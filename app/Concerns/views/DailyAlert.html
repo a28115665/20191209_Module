@@ -1,0 +1,625 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Concerns', 'DailyAlert']" icon="bell-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-blue">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合A
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[0]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[0] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-street-view"></i>
+		                                <span>收件人或公司</span>
+		                            </td>
+		                        </tr>
+		                        <tr class="active">
+		                            <td>
+		                                <i class="fa fa-map-marker"></i>
+		                                <span>收件人地址</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-greenLight">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合B
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[1]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[1] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-map-marker"></i>
+		                                <span>收件人地址</span>
+		                            </td>
+		                        </tr>
+		                        <tr class="active">
+		                            <td>
+		                                <i class="fa fa-phone"></i>
+		                                <span>收件人電話</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-orange">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合C
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[2]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[2] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-street-view"></i>
+		                                <span>收件人或公司</span>
+		                            </td>
+		                        </tr>
+		                        <tr class="active">
+		                            <td>
+		                                <i class="fa fa-phone"></i>
+		                                <span>收件人電話</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-redLight">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合D
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[3]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[3] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-street-view"></i>
+		                                <span>收件人或公司</span>
+		                            </td>
+		                        </tr>
+		                        <tr class="active">
+		                            <td>
+		                                <i class="fa fa-map-marker"></i>
+		                                <span>收件人地址</span>
+		                            </td>
+		                        </tr>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-phone"></i>
+		                                <span>收件人電話</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-blue">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合E
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[5]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[5] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-street-view"></i>
+		                                <span>收件人或公司</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-greenLight">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合F
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[6]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[6] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-street-view"></i>
+		                                <span>新收件人或公司</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-orange">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合G
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[7]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[7] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-map-marker"></i>
+		                                <span>收件人地址</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+            </div>
+			<div class="col-xs-12 col-sm-6 col-md-3">
+	            <div class="panel panel-redLight">
+	                <div class="panel-heading">
+	                    <h3 class="panel-title">
+	                        組合H
+	                    </h3>
+	                </div>
+	                <div class="panel-body no-padding text-align-center">
+	                    <div class="the-price">
+	                        <h1>
+	                            {{$vm.allCountData[8]}}<span class="subscript">/{{$vm.allCountData[4]}}</span>
+	                        </h1>
+	                        <small>不合格率 : {{($vm.allCountData[8] / $vm.allCountData[4]) * 100 | number:2}}%</small>
+	                    </div>
+	                    <table class="table">
+	                        <tbody>
+	                        	<tr>
+		                            <td>
+		                                <i class="fa fa-map-marker"></i>
+		                                <span>新收件人地址</span>
+		                            </td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+	                </div>
+	            </div>
+	        </div>
+		</div>
+
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget ng-init="ShowTabs = true">
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>通報列表 </h2>
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>A </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>B </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr3')" ng-click="$vm.defaultTab='hr3';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr3"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>C </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr4')" ng-click="$vm.defaultTab='hr4';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr4"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>D </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr5')" ng-click="$vm.defaultTab='hr5';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr5"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>E </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr6')" ng-click="$vm.defaultTab='hr6';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr6"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>F </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr7')" ng-click="$vm.defaultTab='hr7';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr7"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>G </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr8')" ng-click="$vm.defaultTab='hr8';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr8"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> 組合</span>H </a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+				            <!-- widget body text-->
+				            <div class="tab-content no-padding">
+
+								<div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseAOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.caseBOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr3')" id="hr3">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseCOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr4')" id="hr4">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseDOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr5')" id="hr5">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseEOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr6')" id="hr6">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseFOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr7')" id="hr7">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseGOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr8')" id="hr8">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label"><span class="text-primary">進口日期</span>：</label>
+										                    <div class="form-group">
+										                    	<span>
+										                    		{{$vm.IMPORTDT_FROM}} ~ {{$vm.IMPORTDT_TOXX}}
+										                    	</span>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success" ng-click="$vm.ExportExcel()">
+												                {{getWord('Export Excel')}}
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.caseHOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+
+<script type="text/ng-template" id="showHistoryCountModalContent.html">
+    <div class="modal-header" ng-init="$ctrl.Init()">
+	    <h3 class="modal-title" id="modal-title">歷史歷程</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+		<div id="grid1" ui-grid="$ctrl.mdDataOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

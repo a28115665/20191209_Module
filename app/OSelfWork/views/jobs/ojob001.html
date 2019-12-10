@@ -1,0 +1,398 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="$vm.bigBreadcrumbsItems" icon="file-text-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-greenDark txt-color-white text-center">
+                    主號
+                    <code>{{$vm.vmData.O_OL_MASTER}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-blue txt-color-white text-center">
+                    航次
+                    <code>{{$vm.vmData.O_OL_VOYSEQ}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-teal txt-color-white text-center">
+                    報機日期
+                    <code>{{$vm.vmData.O_OL_IMPORTDT | dateFilter}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-magenta txt-color-white text-center">
+                    裝貨港
+                    <code>{{$vm.vmData.O_OL_POST}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-blueLight txt-color-white text-center">
+                    行家
+                    <code>{{$vm.vmData.O_OL_CO_CODE | ocompyFilter}}</code>
+                </div>
+
+            </article>
+	        <!-- End WIDGET START -->
+
+
+
+	        <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                <div class="well well-sm bg-color-orange txt-color-white text-center">
+                    報機單(件數)
+                    <code>{{$vm.vmData.O_OL_COUNT}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                <div class="well well-sm bg-color-redLight txt-color-white text-center">
+                    拉貨(件數)
+                    <code>{{$vm.vmData.O_OL_PULL_COUNT}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+
+                <div class="well well-sm bg-color-pinkDark txt-color-white text-center">
+                    描述
+                    <code>{{$vm.vmData.O_OL_REASON}}</code>
+                </div>
+
+            </article>
+	        <!-- End WIDGET START -->
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="job001" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯 </h2>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-warning" href="#" ng-click="$vm.RepeatGet()">檢查重複進口人</a>
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-success" href="#" ng-click="$vm.ExportExcel()">匯出關貿</a>
+				        </div>
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<div class="widget-body-toolbar">
+							    <div class="row">
+							        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+											        <label class="control-label">標籤說明：</label>
+											        <span>
+														<!-- <span class="cell-class-ban"> 黑名單</span> -->
+														<span class="cell-class-pull"> 拉貨</span>
+														<span class="cell-class-special"> 特貨</span>
+														<span class="text-primary"> 可編輯欄位</span>
+											        </span>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+											        <label class="control-label">關貿已匯：</label>
+											        <span>
+														<i ng-class="$vm.vmData.TRADE_EXPORT >= 1 ? 'fa fa-check text-success' : 'fa fa-remove text-danger'"></i>
+											        </span>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 text-right">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+										            <button class="btn btn-warning"
+										            		ng-click="$vm.CalculateNetWieghtBalance()"
+										            		ng-disabled="$vm.loading.calculateNetWieghtBalance">
+									            		<span ng-if="$vm.loading.calculateNetWieghtBalance">
+									            			<i class="fa fa-refresh fa-spin"></i>
+										            	</span>
+									            		<span ng-if="!$vm.loading.calculateNetWieghtBalance">
+										                	平衡淨重
+										            	</span>
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-warning"
+										            		ng-click="$vm.CalculateCrossWieghtBalance()"
+										            		ng-disabled="$vm.loading.calculateCrossWieghtBalance">
+									            		<span ng-if="$vm.loading.calculateCrossWieghtBalance">
+									            			<i class="fa fa-refresh fa-spin"></i>
+										            	</span>
+									            		<span ng-if="!$vm.loading.calculateCrossWieghtBalance">
+										                	平衡毛重
+										            	</span>
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-default"
+										            		ng-click="$vm.MultiSpecialGoods()">
+										                特貨標記
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-primary"
+										            		ng-click="$vm.PullGoods()">
+										                拉貨
+										            </button>
+							                    </div>
+							                    <!-- <div class="form-group">
+										            <button class="btn btn-warning"
+										            		ng-hide="$vm.DoTaxLoading"
+										            		ng-click="$vm.DoTax()">
+										                稅則
+										            </button>
+										            <a href="javascript:void(0);" class="btn btn-warning disabled" ng-show="$vm.DoTaxLoading"> <i class="fa fa-refresh fa-spin"></i></a>
+							                    </div> -->
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.gridMethod.deleteData()">
+										                刪除
+										            </button>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							    </div>
+							</div>
+
+							<!-- <div class="table-responsive"> -->
+
+							<div id="grid1" ui-grid="$vm.job001Options" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection ui-grid-pinning ui-grid-edit ui-grid-row-edit ui-grid-auto-resize></div>
+
+							<!-- </div> -->
+
+							<!-- widget footer -->
+							<div class="widget-footer">
+								<!-- <a href-void class="btn bg-color-purple txt-color-white btn-circle" href="#" data-tooltip-placement="left" data-uib-tooltip="異動筆數">
+									{{$vm.job001GridApi.rowEdit.getDirtyRows($vm.job001GridApi.grid).length}}
+								</a> -->								
+								<button class="btn btn-default" type="button" ng-click="$vm.Return()">
+									返回
+								</button>						
+								<button class="btn btn-primary" type="button" ng-if="$vm.vmData.W2_PRINCIPAL == $vm.profile.U_ID && $vm.vmData.W2_FDATETIME == null" ng-click="$vm.Close()">
+									完成
+								</button>
+								<!-- <button class="btn btn-sm btn-warning" type="button" ng-click="$vm.Update()">
+					                <i class="fa fa-save"></i>
+									更新
+								</button>	 -->
+							</div>
+							<!-- end widget footer -->
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="oexcelMenu.html">
+    <div class="modal-header bg-color-green">
+        <h3 class="modal-title text-center">
+            <strong class=" txt-color-white">選擇格式</strong>
+        </h3>
+    </div>
+	<div class="modal-body" id="modal-body">
+        <div class="row"> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0G1')"> 
+                關貿格式 (G1)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0X2')"> 
+                關貿格式 (X2)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0X3')"> 
+                關貿格式 (X3)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('ALL')"> 
+                關貿格式 (所有)
+            </button> 
+        </div> 
+	</div>
+</script>
+
+<script type="text/ng-template" id="opullGoodsModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">拉貨</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="pullGoodsForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">拉貨原因</label>
+			        <div class="col-md-10">
+			            <textarea class="form-control" rows="3" name="PG_REASON" ng-model="$ctrl.mdData['O_PG_REASON']" maxlength="200" placeholder="輸入拉貨原因(最多200字)" style="resize: none; "></textarea>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer text-center">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!pullGoodsForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="ospecialGoodsModalContent.html">
+	<div class="modal-body" id="modal-body" ng-init="$ctrl.Init()">
+	    <form class="form-horizontal" name="specialGoodsForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-4 control-label">特貨類型</label>
+			        <div class="col-md-8">
+						<select class="form-control" ng-model="$ctrl.mdData['O_SPG_TYPE']" ng-options="data.value as data.label for data in $ctrl.specialGoodsData">
+							<option value="">--請選擇--</option>
+						</select>
+			    	</div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer text-center">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!specialGoodsForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="calculateNetWieghtBalanceModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">平衡淨重</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="modifyForm">
+			<fieldset>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">報機單總重量(淨重)</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="totalNetWeight" ng-model="$ctrl.mdData.totalNetWeight" type="text" disabled="disabled">
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalNetWeight == 0">報機單總重量(淨重) 需要大於 0</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">報機單總重量(新淨重)</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="totalNewNetWeight" ng-model="$ctrl.mdData.totalNewNetWeight" type="text" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label"><code>*</code>銷艙單淨重總重量</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="O_OL_FLIGHT_TOTALNETWEIGHT" placeholder="請輸入銷艙單總重量" ng-model="$ctrl.mdData.O_OL_FLIGHT_TOTALNETWEIGHT" type="text" required>
+                        <p class="note">報機單總重量(新淨重) 將會等於輸入的 銷艙單淨重總重量</p>
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalNetWeight == 0">目前倍率：0</p>
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalNetWeight > 0">目前倍率：{{($ctrl.mdData.O_OL_FLIGHT_TOTALNETWEIGHT / $ctrl.mdData.totalNetWeight).toFixed(2)}} (請介於0.5~1.5之間)</p>
+                    </div>
+                </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!modifyForm.$valid || $ctrl.mdData.totalCrossWeight==0">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="calculateCrossWieghtBalanceModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">平衡毛重</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="modifyForm">
+			<fieldset>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">報機單總重量(毛重)</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="totalCrossWeight" ng-model="$ctrl.mdData.totalCrossWeight" type="text" disabled="disabled">
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalCrossWeight == 0">報機單總重量(毛重) 需要大於 0</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label">報機單總重量(新毛重)</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="totalNewCrossWeight" ng-model="$ctrl.mdData.totalNewCrossWeight" type="text" disabled="disabled">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 control-label"><code>*</code>銷艙單毛重總重量</label>
+                    <div class="col-md-8">
+                        <input class="form-control" name="O_OL_FLIGHT_TOTALCROSSWEIGHT" placeholder="請輸入銷艙單總重量" ng-model="$ctrl.mdData.O_OL_FLIGHT_TOTALCROSSWEIGHT" type="text" required>
+                        <p class="note">報機單總重量(新毛重) 將會等於輸入的 銷艙單毛重總重量</p>
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalCrossWeight == 0">目前倍率：0</p>
+                        <p class="text-danger" ng-if="$ctrl.mdData.totalCrossWeight > 0">目前倍率：{{($ctrl.mdData.O_OL_FLIGHT_TOTALCROSSWEIGHT / $ctrl.mdData.totalCrossWeight).toFixed(2)}} (請介於0.5~1.5之間)</p>
+                    </div>
+                </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!modifyForm.$valid || $ctrl.mdData.totalCrossWeight==0">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="repeatGetModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">重複進口人</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.repeatGetOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-edit ui-grid-row-edit ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

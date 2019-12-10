@@ -1,0 +1,169 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['SelfWork', 'EmployeeJobs']" icon="cube" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>作業區 </h2>
+				        
+				        <!-- <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-primary" href="#">重新讀取個人領單</a>
+				        </div> -->
+
+				        <!-- <div class="widget-toolbar smart-form" role="menu">
+				            <label class="input"> 
+				            	<i class="icon-append fa fa-search"></i>
+				                <input type="text" placeholder="篩選內容" ng-enter="$vm.Filter()" ng-model="$vm.filterValue">
+				                <b class="tooltip tooltip-top-right">
+				                    <i class="fa fa-warning txt-color-teal"></i>
+				                    按下確認鍵後篩選
+				                </b>
+				            </label>
+				        </div> -->
+
+				        <!-- <div class="widget-toolbar" role="menu">
+					        <div class="btn-group">
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Left'">近七天</label>
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Middle'">近一月</label>
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Right'">近三月</label>
+				            </div>
+				        </div> -->
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<div class="widget-body-toolbar">
+							    <div class="row">
+							        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+											        <label class="control-label">標籤說明：</label>
+								                    <div class="form-group">
+														<i class="fa fa-circle-o"> 已派單</i>
+														<i class="fa fa-circle text-warning"> 已編輯</i>
+														<i class="fa fa-circle text-success"> 已完成</i>
+														<i class="fa fa-circle txt-color-magenta"> 非作業員</i>
+								                    </div>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
+							        </div>
+							    </div>
+							</div>
+
+							<div id="grid1" ui-grid="$vm.orderListOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns></div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="opWorkMenu.html">
+    <div class="modal-header bg-color-green">
+        <h3 class="modal-title text-center">
+            <strong class=" txt-color-white">{{$ctrl.row.entity.name}}</strong>
+        </h3>
+    </div>
+    <div class="modal-body text-center"> 
+        <div class="row" ng-if="$ctrl.row.entity.name == '報機單'"> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.viewData($ctrl.row);$ctrl.cancel()" ng-show="$vm.profile.U_GRADE <= 9 || $vm.IsW3()"> 
+                檢視
+            </button>
+            <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.modifyData($ctrl.row);$ctrl.cancel()" ng-disabled="($ctrl.row.entity.W2_EDATETIME != null) && ($ctrl.row.entity.W2_PRINCIPAL != $ctrl.appScope.profile.U_ID || $ctrl.row.entity.W2_FDATETIME != null)"> 
+                編輯 
+            </button> 
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.closeData($ctrl.row);$ctrl.cancel()" ng-disabled="($ctrl.row.entity.W2_PRINCIPAL != $ctrl.appScope.profile.U_ID || $ctrl.row.entity.W2_FDATETIME != null)"> 
+                完成 
+            </button> 
+            <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.fixData($ctrl.row);$ctrl.cancel()" ng-disabled="$ctrl.row.entity.W2_FDATETIME == null"> 
+                修改 
+            </button> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.deleteData($ctrl.row);$ctrl.cancel()"> 
+                刪除(報機單) 
+            </button> 
+        </div> 
+        <div class="row" ng-if="$ctrl.row.entity.name == '銷艙單'"> 
+        	<!--<button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.viewData($ctrl.row);$ctrl.cancel()"> 
+                檢視 
+            </button>--> 
+        	<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.fixData($ctrl.row);$ctrl.cancel()"> 
+                修改 
+            </button>
+            <!--<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.rejectData($ctrl.row);$ctrl.cancel()"> 
+                退單 
+            </button> <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.modifyData($ctrl.row);$ctrl.cancel()"> 
+                編輯 
+            </button> 
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.closeData($ctrl.row);$ctrl.cancel()"> 
+                完成 
+            </button> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.rejectData($ctrl.row);$ctrl.cancel()"> 
+                刪除 
+            </button>--> 
+        </div> 
+        <!--<div class="row" ng-if="$ctrl.row.entity.name == '派送單'"> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob003.rejectData($ctrl.row);$ctrl.cancel()"> 
+                退單 
+            </button> 
+            <button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob003.modifyData($ctrl.row);$ctrl.cancel()"> 
+                編輯 
+            </button> 
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob003.closeData($ctrl.row);$ctrl.cancel()"> 
+                完成 
+            </button> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob003.rejectData($ctrl.row);$ctrl.cancel()"> 
+                刪除 
+            </button> 
+        </div>-->
+    </div>
+</script>
+
+<script type="text/ng-template" id="exportDetailModalContent.html">
+    <div class="modal-header" ng-Init="$ctrl.MdInit()">
+	    <h3 class="modal-title" id="modal-title">匯出紀錄({{$ctrl.item.CO_NAME}}-{{$ctrl.item.OL_MASTER}})</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.mdDataOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

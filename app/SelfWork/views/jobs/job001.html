@@ -1,0 +1,544 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="$vm.bigBreadcrumbsItems" icon="file-text-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-greenDark txt-color-white text-center">
+                    主號
+                    <code>{{$vm.vmData.OL_MASTER}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-blue txt-color-white text-center">
+                    航班
+                    <code>{{$vm.vmData.OL_FLIGHTNO}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-teal txt-color-white text-center">
+                    進口日期
+                    <code>{{$vm.vmData.OL_IMPORTDT | dateFilter}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-magenta txt-color-white text-center">
+                    國別
+                    <code>{{$vm.vmData.OL_COUNTRY}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-5ths col-lg-5ths">
+
+                <div class="well well-sm bg-color-blueLight txt-color-white text-center">
+                    行家
+                    <code>{{$vm.vmData.OL_CO_CODE | compyFilter}}</code>
+                </div>
+
+            </article>
+	        <!-- End WIDGET START -->
+
+
+
+	        <!-- NEW WIDGET START -->
+            <article class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                <div class="well well-sm bg-color-orange txt-color-white text-center">
+                    報機單(袋數)
+                    <code>{{$vm.vmData.OL_COUNT}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+
+                <div class="well well-sm bg-color-redLight txt-color-white text-center">
+                    拉貨(袋數)
+                    <code>{{$vm.vmData.OL_PULL_COUNT}}</code>
+                </div>
+
+            </article>
+
+            <article class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+
+                <div class="well well-sm bg-color-pinkDark txt-color-white text-center">
+                    描述
+                    <code>{{$vm.vmData.OL_REASON}}</code>
+                </div>
+
+            </article>
+	        <!-- End WIDGET START -->
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="job001" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯 </h2>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <div class="btn-group dropdown" uib-dropdown keyboard-nav is-open="overSix">
+						        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-warning dropdown-toggle btn-xs" uib-dropdown-toggle>
+						            逾六次 <span class="caret"></span>
+						        </button>
+						        <ul class="dropdown-menu-right" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+						            <li role="menuitem">
+				                        <a href-void="" href="#" ng-click="$vm.OverSix('N|A');overSix=false">收件者或地址</a>
+						            </li>
+				                    <li>
+				                        <a href-void="" href="#" ng-click="$vm.OverSix('N+A');overSix=false">收件者和地址</a>
+				                    </li>
+						        </ul>
+						    </div>
+				            <!-- <a href-void="" class="btn btn-warning" href="#" ng-click="$vm.OverSix()">逾六次</a> -->
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <div class="btn-group dropdown" uib-dropdown keyboard-nav is-open="repeatData">
+						        <button id="simple-btn-keyboard-nav" type="button" class="btn btn-warning dropdown-toggle btn-xs" uib-dropdown-toggle>
+						            找出相同 <span class="caret"></span>
+						        </button>
+						        <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="simple-btn-keyboard-nav">
+						            <li role="menuitem">
+				                        <a href-void="" href="#" ng-click="$vm.RepeatData('N');repeatData=false">收件者</a>
+						            </li>
+				                    <li>
+				                        <a href-void="" href="#" ng-click="$vm.RepeatData('A');repeatData=false">地址</a>
+				                    </li>
+				                    <li>
+				                        <a href-void="" href="#" ng-click="$vm.RepeatData('N+A');repeatData=false">收件者+地址</a>
+				                    </li>
+						        </ul>
+						    </div>
+				            <!-- <a href-void="" class="btn btn-warning" href="#" ng-click="$vm.RepeatName()">收件者相同</a> -->
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-warning" href="#" ng-click="$vm.MergeNoResult()">併票結果</a>
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-success" href="#" ng-click="$vm.ExportExcel()">匯出關貿</a>
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-success" href="#" ng-click="$vm.ExportAirportSchema()">匯出班機表欄位</a>
+				        </div>
+				        <!-- <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-danger" href="#" ng-click="$vm.CancelNo()">取消併票</a>
+				        </div>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-primary" href="#" ng-click="$vm.MergeNo()">併票</a>
+				        </div> -->
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<div class="widget-body-toolbar">
+							    <div class="row">
+							        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+											        <label class="control-label">標籤說明：</label>
+											        <span>
+														<span class="cell-class-ban"> 黑名單</span>
+														<span class="cell-class-pull"> 拉貨</span>
+														<span class="cell-class-special"> 特貨</span>
+														<span class="text-primary"> 可編輯欄位</span>
+											        </span>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+											        <label class="control-label">班機表已匯：</label>
+											        <span>
+														<i ng-class="$vm.vmData.FLIGHT_EXPORT >= 1 ? 'fa fa-check text-success' : 'fa fa-remove text-danger'"></i>
+											        </span>
+											        <label class="control-label">｜</label>
+											        <label class="control-label">關貿已匯：</label>
+											        <span>
+														<i ng-class="$vm.vmData.TRADE_EXPORT >= 1 ? 'fa fa-check text-success' : 'fa fa-remove text-danger'"></i>
+											        </span>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 text-right">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+										            <button class="btn btn-info"
+										            		ng-click="$vm.SortoutG1ForY()">
+										                報關種類Y
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-primary"
+										            		ng-click="$vm.MergeNo()">
+										                併票
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.CancelNo()">
+										                取消併票
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-default"
+										            		ng-click="$vm.MultiSpecialGoods()">
+										                特貨標記
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-primary"
+										            		ng-click="$vm.PullGoods()">
+										                拉貨
+										            </button>
+							                    </div>
+							                    <!-- <div class="form-group">
+										            <button class="btn btn-warning"
+										            		ng-hide="$vm.DoTaxLoading"
+										            		ng-click="$vm.DoTax()">
+										                稅則
+										            </button>
+										            <a href="javascript:void(0);" class="btn btn-warning disabled" ng-show="$vm.DoTaxLoading"> <i class="fa fa-refresh fa-spin"></i></a>
+							                    </div> -->
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.gridMethod.banData()">
+										                加入黑名單
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.gridMethod.deleteData()">
+										                刪除
+										            </button>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							    </div>
+							</div>
+
+							<!-- <div class="table-responsive"> -->
+
+							<div id="grid1" ui-grid="$vm.job001Options" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection ui-grid-pinning ui-grid-edit ui-grid-row-edit ui-grid-auto-resize></div>
+
+							<!-- </div> -->
+
+							<!-- widget footer -->
+							<div class="widget-footer">
+								<!-- <a href-void class="btn bg-color-purple txt-color-white btn-circle" href="#" data-tooltip-placement="left" data-uib-tooltip="異動筆數">
+									{{$vm.job001GridApi.rowEdit.getDirtyRows($vm.job001GridApi.grid).length}}
+								</a> -->								
+								<button class="btn btn-default" type="button" ng-click="$vm.Return()">
+									返回
+								</button>						
+								<button class="btn btn-primary" type="button" ng-if="$vm.vmData.W2_PRINCIPAL == $vm.profile.U_ID && $vm.vmData.W2_FDATETIME == null" ng-click="$vm.Close()">
+									完成
+								</button>
+								<!-- <button class="btn btn-sm btn-warning" type="button" ng-click="$vm.Update()">
+					                <i class="fa fa-save"></i>
+									更新
+								</button>	 -->
+							</div>
+							<!-- end widget footer -->
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="excelMenu.html">
+    <div class="modal-header bg-color-green">
+        <h3 class="modal-title text-center">
+            <strong class=" txt-color-white">選擇格式</strong>
+        </h3>
+    </div>
+	<div class="modal-body" id="modal-body">
+        <div class="row"> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0G1')"> 
+                關貿格式 (G1)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0X2')"> 
+                關貿格式 (X2)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0X3')"> 
+                關貿格式 (X3)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('0MX3')"> 
+                關貿格式 (併X3)
+            </button> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.ok('8')"> 
+                介宏格式 
+            </button> 
+        </div> 
+	</div>
+</script>
+
+<script type="text/ng-template" id="pullGoodsModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">拉貨</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="pullGoodsForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">拉貨原因</label>
+			        <div class="col-md-10">
+			            <textarea class="form-control" rows="3" name="PG_REASON" ng-model="$ctrl.mdData['PG_REASON']" maxlength="200" placeholder="輸入拉貨原因(最多200字)" style="resize: none; "></textarea>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer text-center">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!pullGoodsForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="specialGoodsModalContent.html">
+	<div class="modal-body" id="modal-body" ng-init="$ctrl.Init()">
+	    <form class="form-horizontal" name="specialGoodsForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-4 control-label">特貨類型</label>
+			        <div class="col-md-8">
+						<select class="form-control" ng-model="$ctrl.mdData['SPG_TYPE']" ng-options="data.value as data.label for data in $ctrl.specialGoodsData">
+							<option value="">--請選擇--</option>
+						</select>
+			    	</div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer text-center">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!specialGoodsForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="mergeNoModalContent.html">
+    <div class="modal-header" ng-init="$ctrl.Init()">
+	    <h3 class="modal-title" id="modal-title">併票</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="form">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">併票號</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData.mergeNo" type="text" name="mergeNo" ng-required="true">
+			        </div>
+			    </div>
+			    <div class="form-group">
+			        <label class="col-md-2 control-label">併票號品名</label>
+			        <div class="col-md-10">
+			            <label class="radio radio-inline">
+			                <input type="radio" ng-model="$ctrl.mergeNoNature" value="1" name="mergeNoNature" ng-required="true">
+			                選擇 
+			            </label>
+			            <label class="radio radio-inline">
+			                <input type="radio" ng-model="$ctrl.mergeNoNature" value="2" name="mergeNoNature" ng-required="true">
+			                自訂 
+			            </label>
+			        </div>
+			    </div>
+				<div class="form-group" ng-show="$ctrl.mergeNoNature == '1'">
+			        <label class="col-md-2 control-label">新品名</label>
+			        <div class="col-md-10">
+						<select class="form-control" name="natureNew" ng-model="$ctrl.mdData.natureNew" ng-options="data as data for data in $ctrl.natureNew" ng-disabled="$ctrl.natureNew.length == 0" ng-required="true">
+							<option value="">-- 請選擇 --</option>
+						</select>
+			        </div>
+			    </div>
+				<div class="form-group" ng-show="$ctrl.mergeNoNature == '2'">
+			        <label class="col-md-2 control-label">自訂</label>
+			        <div class="col-md-10">
+			            <input class="form-control" name="natureNew" placeholder="請輸入自訂併票號品名" ng-model="$ctrl.mdData.natureNew" type="text" ng-required="true">
+			        </div>
+			    </div>
+			    <div class="form-group">
+			        <label class="col-md-2 control-label">併票號稅則</label>
+			        <div class="col-md-10">
+			            <label class="radio radio-inline">
+			                <input type="radio" ng-model="$ctrl.mergeNoIlTax2" value="1" name="mergeNoIlTax2" ng-required="true">
+			                選擇 
+			            </label>
+			            <label class="radio radio-inline">
+			                <input type="radio" ng-model="$ctrl.mergeNoIlTax2" value="2" name="mergeNoIlTax2" ng-required="true">
+			                自訂 
+			            </label>
+			        </div>
+			    </div>
+				<div class="form-group" ng-show="$ctrl.mergeNoIlTax2 == '1'">
+			        <label class="col-md-2 control-label">稅則</label>
+			        <div class="col-md-10">
+						<select class="form-control" name="ilTax2" ng-model="$ctrl.mdData.ilTax2" ng-options="data as data for data in $ctrl.ilTax2" ng-disabled="$ctrl.ilTax2.length == 0" ng-required="true">
+							<option value="">-- 請選擇 --</option>
+						</select>
+			        </div>
+			    </div>
+				<div class="form-group" ng-show="$ctrl.mergeNoIlTax2 == '2'">
+			        <label class="col-md-2 control-label">自訂</label>
+			        <div class="col-md-10">
+			            <input class="form-control" name="ilTax2" placeholder="請輸入自訂併票號稅則" ng-model="$ctrl.mdData.ilTax2" type="text" ng-required="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">袋數</label>
+			        <div class="col-md-10">
+			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.bagNo.length}}</span>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!form.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="opAddBanModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">黑名單</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">寄件人公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入寄件人公司" ng-model="$ctrl.mdData['IL_SENDNAME']" type="text" ng-disabled="true" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人或公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人或公司" ng-model="$ctrl.mdData['IL_GETNAME']" type="text" ng-disabled="true" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人地址</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人地址" ng-model="$ctrl.mdData['IL_GETADDRESS']" type="text" ng-disabled="true" required>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="mergeNoResultModalContent.html">
+    <div class="modal-header" ng-Init="$ctrl.MdInit()">
+	    <h3 class="modal-title" id="modal-title">併票結果</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+	    <ul id="myTab1" class="nav nav-tabs bordered">
+            <li class="active">
+                <a href="#s1" data-toggle="tab">
+                	有併號 
+                	<span class="badge bg-color-blue txt-color-white">{{$ctrl.job001DataHaveMergeNo.length}}</span>
+                </a>
+            </li>
+            <li>
+                <a href="#s2" data-toggle="tab">
+                	無併號
+                	<span class="badge bg-color-blue txt-color-white">{{$ctrl.job001DataNotMergeNo.length}}</span>
+                </a>
+            </li>
+            <!-- <li class="pull-right">
+                <a href-void="" href="#">
+                    <div class="sparkline txt-color-pinkDark text-align-right" data-sparkline-height="18px" data-sparkline-width="90px" data-sparkline-barwidth="7">
+                        5,10,6,7,4,3
+                    </div> 
+                </a>
+            </li> -->
+        </ul>
+        <div id="myTabContent1" class="tab-content no-padding">
+            <div class="tab-pane fade in active" id="s1">
+                <div id="grid1" ui-grid="$ctrl.job001DataHaveMergeNoOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-grouping ui-grid-auto-resize></div>
+            </div>
+            <div class="tab-pane fade" id="s2">
+                <div id="grid1" ui-grid="$ctrl.job001DataNotMergeNoOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+            </div>
+        </div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="repeatDataModalContent.html">
+    <div class="modal-header" ng-Init="$ctrl.MdInit()">
+	    <h3 class="modal-title" id="modal-title">收件者相同</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.repeatDataOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-edit ui-grid-row-edit ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="overSixModalContent.html">
+    <div class="modal-header" ng-Init="$ctrl.MdInit()">
+	    <h3 class="modal-title" id="modal-title">逾六次({{$ctrl.type}})</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.overSixOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-pinning ui-grid-edit ui-grid-row-edit ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

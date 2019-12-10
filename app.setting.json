@@ -1,0 +1,49 @@
+{
+	"NodeJs" : {
+		"port" : "3000"	
+	},
+	"Socket" : {
+		"port" : "8888"
+	},
+	"RedisStore" : {
+		"name" : "GHS",
+		"host" : "127.0.0.1",
+		"port" : "6379",
+		"ttl" : "6000",
+		"secret" : "AlanHsu"
+	},
+	"MSSQL" : {
+		"user": "sa",
+		"password": "2j/ z/ !@#$%",
+		"server": "127.0.0.1",
+		"database": "GHS",
+		"pool": {
+	        "max": 50,
+	        "min": 0,
+	        "idleTimeoutMillis": 2000
+	    }
+	},
+	"WebService" : {
+		"changeNature" : {
+			"host" : "10.1.31.61",
+			"port" : "80",
+			"url" : "/EWSWS/WebServiceChangeNature.asmx/GetNewNature"
+		},
+		"doTax" : {
+			"host" : "10.1.31.61",
+			"port" : "80",
+			"url" : "/EWSWS/WebServiceChangeNature.asmx/GetNatureTax"
+		},
+		"changeONature" : {
+			"host" : "61.216.149.43",
+			"port" : "80",
+			"url" : "/EOSWS/WebServiceChangeNature.asmx/GetNewNature"
+		}
+	},
+	"MOTC" : {
+		"timer" : 120000
+	},
+	"GMail" : {
+		"account" : ""
+	}
+}

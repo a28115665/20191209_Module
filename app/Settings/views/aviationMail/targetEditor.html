@@ -1,0 +1,186 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'AviationMail', 'TargetEditor']" icon="pencil-square-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯 </h2>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body" nv-file-drop="" uploader="$vm.uploader" filters="queueLimit, queueFilter, sizeFilter">
+
+							<form class="form-horizontal" name="targetEditor">
+								<fieldset>
+									<div class="form-group">
+								        <label class="col-md-2 control-label"><code>*</code>目標名稱</label>
+								        <div class="col-md-10">
+								            <input class="form-control" ng-model="$vm.vmData.FM_TARGET" type="text" placeholder="請輸入目標名稱" required>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label"><code>*</code>信箱</label>
+								        <div class="col-md-10">
+								            <tags-input ng-model="$vm.vmData.FM_MAIL" 
+										                placeholder="新增信箱"
+										                key-property="text"
+										                allowed-tags-pattern="^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z]+$"
+              											on-invalid-tag="$vm.OnInvalidTag()"
+										                required>
+										    </tags-input>
+								        </div>
+								    </div>
+									<div class="form-group">
+								        <label class="col-md-2 control-label">預設標題</label>
+								        <div class="col-md-10">
+								            <input class="form-control" ng-model="$vm.vmData.FM_TITLE" type="text" placeholder="請輸入預設標題">
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">預設內容</label>
+								        <div class="col-md-10">
+								            <summernote ng-model="$vm.vmData.FM_CONTENT" config="$vm.snOptions"></summernote>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">預設航班</label>
+								        <div class="col-md-10">
+								            <tags-input ng-model="$vm.vmData.FMP_FLIGHTNO" 
+										                placeholder="新增航班(英文需大寫)"
+										                key-property="text"
+										                allowed-tags-pattern="^[A-Z0-9]{2}\s[0-9]{4}$"
+										                replace-spaces-with-dashes="false"
+										                add-on-enter="true"
+              											on-tag-adding="$vm.OnTagAdding($tag)"
+              											on-invalid-tag="$vm.OnInvalidTag()">
+										    </tags-input>
+								        </div>
+								    </div>
+									<div class="form-group">
+								        <label class="col-md-2 control-label">預設附件</label>
+								        <div class="col-md-10">
+								            <div class="fileUpload btn btn-primary">
+											    <span>選擇檔案</span>
+											    <input type="file" class="upload" nv-file-select=""  uploader="$vm.uploader" multiple/>
+											</div>
+								            <!-- <button type="button" class="btn btn-success btn-s" ng-click="$vm.uploader.uploadAll()" ng-disabled="!$vm.uploader.getNotUploadedItems().length">
+					                            <span class="glyphicon glyphicon-upload"></span> 一鍵上傳
+					                        </button> -->
+								        </div>
+								    </div>
+									<div class="form-group" ng-show="$vm.uploader.queue.length > 0 || $vm.vmData.UploadedData.length > 0">
+								        <label class="col-md-2 control-label"></label>
+								        <div class="col-md-10">
+								            <table class="table" ng-show="$vm.uploader.queue.length > 0 || $vm.vmData.UploadedData.length > 0">
+											    <thead>
+											        <tr>
+											            <th width="50%">名稱</th>
+											            <th ng-show="$vm.uploader.isHTML5">檔案大小</th>
+											            <th ng-show="$vm.uploader.isHTML5">進度</th>
+											            <th>狀態</th>
+											            <th>操作</th>
+											        </tr>
+											    </thead>
+											    <tbody>
+											    	<tr ng-repeat="uploaded in $vm.vmData.UploadedData">
+											    		<td><strong>{{ uploaded.FMAF_O_FILENAME }}</strong></td>
+											            <td>{{ uploaded.FMAF_FILESIZE/1024/1024|number:2 }} MB</td>
+											            <td>
+											                已上傳
+											            </td>
+											            <td class="text-center">
+											                <span><i class="glyphicon glyphicon-hdd"></i></span>
+											            </td>
+											            <td nowrap>
+											                <button type="button" class="btn btn-danger btn-xs" ng-click="$vm.DeleteUploaded(uploaded, $index)">
+											                    <span class="glyphicon glyphicon-trash"></span> 移除
+											                </button>
+											            </td>
+											        </tr>
+											        <tr ng-repeat="item in $vm.uploader.queue">
+											            <td><strong>{{ item.file.name }}</strong></td>
+											            <td ng-show="$vm.uploader.isHTML5" nowrap>{{ item.file.size/1024/1024|number:2 }} MB</td>
+											            <td ng-show="$vm.uploader.isHTML5">
+											                <div class="progress" style="margin-bottom: 0;">
+											                    <div class="progress-bar" role="progressbar" ng-style="{ 'width': item.progress + '%' }"></div>
+											                </div>
+											            </td>
+											            <td class="text-center">
+											                <span ng-show="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+											                <span ng-show="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+											                <span ng-show="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
+											            </td>
+											            <td nowrap>
+											                <!-- <button type="button" class="btn btn-success btn-xs" ng-click="item.upload()" ng-disabled="item.isReady || item.isUploading || item.isSuccess">
+											                    <span class="glyphicon glyphicon-upload"></span> 上傳
+											                </button>
+											                <button type="button" class="btn btn-warning btn-xs" ng-click="item.cancel()" ng-disabled="!item.isUploading">
+											                    <span class="glyphicon glyphicon-ban-circle"></span> 取消
+											                </button> -->
+											                <button type="button" class="btn btn-warning btn-xs" ng-click="item.remove()">
+											                    <span class="glyphicon glyphicon-ban-circle"></span> 取消
+											                    <!-- <span class="glyphicon glyphicon-trash"></span> 移除 -->
+											                </button>
+											            </td>
+											        </tr>
+											    </tbody>
+											</table>
+								        </div>
+								    </div>
+								</fieldset>
+								<div class="form-actions">
+								    <div class="row">
+								        <div class="col-md-12">
+								            <button class="btn btn-default" type="submit" ng-click="$vm.Return()">
+								                {{getWord('Return')}}
+								            </button>
+								            <button class="btn btn-primary" type="submit" ng-click="$vm.Add()" ng-disabled="!targetEditor.$valid" ng-show="$vm.vmData.IU == 'Add'">
+								                <i class="fa fa-save"></i>
+								                {{getWord('Add')}}
+								            </button>
+								            <button class="btn btn-warning" type="submit" ng-click="$vm.Update()" ng-disabled="!targetEditor.$valid" ng-show="$vm.vmData.IU == 'Update'">
+								                <i class="fa fa-wrench"></i>
+								                {{getWord('Update')}}
+								            </button>
+								        </div>
+								    </div>
+								</div>
+							</form>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

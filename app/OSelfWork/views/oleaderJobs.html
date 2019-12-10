@@ -1,0 +1,245 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['OSelfWork', 'OLeaderJobs']" icon="cubes" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>作業區 </h2>
+
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-hand-o-down"></i> <span class="hidden-mobile hidden-tablet"> 派單 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="glyphicon glyphicon-stats"></i> <span class="hidden-mobile hidden-tablet"> 統計 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label">標籤說明：</label>
+										                    <div class="form-group">
+																<i class="fa fa-circle-o"> 已派單</i>
+																<i class="fa fa-circle text-warning"> 已編輯</i>
+																<i class="fa fa-circle text-success"> 已完成</i>
+																<i class="fa fa-circle txt-color-magenta"> 非作業員</i>
+																<i class="fa fa-ship text-warning"> 報機單上傳中</i>
+																<i class="fa fa-ship text-success"> 報機單上傳完成</i>
+																<!-- <i class="fa fa-ship text-warning"> 銷倉單上傳中</i>
+																<i class="fa fa-ship text-success"> 銷倉單上傳完成</i> -->
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+										                    <div class="onoffswitch-container">
+									                            <span class="onoffswitch-title">自動派單開關</span> 
+																<span class="onoffswitch">
+																	<input type="checkbox" class="onoffswitch-checkbox" id="autoopen" ng-model="$vm.parmData['O_SPA_AUTOPRIN']" ng-click="$vm.AutoPrincipal()">
+																	<label class="onoffswitch-label" for="autoopen">
+									                                    <span class="onoffswitch-inner" data-swchon-text="開" data-swchoff-text="關"></span>
+									                                    <span class="onoffswitch-switch"></span>
+									                                </label> 
+																</span>
+									                        </div>
+								                        </div>
+									                    <div class="form-group">
+															<select class="form-control" ng-model="$vm.selectAssignOptype" ng-options="data.value as data.label for data in $vm.opType" ng-disabled="true">
+			  													<option value="">[海運] 專區</option>
+			  												</select>
+									                    </div>
+									                    <div class="form-group">
+															<select class="form-control" ng-model="$vm.selectAssignDept" ng-change="$vm.ChangeDept()" ng-options="data.value as data.label for data in $vm.assignGradeData">
+			  												</select>
+									                    </div>
+									                    <div class="form-group">
+															<select class="form-control" ng-model="$vm.selectAssignPrincipal" ng-options="data.value as data.label for data in $vm.assignPrincipalData[$vm.selectAssignDept]">
+			  													<option value="">-- 請選擇負責人 --</option>
+			  												</select>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-disabled="$vm.orderListGridApi.selection.getSelectedRows().length == 0 || $vm.selectAssignPrincipal == undefined"
+												            		ng-click="$vm.CustomizeAssign()">
+												                自訂指派
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-click="$vm.AutoAssign()"
+												            		ng-disabled="$vm.principalData.length == 0">
+												                自動分派
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-danger"
+												            		ng-disabled="$vm.orderListGridApi.selection.getSelectedRows().length == 0"
+												            		ng-click="$vm.CancelPrincipal()">
+												                取消/取回
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-success"
+												            		ng-disabled="$vm.vmData.length == 0"
+												            		ng-click="$vm.ExportExcel()">
+												                匯出Excel
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-info"
+												            		ng-disabled="$vm.orderListGridApi.selection.getSelectedRows().length == 0"
+												            		ng-click="$vm.CloseData()">
+												                結單
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.orderListOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-edit ui-grid-row-edit ui-grid-expandable ui-grid-selection ui-grid-auto-resize ui-grid-pinning></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+									        	<form class="form-inline" role="form" name="statisticsForm">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label">報機日期(起)：</label>
+													        <span>
+								            					<input class="form-control" name="CRDT_FROM" type="text" ng-model="$vm.O_IMPORTDT_FROM" ui-mask="9999-99-99" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="報機日期起 (西元 年-月-日)" model-view-value="true"/>
+													        </span>
+									                    </div>
+									                    <div class="form-group">
+													        <label class="control-label">報機日期(迄)：</label>
+													        <span>
+								            					<input class="form-control" name="CRDT_TOXX" type="text" ng-model="$vm.O_IMPORTDT_TOXX" ui-mask="9999-99-99" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="報機日期迄 (西元 年-月-日)" model-view-value="true"/>
+													        </span>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-disabled="!statisticsForm.$valid"
+												            		ng-click="$vm.LoadStatistics()">
+												                {{getWord('Search')}}
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+													        <label class="control-label">說明：</label>
+													        <span>
+										                    	統計全行家報機單(小號數、件數)的數量
+													        </span>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-success"
+												            		ng-disabled="$vm.compyStatisticsData.length == 0"
+												            		ng-click="$vm.ExportExcel()">
+												                匯出Excel
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.compyStatisticsOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				            </div>
+
+							<!-- widget footer -->
+							<!-- <div class="widget-footer">
+								<button class="btn btn-sm btn-primary" type="button" ng-click="$vm.Save()">
+					                <i class="fa fa-save"></i>
+									儲存
+								</button>	
+							</div> -->
+							<!-- end widget footer -->
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="oopWorkMenu.html">
+    <div class="modal-header bg-color-green">
+        <h3 class="modal-title text-center">
+            <strong class=" txt-color-white">刪除</strong>
+        </h3>
+    </div>
+    <div class="modal-body text-center"> 
+        <div class="row"> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethod.deleteData($ctrl.row, '報機單');$ctrl.cancel()"> 
+                刪除(報機單) 
+            </button> 
+            <!-- <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethod.deleteData($ctrl.row, '銷倉單');$ctrl.cancel()"> 
+                刪除(銷倉單) 
+            </button>  -->
+        	<button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethod.deleteData($ctrl.row, '所有');$ctrl.cancel()"> 
+                刪除(所有) 
+            </button>
+        </div> 
+    </div>
+</script>
+
+<script type="text/ng-template" id="expandableRowTemplate.html">
+	<div ui-grid="row.entity.subGridOptions" style="height:150px;"></div>
+</script>

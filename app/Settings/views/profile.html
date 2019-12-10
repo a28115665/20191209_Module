@@ -1,0 +1,206 @@
+<!-- MAIN CONTENT -->
+<div id="content">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'Profile']" icon="user" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<div class="row">
+	    <div class="col-sm-12">
+	        <div class="well well-sm">
+	            <div class="row">
+	                <div class="col-sm-12">
+	                    <div id="myCarousel" class="carousel fade profile-carousel" data-smart-ride-carousel data-interval="3000">
+	                        <div class="air air-bottom-right padding-10">
+	                            <!-- <a href-void="" class="btn txt-color-white bg-color-teal btn-sm" href="#"><i class="fa fa-check"></i> Follow</a>&nbsp; -->
+	                            <a href-void="" class="btn txt-color-white bg-color-orange btn-sm" href="#" ng-click="$vm.Editor()"><i class="fa fa-wrench"></i> 編輯</a>
+	                        </div>
+	                        <div class="air air-top-left padding-10">
+	                            <h4 class="txt-color-white font-md">{{$vm.profile.U_CR_DATETIME | dateFilter }}</h4>
+	                        </div>
+	                        <ol class="carousel-indicators">
+	                            <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+	                            <li data-target="#myCarousel" data-slide-to="1" class=""></li>
+	                            <li data-target="#myCarousel" data-slide-to="2" class=""></li>
+	                        </ol>
+	                        <div class="carousel-inner">
+	                            <!-- Slide 1 -->
+	                            <div class="item active">
+	                                <img src="styles/img/demo/s1.jpg" alt="demo user">
+	                            </div>
+	                            <!-- Slide 2 -->
+	                            <div class="item">
+	                                <img src="styles/img/demo/s2.jpg" alt="demo user">
+	                            </div>
+	                            <!-- Slide 3 -->
+	                            <div class="item">
+	                                <img src="styles/img/demo/m3.jpg" alt="demo user">
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="col-sm-12">
+	                    <div class="row">
+	                        <div class="col-sm-3 profile-pic">
+	                            <img src="{{sysParm.SPA_AVATARS_BIG}}" alt="demo user">
+	                            <div class="padding-10">
+	                                <!-- <h4 class="font-md">
+	                                	<strong>15</strong>
+                                        <br>
+                                        <small>持有單量</small>
+                                    </h4>
+	                                <br>
+	                                <h4 class="font-md">
+	                                	<strong>419</strong>
+                                        <br>
+                                        <small>完成單量</small>
+                                    </h4> -->
+	                            </div>
+	                        </div>
+	                        <div class="col-sm-6">
+	                            <h1>{{$vm.profile.U_NAME}} 
+	                            	<!-- <span class="semi-bold">Doe</span> -->
+                                    <br>
+                                    <small> {{$vm.profile.U_ID}} </small>
+                                </h1>
+	                            <ul class="list-unstyled">
+	                                <li>
+	                                    <p class="text-muted">
+	                                        <i class="fa fa-user-circle" title="職稱"></i>&nbsp;&nbsp;
+	                                        <span class="txt-color-darken">
+	                                        	{{$vm.profile.U_GRADE | gradeFilter}}
+	                                        </span>
+	                                    </p>
+	                                </li>
+	                                <li>
+	                                    <p class="text-muted">
+	                                        <i class="fa fa-envelope" title="信箱"></i>&nbsp;&nbsp;
+	                                        <span class="txt-color-darken">
+	                                        	{{$vm.profile.U_EMAIL}}
+	                                        </span>
+	                                    </p>
+	                                </li>
+	                                <li>
+	                                    <p class="text-muted">
+	                                        <i class="fa fa-key" title="權限"></i>&nbsp;&nbsp;
+	                                        <span class="txt-color-darken">
+	                                        	{{$vm.profile.U_ROLE | roleFilter}}
+	                                        </span>
+	                                    </p>
+	                                </li>
+	                                <li>
+	                                    <p class="text-muted">
+	                                        <i class="fa fa-calendar-check-o" title="更新時間"></i>&nbsp;&nbsp;
+	                                        <span class="txt-color-darken">
+	                                        	{{$vm.profile.U_UP_DATETIME | datetimeFilter}}
+	                                        </span>
+	                                    </p>
+	                                </li>
+	                            </ul>
+	                            <!-- <br>
+	                            <p class="font-md">
+	                                <i>A little about me...</i>
+	                            </p>
+	                            <p>
+	                                Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere
+	                            </p>
+	                            <br>
+	                            <a href-void="" class="btn btn-default btn-xs" href="#"><i class="fa fa-envelope-o"></i> Send Message</a>
+	                            <br>
+	                            <br> -->
+	                        </div>
+	                        <!-- <div class="col-sm-3">
+	                            <h1>
+				                    <small>Connections</small>
+				                </h1>
+	                            <ul class="list-inline friends-list">
+	                                <li><img src="styles/img/avatars/1.png" alt="friend-1">
+	                                </li>
+	                                <li><img src="styles/img/avatars/2.png" alt="friend-2">
+	                                </li>
+	                                <li><img src="styles/img/avatars/3.png" alt="friend-3">
+	                                </li>
+	                                <li><img src="styles/img/avatars/4.png" alt="friend-4">
+	                                </li>
+	                                <li><img src="styles/img/avatars/5.png" alt="friend-5">
+	                                </li>
+	                                <li><img src="styles/img/avatars/male.png" alt="friend-6">
+	                                </li>
+	                                <li>
+	                                    <a href-void="" href="#">413 more</a>
+	                                </li>
+	                            </ul>
+	                            <h1>
+				                    <small>Recent visitors</small>
+				                </h1>
+	                            <ul class="list-inline friends-list">
+	                                <li><img src="styles/img/avatars/male.png" alt="friend-1">
+	                                </li>
+	                                <li><img src="styles/img/avatars/female.png" alt="friend-2">
+	                                </li>
+	                                <li><img src="styles/img/avatars/female.png" alt="friend-3">
+	                                </li>
+	                            </ul>
+	                        </div> -->
+	                    </div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+</div>
+
+<style>
+.carousel > .carousel-inner > .item > img {
+    width: 100%;
+}
+</style>
+
+<script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Profile')}}{{getWord('Editor')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+
+		<form class="form-horizontal" name="profileEditorform">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">帳號</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['U_ID']" type="text" ng-disabled="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">當前密碼</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['N_PW']" type="password" placeholder="請輸入當前密碼" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">更改密碼</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['M_PW']" type="password" placeholder="請輸入更改密碼（長度6-15，需含英文大小寫+數字+特殊符號[@#$^&+=]）" ng-pattern="/^.*(?=.{6,15})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$^&+=]).*$/" minlength="6" maxlength="15" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">確認密碼</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['C_PW']" type="password" placeholder="請輸入確認密碼" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">信箱</label>
+			        <div class="col-md-10">
+			            <input name="U_EMAIL" class="form-control" ng-model="$ctrl.mdData['U_EMAIL']" type="email">
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!profileEditorform.$valid && $ctrl.CheckPW()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

@@ -1,0 +1,137 @@
+<header id="header"  class="animated fadeInDown" >
+
+    <div id="logo-group">
+        <!-- <span id="logo"> <img src="styles/img/ews/title_logo.png" alt="東風管理系統"> </span> -->
+        <span id="logo"> <img src="{{sysParm.SPA_HEADER_PNG}}" alt="{{sysParm.SPA_HEADER}}"> </span>
+    </div>
+
+    <!-- <span id="extr-page-header-space"> <span class="hidden-mobile hiddex-xs">Need an account?</span> <a
+           ui-sref="register" class="btn btn-danger">Create account</a> </span> -->
+
+</header>
+<div id="main" role="main"  class="animated fadeInDown" ng-init="$vm.Init()">
+
+    <div id="content" class="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-7 col-lg-8 hidden-xs hidden-sm">
+                <h1 class="login-header-big">
+                    <img src="{{sysParm.SPA_LOGIN_LOGO}}">
+                    <span class="txt-logo1-style">{{sysParm.SPA_LOGIN_LOGO1_TXT}}</span>
+                    <span class="txt-logo2-style">{{sysParm.SPA_LOGIN_LOGO2_TXT}}</span>
+                </h1>
+
+                <div class="hero shine-style" style="background-image: url('{{sysParm.SPA_LOGIN_LOGO_BG}}'); background-position: 0 0">
+                    <div class="pull-left login-desc-box-l">
+                        <h4 class="txt-logo3-style">
+                            EXPRESS
+                        </h4>
+
+                        <!-- <div class="login-app-icons">
+                            <a ui-sref="app.dashboard" class="btn btn-danger btn-sm">Frontend Template</a>
+                            <a href-void class="btn btn-danger btn-sm">Find out more</a>
+                        </div> -->
+                    </div>
+                    <!-- <img src="styles/img/demo/iphoneview.png" class="pull-right display-image" alt style="width:210px"> -->
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <h5 class="about-heading">{{sysParm.SPA_LOGIN_BOTTOM1}}</h5>
+
+                        <p>
+                            {{sysParm.SPA_LOGIN_BOTTOM2}}
+                        </p>
+                    </div>
+                    <!-- <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <h5 class="about-heading">About SmartAdmin - Are you up to date?</h5>
+
+                        <p>
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque
+                            laudantium, totam rem aperiam, eaque ipsa.
+                        </p>
+                    </div>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <h5 class="about-heading">Not just your average template!</h5>
+
+                        <p>
+                            Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta
+                            nobis est eligendi voluptatem accusantium!
+                        </p>
+                    </div> -->
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-5 col-lg-4">
+                <div class="well no-padding">
+                    <!-- <form action="#/dashboard" id="login-form" class="smart-form client-form"  data-smart-validate-form> -->
+                    <form id="login-form"
+                          name="loginform"
+                          class="smart-form client-form login-form"  data-smart-validate-form
+                          ng-submit="loginform.$valid && Login($vm)">
+                        <header class="login-form-bg-color txt-color-white">
+                            登入
+                        </header>
+                        <fieldset>
+                            <section>
+                                <label class="label">使用者帳號</label>
+                                <label class="input"> 
+                                    <i class="icon-append fa fa-user"></i>
+                                    <input type="text" name="userid"
+                                           data-smart-validate-input
+                                           data-required
+                                           data-message="Please enter your userid"
+                                           data-ng-model="$vm.userid">
+                                    <b class="tooltip tooltip-top-right">
+                                        <i class="fa fa-user txt-color-teal"></i>
+                                        請輸入帳號
+                                    </b>
+                                </label>
+                            </section>
+                            <section>
+                                <label class="label">使用者密碼</label>
+                                <label class="input"> <i class="icon-append fa fa-lock"></i>
+                                   <input type="password" name="password"
+                                          data-smart-validate-input
+                                          data-required
+                                          data-minlength="3"
+                                          data-maxnlength="20"
+                                          data-message="Please enter your password"
+                                          data-ng-model="$vm.password">
+                                    <b class="tooltip tooltip-top-right">
+                                        <i class="fa fa-lock txt-color-teal"></i> 
+                                        請輸入密碼
+                                    </b> 
+                                </label>
+
+                                <!-- <div class="note">
+                                    <a ui-sref="forgotPassword">Forgot password?</a>
+                                </div> -->
+                            </section>
+                            <!-- <section>
+                                <label class="checkbox">
+                                    <input type="checkbox" name="remember" checked>
+                                    <i></i>Stay signed in</label>
+                            </section> -->
+                        </fieldset>
+                        <footer>
+                            <button type="submit" class="btn btn-primary">
+                                登入
+                            </button>
+                        </footer>
+                    </form>
+                </div>
+                <!-- <h5 class="text-center"> - 東風管理系統 -</h5> -->
+                <!-- <ul class="list-inline text-center">
+                    <li>
+                        <a href-void class="btn btn-primary btn-circle"><i class="fa fa-facebook"></i></a>
+                    </li>
+                    <li>
+                        <a href-void class="btn btn-info btn-circle"><i class="fa fa-twitter"></i></a>
+                    </li>
+                    <li>
+                        <a href-void class="btn btn-warning btn-circle"><i class="fa fa-linkedin"></i></a>
+                    </li>
+                </ul> -->
+            </div>
+        </div>
+    </div>
+
+</div>

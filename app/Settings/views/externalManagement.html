@@ -1,0 +1,148 @@
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'ExternalManagement']" icon="external-link" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="managementSettings" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>管理設定 </h2>
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-external-link-square"></i> <span class="hidden-mobile hidden-tablet"> 外部帳號 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-building-o"></i> <span class="hidden-mobile hidden-tablet"> 行家 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+				            <!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddAccount()">
+									                {{getWord('Add Account')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.custInfoOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+				                    <div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddCompy()">
+									                {{getWord('Add')}}{{getWord('Compy')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.compyInfoOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				            </div>
+
+							<!-- <div class="table-responsive">
+
+								<div id="grid1" ui-grid="$vm.historySearchOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns></div>
+
+							</div> -->
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+</div>
+
+<script type="text/ng-template" id="addCompyModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Add')}}{{getWord('Compy')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="addCompyForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label"><code>*</code>{{getWord('Compy')}}{{getWord('Name')}}</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.items['CO_NAME']" type="text" placeholder="請輸入行家名稱" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label"><code>*</code>{{getWord('Compy')}}區域</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.items['CO_AREA']" type="text" placeholder="請輸入行家區域" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">{{getWord('Compy')}}{{getWord('Editorial')}}</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.items['CO_NUMBER']" type="text" placeholder="請輸入行家統編">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">{{getWord('Compy')}}{{getWord('Address')}}</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.items['CO_ADDR']" type="text" placeholder="請輸入行家地址">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">{{getWord('Compy')}}權重</label>
+			        <div class="col-md-10">
+						<select class="form-control" 
+								ng-model="$ctrl.items['CO_WEIGHTS']"
+								ng-options="data.value as data.label for data in $ctrl.coWeightsData">
+								<option value="">-- 請選擇 --</option>
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!addCompyForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

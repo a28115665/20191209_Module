@@ -1,0 +1,115 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['SelfWork', 'DailyLeave']" icon="child" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>請假設定 </h2>
+				        
+				        <!-- <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-primary" href="#">重新讀取個人領單</a>
+				        </div> -->
+
+				        <!-- <div class="widget-toolbar smart-form" role="menu">
+				            <label class="input"> 
+				            	<i class="icon-append fa fa-search"></i>
+				                <input type="text" placeholder="篩選內容" ng-enter="$vm.Filter()" ng-model="$vm.filterValue">
+				                <b class="tooltip tooltip-top-right">
+				                    <i class="fa fa-warning txt-color-teal"></i>
+				                    按下確認鍵後篩選
+				                </b>
+				            </label>
+				        </div> -->
+
+				        <!-- <div class="widget-toolbar" role="menu">
+					        <div class="btn-group">
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Left'">近七天</label>
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Middle'">近一月</label>
+						        <label class="btn btn-success btn-xs" ng-model="$vm.defaultChoice" uib-btn-radio="'Right'">近三月</label>
+				            </div>
+				        </div> -->
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<div class="widget-body-toolbar">
+							    <div class="row">
+							        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+							        </div>
+							        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+							        	<form class="form-inline" role="form">
+							                <fieldset>
+							                    <div class="form-group">
+													<select class="form-control" ng-model="$vm.selectAssignDept" ng-change="$vm.LoadDailyLeave()" ng-options="data.value as data.label for data in $vm.assignGradeData">
+	  												</select>
+							                    </div>
+							                    <div class="form-group">
+													<select class="form-control" ng-model="$vm.isLeave" ng-options="bool.value as bool.label for bool in $vm.boolData">
+	  												</select>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-primary"
+										            		ng-disabled="$vm.dailyLeaveGridApi.selection.getSelectedRows().length == 0 || $vm.isLeave == undefined"
+										            		ng-click="$vm.ChangeLeave()">
+										                變更
+										            </button>
+							                    </div>
+							                </fieldset>
+							            </form>
+							        </div>
+							    </div>
+							</div>
+
+							<div class="table-responsive">
+
+								<div id="grid1" ui-grid="$vm.dailyLeaveOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-edit ui-grid-row-edit ui-grid-selection></div>
+
+							</div>
+
+							<!-- widget footer -->
+							<!-- <div class="widget-footer">
+								<button class="btn btn-sm btn-primary" type="button" ng-click="$vm.Save()">
+					                <i class="fa fa-save"></i>
+									儲存
+								</button>	
+							</div> -->
+							<!-- end widget footer -->
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

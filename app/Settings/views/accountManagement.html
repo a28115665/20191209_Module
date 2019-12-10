@@ -1,0 +1,121 @@
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'AccountManagement']" icon="sitemap" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="managementSettings" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>管理設定 </h2>
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-user"></i> <span class="hidden-mobile hidden-tablet"> 帳號 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-users"></i> <span class="hidden-mobile hidden-tablet"> 群組 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+				            <!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddAccount()">
+									                {{getWord('Add Account')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.accountManagementOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+				                    <div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddGroup()">
+									                {{getWord('Add')}}{{getWord('Group')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.groupManagementOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="addGroupModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Add')}}{{getWord('Group')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="addGroupForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">群組名稱</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.items['TITLE']" type="text" placeholder="請輸入群組名稱">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">群組描述</label>
+			        <div class="col-md-10">
+		        		<textarea class="form-control" rows="3" maxlength="50" ng-model="$ctrl.items['DESC']" placeholder="字數限制 50字"></textarea>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!addGroupForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

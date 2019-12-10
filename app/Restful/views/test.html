@@ -1,0 +1,258 @@
+<!-- MAIN CONTENT -->
+<div id="content">
+
+	<div class="row">
+		<big-breadcrumbs items="['Restful', 'AlanTest']" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+    <!-- widget grid -->
+    <section id="widget-grid" widget-grid>
+        <!-- row -->
+        <div class="row">
+            <!-- NEW WIDGET START -->
+            <article class="col-sm-12">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div jarvis-widget class="well" id="wid-id-0a" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-sortable="false">
+                    <!-- widget options:
+                    usage: <div jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+
+                    data-widget-colorbutton="false"
+                    data-widget-editbutton="false"
+                    data-widget-togglebutton="false"
+                    data-widget-deletebutton="false"
+                    data-widget-fullscreenbutton="false"
+                    data-widget-custombutton="false"
+                    data-widget-collapsed="true"
+                    data-widget-sortable="false"
+
+                    -->
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-hand-o-up"></i> </span>
+                        <h2>Restful 測試頁面 </h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+                        <!-- widget content -->
+                        <div class="widget-body">
+                            <h1>Restful 測試頁面</h1>
+                            <p>
+                                巴拉巴拉巴拉...
+                            </p>
+                            <div class="table-responsive">
+
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>測試按鈕</th>
+                                            <th>描述</th>
+                                            <th>結果</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><a class="btn btn-primary" href-void ng-click="$vm.QueryTest()">查詢</a></td>
+                                            <td>
+												<form class="form-horizontal">
+													<fieldset>
+													    <legend>Query Test</legend>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">Query ID</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+														    </div>
+														</div>
+													</fieldset>
+												</form>
+                                            </td>
+                                            <td>
+                                            	<h6>{{$vm.restful.queryTest.status}}</h6>
+                                            	<p>{{$vm.restful.queryTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-success" href-void ng-click="$vm.InsertTest()">新增</a></td>
+                                            <td>
+												<form class="form-horizontal">
+													<fieldset>
+													    <legend>Insert Test</legend>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">Insert ID</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+														    </div>
+														</div>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">Insert Name</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Name" ng-model="$vm.testData.Name">
+														    </div>
+														</div>
+													</fieldset>
+												</form>
+											</td>
+                                            <td>
+                                            	<h6>{{$vm.restful.insertTest.status}}</h6>
+                                            	<p>{{$vm.restful.insertTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-warning" href-void ng-click="$vm.UpdateTest()">修改</a></td>
+                                            <td>
+												<form class="form-horizontal">
+													<fieldset>
+													    <legend>Update Test</legend>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">ID</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+														    </div>
+														</div>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">Update that ID Name</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.Name">
+														    </div>
+														</div>
+													</fieldset>
+												</form>
+											</td>
+                                            <td>
+                                            	<h6>{{$vm.restful.updateTest.status}}</h6>
+                                            	<p>{{$vm.restful.updateTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-warning" href-void ng-click="$vm.UpsertTest()">插入</a></td>
+                                            <td>
+                                                <form class="form-horizontal">
+                                                    <fieldset>
+                                                        <legend>Update Test</legend>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">ID</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">Update that ID Name</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.Name">
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <h6>{{$vm.restful.upsertTest.status}}</h6>
+                                                <p>{{$vm.restful.upsertTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-danger" href-void ng-click="$vm.DeleteTest()">刪除</a></td>
+                                            <td>
+												<form class="form-horizontal">
+													<fieldset>
+													    <legend>Delete Test</legend>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">ID</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+														    </div>
+														</div>
+													</fieldset>
+												</form>
+											</td>
+                                            <td>
+                                            	<h6>{{$vm.restful.deleteTest.status}}</h6>
+                                            	<p>{{$vm.restful.deleteTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-default" href-void ng-click="$vm.ExportExcelByVarTest()">匯出</a></td>
+                                            <td>
+												<form class="form-horizontal">
+													<fieldset>
+													    <legend>Export Excel By Var Test</legend>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">Filename</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Filename" ng-model="$vm.testData.Filename">
+                                                            </div>
+                                                        </div>
+									                    <div class="form-group">
+														    <label class="col-md-2 control-label">ID</label>
+														    <div class="col-md-10">
+									                        	<input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.ID">
+														    </div>
+														</div>
+													</fieldset>
+												</form>
+											</td>
+                                            <td>
+                                            	<h6>{{$vm.restful.exportExcelByVarTest.status}}</h6>
+                                            	<p>{{$vm.restful.exportExcelByVarTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-primary" href-void ng-click="$vm.QueryTestByTask()">任務查詢</a></td>
+                                            <td>
+                                                <form class="form-horizontal">
+                                                    <fieldset>
+                                                        <legend>Query 2 Task Test</legend>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">Query ID1</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testTask.ID1">
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">Query ID2</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testTask.ID2">
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <h6>{{$vm.restful.queryTestByTask.status}}</h6>
+                                                <p>{{$vm.restful.queryTestByTask.result}}</p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td><a class="btn btn-primary" href-void ng-click="$vm.ChangeNatureTest()">改單</a></td>
+                                            <td>
+                                                <form class="form-horizontal">
+                                                    <fieldset>
+                                                        <legend>Change Nature Test</legend>
+                                                        <div class="form-group">
+                                                            <label class="col-md-2 control-label">Nature</label>
+                                                            <div class="col-md-10">
+                                                                <input type="text" class="form-control" placeholder="Enter Identity" ng-model="$vm.testData.Nature">
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </form>
+                                            </td>
+                                            <td>
+                                                <h6>{{$vm.restful.changeNatureTest.status}}</h6>
+                                                <p>{{$vm.restful.changeNatureTest.result}}</p>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+            </article>
+            <!-- WIDGET END -->
+        </div>
+        <!-- end row -->
+    </section>
+    <!-- end grid -->
+
+</div>

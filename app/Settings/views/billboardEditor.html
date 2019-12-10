@@ -1,0 +1,101 @@
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'BillboardEditor']" icon="newspaper-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="managementSettings" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget ng-init="ShowTabs = true">
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>公佈欄 </h2>
+						<ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-bullhorn"></i> <span class="hidden-mobile hidden-tablet"> 公佈區 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-history"></i> <span class="hidden-mobile hidden-tablet"> 歷史區 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddNews()">
+									                {{getWord('Add')}}{{getWord('News')}}
+									            </button>
+									            <button class="btn btn-danger"
+									            		ng-click="$vm.DeleteNews()"
+									            		ng-disabled="$vm.billboardEditorGridApi.selection.getSelectedRows() == 0">
+									                {{getWord('Delete')}}{{getWord('News')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.billboardEditorOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-danger"
+									            		ng-click="$vm.DeleteHistoryNews()"
+									            		ng-disabled="$vm.billboardHistoryGridApi.selection.getSelectedRows() == 0">
+									                {{getWord('Delete')}}{{getWord('News')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.billboardHistoryOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
+
+				                </div>
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

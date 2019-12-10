@@ -1,0 +1,73 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'BagnoCount']" icon="hourglass-half" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="job002" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯 </h2>
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body">
+
+							<form class="form-horizontal" name="bagnoCount">
+								<fieldset>
+									<div class="form-group">
+								        <label class="col-md-2 control-label">目前數量</label>
+								        <div class="col-md-4">
+								            <input class="form-control" ng-model="$vm.vmData.ILC_CURRENT" type="text" placeholder="請輸入目前數量" required>
+								        </div>
+								        <label class="col-md-2 control-label"><code>*</code>最大數量</label>
+								        <div class="col-md-4">
+								            <input class="form-control" ng-model="$vm.vmData.ILC_MAX" type="text" placeholder="請輸入最大數量" required>
+								        </div>
+								    </div>
+								</fieldset>
+								<div class="form-actions">
+								    <div class="row">
+								        <div class="col-md-12">
+								            <button class="btn btn-warning" type="submit" ng-click="$vm.Update()" ng-disabled="!bagnoCount.$valid">
+								                <i class="fa fa-wrench"></i>
+								                {{getWord('Update')}}
+								            </button>
+								        </div>
+								    </div>
+								</div>
+							</form>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

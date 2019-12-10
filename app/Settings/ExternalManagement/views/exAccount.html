@@ -1,0 +1,121 @@
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'ExternalManagement', 'ExternalAccount']" icon="external-link-square" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="managementSettings" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯</h2>
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body">
+
+							<form class="form-horizontal" name="exAccount">
+								<fieldset>
+									<div class="form-group">
+								        <label class="col-md-2 control-label">使用者帳號</label>
+								        <div class="col-md-6">
+								        	<div class="input-icon-right">
+                        						<i class="txt-color-green fa fa-check" ng-show="exAccount.ID.$dirty && exAccount.ID.$valid"></i>
+                        						<i class="txt-color-red fa fa-remove" ng-show="exAccount.ID.$dirty && !exAccount.ID.$valid && exAccount.ID.$viewValue != null"></i>
+								            	<input class="form-control" name="ID" placeholder="請輸入使用者帳號" type="text" ng-model="$vm.vmData.CI_ID" ng-disabled="$vm.vmData.IU == 'Update'" maxlength="15" required>
+								            </div>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">使用者密碼</label>
+								        <div class="col-md-6" ng-show="$vm.vmData.IU == 'Add'">
+						                    <div class="input-icon-right">
+                        						<i class="txt-color-green fa fa-check" ng-show="exAccount.PW.$dirty && exAccount.PW.$valid && exAccount.PW.$viewValue != ''"></i>
+                        						<i class="txt-color-red fa fa-remove" ng-show="exAccount.PW.$dirty && !exAccount.PW.$valid"></i>
+								            	<input class="form-control" name="PW" placeholder="請輸入使用者密碼" type="password" ng-model="$vm.vmData.CI_PW" ng-pattern="/^.*(?=.{6,15})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$^&+=]).*$/" minlength="6" maxlength="15" required>
+						                    </div>
+							            	<p class="note">長度6-15，需含英文大小寫 + 數字 + 特殊符號[@#$^&+=]</p>
+								        </div>
+								        <div class="col-md-6" ng-show="$vm.vmData.IU == 'Update'">
+						                    <div class="input-group">
+									            <input class="form-control" placeholder="請輸入使用者密碼（長度6-15，需含英文大小寫+數字+特殊符號[@#$^&+=]）" type="password" ng-model="$vm.vmData.CI_PW" ng-disabled="true" required>
+						                        <div class="input-group-btn">
+						                            <button class="btn btn-danger" type="button" ng-click="$vm.ForgetPW()">
+						                                忘記密碼
+						                            </button>
+						                        </div>
+						                    </div>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">姓名</label>
+								        <div class="col-md-2">
+								            <input class="form-control" placeholder="請輸入姓名" type="text" ng-model="$vm.vmData.CI_NAME" required>
+								        </div>
+								        <label class="col-md-2 control-label">公司名稱</label>
+								        <div class="col-md-2">
+											<select class="form-control" 
+													ng-model="$vm.vmData.CI_COMPY"
+													ng-options="data.value as data.label for data in $vm.compyData">
+													<option value="">-- 請選擇 --</option>
+											</select>
+								        </div>
+								        <label class="col-md-2 control-label">離職</label>
+								        <div class="col-md-2">
+											<select class="form-control" 
+													ng-model="$vm.vmData.CI_STS"
+													ng-options="data.value as data.label for data in $vm.boolData">
+											</select>
+								        </div>
+								    </div>
+								</fieldset>
+								<div class="form-actions">
+								    <div class="row">
+								        <div class="col-md-12">
+								            <button class="btn btn-default" type="submit" ng-click="$vm.Return()">
+								                {{getWord('Return')}}
+								            </button>
+								            <button class="btn btn-primary" type="submit" ng-click="$vm.Add()" ng-disabled="!exAccount.$valid" ng-show="$vm.vmData.IU == 'Add'">
+								                <i class="fa fa-save"></i>
+								                {{getWord('Add')}}
+								            </button>
+								            <button class="btn btn-warning" type="submit" ng-click="$vm.Update()" ng-disabled="!exAccount.$valid" ng-show="$vm.vmData.IU == 'Update'">
+								                <i class="fa fa-wrench"></i>
+								                {{getWord('Update')}}
+								            </button>
+								        </div>
+								    </div>
+								</div>
+							</form>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

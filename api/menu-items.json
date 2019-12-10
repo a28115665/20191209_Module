@@ -1,0 +1,107 @@
+{
+  "items": [
+    {
+        "title":"MainWork",
+        "sref":"app.mainwork",
+        "icon":"newspaper-o"
+    },
+    {
+        "title":"SelfWork",
+        "href":"#",
+        "icon":"truck",
+        "items": [
+            {
+                "title":"LeaderOption",
+                "href":"#",
+                "icon":"folder-open",
+                "items": [
+                    {
+                        "title":"CompyDistribution",
+                        "sref": "app.selfwork.compydistribution",
+                        "icon":"building-o"
+                    },
+                    {
+                        "title":"AgentSetting",
+                        "sref": "app.selfwork.agentsetting",
+                        "icon":"braille"
+                    },
+                    {
+                        "title":"DailyLeave",
+                        "sref": "app.selfwork.dailyleave",
+                        "icon":"child"
+                    }
+                ]
+            },
+            {
+                "title":"LeaderJobs",
+                "sref": "app.selfwork.leaderjobs",
+                "icon":"cubes"
+            },
+            {
+                "title":"AssistantJobs",
+                "sref": "app.selfwork.assistantjobs",
+                "icon":"cube"
+            },
+            {
+                "title":"EmployeeJobs",
+                "sref": "app.selfwork.employeejobs",
+                "icon":"cube"
+            },
+            {
+                "title":"HistorySearch",
+                "sref": "app.selfwork.historysearch",
+                "icon":"history"
+            }
+        ]
+    },
+    {
+        "title":"Concerns",
+        "href":"#",
+        "icon":"address-book-o",
+        "items": [
+            {
+                "title":"Ban",
+                "sref": "app.concerns.ban",
+                "icon":"ban"
+            },
+            {
+                "title":"DailyAlert",
+                "sref": "app.concerns.dailyalert",
+                "icon":"bell-o"
+            },
+            {
+                "title":"HistorySearch",
+                "sref": "app.concerns.banhistorysearch",
+                "icon":"history"
+            }
+        ]
+    },
+    {
+        "title":"Settings",
+        "href":"#",
+        "icon":"cog",
+        "items": [
+            {
+                "title":"Profile",
+                "sref": "app.settings.profile",
+                "icon":"user"
+            },
+            {
+                "title":"Account Management",
+                "sref": "app.settings.accountmanagement",
+                "icon":"sitemap"
+            },
+            {
+                "title":"Billboard Editor",
+                "sref": "app.settings.billboardeditor",
+                "icon":"newspaper-o"
+            },
+            {
+                "title":"External Management",
+                "sref": "app.settings.externalmanagement",
+                "icon":"external-link"
+            }
+        ]
+    }
+  ]
+}

@@ -1,0 +1,237 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['SelfWork', 'CustomOverSix']" icon="cube" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>自訂逾六次 </h2>
+
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-object-ungroup"></i> <span class="hidden-mobile hidden-tablet"> 單一 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-object-group"></i> <span class="hidden-mobile hidden-tablet"> 複合 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-click="$vm.Add()">
+												                新增
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-danger"
+												            		ng-click="$vm.Delete()">
+												                刪除
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.overSixOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize ui-grid-selection></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-click="$vm.AddCompound()">
+												                新增
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-danger"
+												            		ng-click="$vm.DeleteCompound()">
+												                刪除
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.overSixCompoundOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize ui-grid-selection></div>
+				                </div>
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="addOverSixModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">新增</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="overSixForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">類型</label>
+			        <div class="col-md-10">
+						<select class="form-control" ng-model="$ctrl.mdData['COS_TYPE']" ng-options="data.value as data.label for data in $ctrl.overSixData" required>
+							<option value="">--請選擇--</option>
+						</select>
+			    	</div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">內容</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COS_CONTENT']" type="text" placeholder="請輸入內容" maxlength="200" required>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!overSixForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="modifyOverSixModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">修改</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="overSixForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">類型</label>
+			        <div class="col-md-10">
+						<select class="form-control" ng-model="$ctrl.mdData['COS_TYPE']" ng-options="data.value as data.label for data in $ctrl.overSixData" disabled required>
+							<option value="">--請選擇--</option>
+						</select>
+			    	</div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">內容</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COS_CONTENT']" type="text" placeholder="請輸入內容" maxlength="200" required>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-warning" type="button" ng-click="$ctrl.ok()" ng-disabled="!overSixForm.$valid">{{getWord('Modify')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="addOverSixCompoundModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">新增</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="overSixCompoundForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">收件者</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COSC_NAME']" type="text" placeholder="請輸入收件者" maxlength="50" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">地址</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COSC_ADDRESS']" type="text" placeholder="請輸入地址" maxlength="200" required>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!overSixCompoundForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="modifyOverSixCompoundModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">修改</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="overSixForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">收件者</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COSC_NAME']" type="text" placeholder="請輸入收件者" maxlength="50" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">地址</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['COSC_ADDRESS']" type="text" placeholder="請輸入地址" maxlength="200" required>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-warning" type="button" ng-click="$ctrl.ok()" ng-disabled="!overSixForm.$valid">{{getWord('Modify')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

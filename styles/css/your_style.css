@@ -1,0 +1,249 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+    Login Style
+ */
+.txt-logo1-style {
+    color: #000!important;
+    font-weight:bold;
+}
+.txt-logo2-style {
+    color: #000!important;
+    font-weight:bold;
+}
+.txt-logo3-style {
+    color: #e37e12!important;
+    font-weight:bold;
+    position: relative;
+    left: 50px;
+}
+
+.login-form {
+    box-shadow: 4px 4px 12px 4px rgba(20%,20%,40%,0.5);
+}
+.login-form-bg-color {
+    background-color: #3373b8!important;
+}
+
+.shine-style {
+    position: relative;
+}
+.shine-style::before {
+    position: absolute;
+    top: 0;
+    left: -75%;
+    z-index: 2;
+    display: block;
+    content: '';
+    width: 50%;
+    height: 100%;
+    background: -webkit-linear-gradient(left, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,.3) 100%);
+    -webkit-transform: skewX(-25deg);
+    transform: skewX(-25deg);
+    
+    -webkit-animation: shine 2s;
+    -webkit-animation-iteration-count: infinite;
+    animation: shine 2s;
+    animation-iteration-count: infinite;
+}
+
+@-webkit-keyframes shine {
+    100% {
+        left: 40%;
+    }
+}
+@keyframes shine {
+    100% {
+        left: 40%;
+    }
+}
+
+/*
+ * default page style
+ */
+.default-background {
+    background: url(/styles/img/default_background.png) no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 1024px;
+}
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+.my-ui-grid {
+    height: 570px;
+}
+.my-ui-grid-job {
+    height: 720px;
+}
+.my-ui-grid-350 {
+    height: 350px;
+}
+.my-ui-grid-cell-contents {
+    padding: 5px;
+}
+
+/*黑名單加入*/
+.cell-class-ban {
+    /*position: relative;*/
+    /*background-color: #F99D9D !important; */
+    color: #a90329 !important;
+    font-weight: bold;
+
+    /*opacity: 1;
+    -webkit-animation: flash 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    animation: flash 1.5s;
+    animation-iteration-count: infinite;*/
+}
+@-webkit-keyframes flash {
+    0% {
+        /*opacity: .7;*/
+        background-color:rgba(249, 157, 157, 0.8);
+    }
+    100% {
+        /*opacity: 1;*/
+        background-color:rgba(249, 157, 157, 1);
+    }
+}
+@keyframes flash {
+    0% {
+        /*opacity: .7;*/
+        background-color:rgba(249, 157, 157, 0.8);
+    }
+    100% {
+        /*opacity: 1;*/
+        background-color:rgba(249, 157, 157, 1);
+    }
+}
+
+/*拉貨*/
+.cell-class-pull {
+    /*position: relative;*/
+    background-color: #d4d4d4 !important; 
+    /*color: #a90329 !important;*/
+
+    /*opacity: 1;
+    -webkit-animation: flash 1.5s;
+    -webkit-animation-iteration-count: infinite;
+    animation: flash 1.5s;
+    animation-iteration-count: infinite;*/
+}
+
+/*特貨*/
+.cell-class-special {
+    font-style: italic;
+    text-decoration: underline;
+}
+.cell-class-no-style {
+    font-style: normal;
+    text-decoration: none;
+}
+
+/*ui-grid 異動資料*/
+.ui-grid-row-dirty .ui-grid-cell {
+    color: #8e1da9;
+}
+
+.cell-class-editabled {
+    background-color: red !important; 
+    color: #000 !important;
+    -webkit-animation-name: cellClassEditabled; 
+    -webkit-animation-duration: 1s; 
+    -webkit-animation-iteration-count: infinite;
+    animation-name: cellClassEditabled;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}
+@keyframes cellClassEditabled {
+    0%   {background-color:rgba(255, 0, 0, 0.4);}
+    10%  {background-color:rgba(255, 0, 0, 0.44);}
+    20%  {background-color:rgba(255, 0, 0, 0.48);}
+    30%  {background-color:rgba(255, 0, 0, 0.52);}
+    40%  {background-color:rgba(255, 0, 0, 0.56);}
+    50%  {background-color:rgba(255, 0, 0, 0.60);}
+    60%  {background-color:rgba(255, 0, 0, 0.64);}
+    70%  {background-color:rgba(255, 0, 0, 0.68);}
+    80%  {background-color:rgba(255, 0, 0, 0.72);}
+    90%  {background-color:rgba(255, 0, 0, 0.76);}
+    100% {background-color:rgba(255, 0, 0, 0.8);}
+}
+.fileUpload {
+    position: relative;
+    overflow: hidden;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+ 
+/**
+ * modal
+ */
+.center-modal {
+    margin: 15% auto;
+}
+
+/**
+ * Bootstrap col-5
+ */
+.col-xs-5ths,
+.col-sm-5ths,
+.col-md-5ths,
+.col-lg-5ths {
+    position: relative;
+    min-height: 1px;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.col-xs-5ths {
+    width: 20%;
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .col-sm-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 992px) {
+    .col-md-5ths {
+        width: 20%;
+        float: left;
+    }
+}
+
+@media (min-width: 1200px) {
+    .col-lg-5ths {
+        width: 20%;
+        float: left;
+    }
+}

@@ -1,0 +1,110 @@
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'ExternalManagement', 'ExternalCompy']" icon="building-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="group" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget ng-init="ShowTabs = true">
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>編輯</h2>
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body">
+
+							<form class="form-horizontal" name="exCompy">
+								<fieldset>
+									<div class="form-group">
+								        <label class="col-md-2 control-label">行家名稱</label>
+								        <div class="col-md-10">
+								            <input class="form-control" placeholder="請輸入行家名稱" type="text" ng-model="$vm.vmData.CO_NAME" required>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">行家區域</label>
+								        <div class="col-md-4">
+								            <input class="form-control" placeholder="請輸入行家區域" type="text" ng-model="$vm.vmData.CO_AREA" required>
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">行家統編</label>
+								        <div class="col-md-4">
+								            <input class="form-control" placeholder="請輸入行家統編" type="text" ng-model="$vm.vmData.CO_NUMBER">
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">行家地址</label>
+								        <div class="col-md-10">
+								            <input class="form-control" placeholder="請輸入行家地址" type="text" ng-model="$vm.vmData.CO_ADDR">
+								        </div>
+								    </div>
+								    <div class="form-group">
+								        <label class="col-md-2 control-label">作廢</label>
+								        <div class="col-md-2">
+											<select class="form-control" 
+													ng-model="$vm.vmData.CO_STS"
+													ng-options="data.value as data.label for data in $vm.boolData">
+											</select>
+								        </div>
+								        <label class="col-md-2 control-label">行家代號</label>
+								        <div class="col-md-2">
+								            <input class="form-control" placeholder="請輸入行家代號" type="text" ng-model="$vm.vmData.CO_CODE" ng-disabled="true">
+								        </div>
+								        <label class="col-md-2 control-label">行家權重</label>
+								        <div class="col-md-2">
+											<select class="form-control" 
+													ng-model="$vm.vmData.CO_WEIGHTS"
+													ng-options="data.value as data.label for data in $vm.coWeightsData">
+													<option value="">-- 請選擇 --</option>
+											</select>
+								        </div>
+								    </div>
+								</fieldset>
+								<div class="form-actions">
+								    <div class="row">
+								        <div class="col-md-12">
+								            <button class="btn btn-default" type="submit" ng-click="$vm.Return()">
+								                {{getWord('Return')}}
+								            </button>
+								            <button class="btn btn-warning" type="submit" ng-click="$vm.Update()" ng-disabled="!exCompy.$valid">
+								                <i class="fa fa-wrench"></i>
+								                {{getWord('Update')}}
+								            </button>
+								        </div>
+								    </div>
+								</div>
+							</form>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>

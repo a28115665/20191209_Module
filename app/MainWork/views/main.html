@@ -1,0 +1,134 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['MainWork']" icon="newspaper-o" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="greenLight" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>公佈欄 </h2>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<div class="table-responsive">
+
+								<div id="grid1" ui-grid="$vm.billboardOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ></div>
+
+							</div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+			<!-- NEW WIDGET START -->
+	        <!-- <article class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
+	        	<div jarvis-widget id="bar-chart-widget" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+
+                        <h2>Bar Chart</h2>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <flot-bar-chart data="barChartData"></flot-bar-chart>
+                        </div>
+                    </div>
+                </div>
+	        </article> -->
+	        <!-- End WIDGET START -->
+
+			<!-- NEW WIDGET START -->
+	        <!-- <article class="col-xs-12 col-sm-12 col-md-5 col-lg-5">
+
+                <div jarvis-widget id="pie-chart-widget" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-bar-chart-o"></i> </span>
+
+                        <h2>Pie Chart</h2>
+                    </header>
+
+                    <div>
+                        <div class="widget-body no-padding">
+                            <flot-pie-chart data="pieChartData"></flot-pie-chart>
+                        </div>
+                    </div>
+                </div>
+
+	        </article> -->
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="news.html">
+    <div class="modal-header">
+	    <h1 class="modal-title" id="modal-title">
+	    	<i class="fa fa-lock" ng-if="$ctrl.mdData.BB_STICK_TOP"></i> {{$ctrl.mdData.BB_TITLE}}
+	    </h1>
+	</div>
+	<div class="modal-body font-md" id="modal-body">
+		<p class="alert alert-info"> 
+			<small>發文時間 <cite>{{$ctrl.mdData.BB_CR_DATETIME | datetimeFilter}}</cite></small>
+		</p>
+		<div style="overflow: hidden;">
+			<span ng-bind-html="$ctrl.mdData.BB_CONTENT">
+			</span>
+		</div>
+		<div style="overflow: hidden;">
+		    <blockquote class="pull-right">
+	            <small>發文者 <cite ng-title="$ctrl.mdData.U_NAME" ng-bind="$ctrl.mdData.U_NAME"></cite></small>
+	        </blockquote>
+		</div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="downloadFiles.html">
+    <div class="modal-header" ng-init="$ctrl.MdInit()">
+	    <h1 class="modal-title" id="modal-title">
+	    	<span class="label txt-color-pink">檔案下載</span>
+	    </h1>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+
+		<div id="grid1" ui-grid="$ctrl.mdDataOptions" class="my-ui-grid-350" ui-grid-resize-columns ui-grid-selection></div>
+		
+	</div>
+	<div class="modal-footer">
+		<a href-void="" class="btn bg-color-pink txt-color-white" href="#" ng-click="$ctrl.ok()">{{getWord('Download')}}</a>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

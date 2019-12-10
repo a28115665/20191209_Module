@@ -1,0 +1,211 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Concerns', 'Ban']" icon="ban" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	    	<!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="ban" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+
+				    <!-- <header>
+				        <h2>名單成員 </h2>
+				        <div class="widget-toolbar smart-form" role="menu">
+				            <a href-void="" class="btn btn-primary" href="#" ng-click="$vm.AddBanMember()">{{getWord('Add Ban Member')}}</a>
+				        </div>
+
+				    </header> -->
+
+				    <header>
+				        <h2>名單成員 </h2>
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-bullseye"></i> <span class="hidden-mobile hidden-tablet"> OP通報 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-pencil"></i> <span class="hidden-mobile hidden-tablet"> 自訂 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-danger"
+									            		ng-click="$vm.DeleteBLFO()"
+									            		ng-disabled="$vm.blfoGridApi.selection.getSelectedRows() == 0">
+									                {{getWord('Delete')}}{{getWord('Ban')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.blfoOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+				                    <div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddBLFL()">
+									                {{getWord('Add')}}{{getWord('Ban')}}
+									            </button>
+									            <button class="btn btn-danger"
+									            		ng-click="$vm.DeleteBLFL()"
+									            		ng-disabled="$vm.blflGridApi.selection.getSelectedRows() == 0">
+									                {{getWord('Delete')}}{{getWord('Ban')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.blflOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection></div>
+				                </div>
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="banMemberByOPModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">關注成員</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="banMemberByOPform">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">寄件人公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入寄件人公司" ng-model="$ctrl.mdData['IL_SENDNAME']" type="text" ng-disabled="true"  ng-required="!$ctrl.mdData['IL_GETNAME'] && !$ctrl.mdData['IL_GETADDRESS'] && !$ctrl.mdData['IL_GETTEL']">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人或公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人或公司" ng-model="$ctrl.mdData['IL_GETNAME']" type="text" ng-disabled="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人地址</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人地址" ng-model="$ctrl.mdData['IL_GETADDRESS']" type="text" ng-disabled="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人電話</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人電話" ng-model="$ctrl.mdData['IL_GETTEL']" type="text" ng-disabled="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">追蹤</label>
+			        <div class="col-md-9">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData['BLFO_TRACK']"
+								ng-options="data.value as data.label for data in $ctrl.bool"
+								required>
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-warning" type="button" ng-click="$ctrl.ok()" ng-disabled="!banMemberByOPform.$valid">{{getWord('Update')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="banMemberByLeaderModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">關注成員</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="banMemberByLeaderform">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">寄件人公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入寄件人公司" ng-model="$ctrl.mdData['BLFL_SENDNAME']" type="text" ng-required="!$ctrl.mdData['BLFL_GETNAME'] && !$ctrl.mdData['BLFL_GETADDRESS'] && !$ctrl.mdData['BLFL_GETTEL']">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人或公司</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人或公司" ng-model="$ctrl.mdData['BLFL_GETNAME']" type="text">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人地址</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="請輸入收件人地址" ng-model="$ctrl.mdData['BLFL_GETADDRESS']" type="text">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">收件人電話</label>
+			        <div class="col-md-9">
+			            <input class="form-control" placeholder="收件人電話" ng-model="$ctrl.mdData['BLFL_GETTEL']" type="text" ng-pattern="/^\d+$/">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-3 control-label">追蹤</label>
+			        <div class="col-md-9">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData['BLFL_TRACK']"
+								ng-options="data.value as data.label for data in $ctrl.bool"
+								required>
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-warning" type="button" ng-click="$ctrl.ok()" ng-disabled="!banMemberByLeaderform.$valid" ng-show="$ctrl.mdData['BLFL_ID'] != null">{{getWord('Update')}}</button>
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!banMemberByLeaderform.$valid" ng-show="$ctrl.mdData['BLFL_ID'] == null">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

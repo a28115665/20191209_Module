@@ -1,0 +1,319 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['SelfWork', 'AssistantJobs']" icon="cube" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>作業區 </h2>
+
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-fighter-jet"></i> <span class="hidden-mobile hidden-tablet"> 航班資訊 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-cube"></i> <span class="hidden-mobile hidden-tablet"> 銷艙單 </span> </a>
+				            </li>
+				            <!-- <li ng-class="$vm.TabSwitch('hr3')" ng-click="$vm.defaultTab='hr3';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr3"> <i class="fa fa-lg fa-question"></i> <span class="hidden-mobile hidden-tablet"> 主號待補 </span> </a>
+				            </li> -->
+				            <li ng-class="$vm.TabSwitch('hr4')" ng-click="$vm.defaultTab='hr4';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr4"> <i class="fa fa-lg fa-hand-o-down"></i> <span class="hidden-mobile hidden-tablet"> 主號待補 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr5')" ng-click="$vm.defaultTab='hr5';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr5"> <i class="fa fa-lg fa-puzzle-piece"></i> <span class="hidden-mobile hidden-tablet"> 拉貨 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+							<!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-disabled="$vm.flightArrivalData.length == 0"
+												            		ng-click="$vm.ReloadFlightArrival()">
+												                重新整理
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.flightArrivalOptions" class="my-ui-grid" ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+
+									<div id="grid1" ui-grid="$vm.flightItemOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+									
+				                </div>
+				                <!-- <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr3')" id="hr3">
+				                	主號待補
+				                </div> -->
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr4')" id="hr4">
+
+									<div id="grid1" ui-grid="$vm.masterToBeFilledOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr5')" id="hr5">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+													        <label class="control-label">標籤說明：</label>
+										                    <div class="form-group">
+																<i class="fa fa-circle-o"> 已派單</i>
+																<i class="fa fa-circle text-warning"> 已編輯</i>
+																<i class="fa fa-circle text-success"> 已完成</i>
+																<i class="fa fa-circle txt-color-magenta"> 非作業員</i>
+										                    </div>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 text-right">
+									        	<form class="form-inline" role="form">
+									                <fieldset>
+									                    <div class="form-group">
+												            <button class="btn btn-warning"
+												            		ng-click="$vm.gridMethodForPullGoods.modifyData()">
+												                修改
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-danger"
+												            		ng-click="$vm.gridMethodForPullGoods.cancelPullGoodsData()">
+												                取消拉貨
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-primary"
+												            		ng-click="$vm.gridMethodForPullGoods.movedData()">
+												                移機
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-danger"
+												            		ng-click="$vm.gridMethodForPullGoods.cancelMovedData()">
+												                取消移機
+												            </button>
+									                    </div>
+									                    <div class="form-group">
+												            <button class="btn btn-success"
+												            		ng-click="$vm.gridMethodForPullGoods.exportExcel()">
+												                匯出Excel
+												            </button>
+									                    </div>
+									                </fieldset>
+									            </form>
+									        </div>
+									    </div>
+									</div>
+
+									<div id="grid1" ui-grid="$vm.pullGoodsOptions" class="my-ui-grid" ui-grid-pagination ui-grid-selection ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				            </div>
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="opWorkMenu.html">
+    <div class="modal-header bg-color-green">
+        <h3 class="modal-title text-center">
+            <strong class=" txt-color-white">{{$ctrl.row.entity.name}}</strong>
+        </h3>
+    </div>
+    <div class="modal-body text-center"> 
+        <div class="row" ng-if="$ctrl.row.entity.name == '報機單'"> 
+            <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob001.viewData($ctrl.row);$ctrl.cancel()"> 
+                檢視
+            </button>
+        </div> 
+        <div class="row" ng-if="$ctrl.row.entity.name == '銷艙單'"> 
+        	<!-- <button type="button" class="btn btn-info btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.viewData($ctrl.row);$ctrl.cancel()"> 
+                檢視 
+            </button> -->
+        	<button type="button" class="btn btn-warning btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.fixData($ctrl.row);$ctrl.cancel()"> 
+                修改 
+            </button>
+            <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.closeData($ctrl.row);$ctrl.cancel()" ng-disabled="$ctrl.row.entity.W3_FDATETIME != null"> 
+                完成 
+            </button> 
+            <button type="button" class="btn btn-danger btn-lg btn-block" ng-click="$ctrl.appScope.gridMethodForJob002.deleteData($ctrl.row);$ctrl.cancel()" ng-show="$vm.profile.U_GRADE <= 9"> 
+                刪除(銷倉單) 
+            </button> 
+        </div> 
+    </div>
+</script>
+
+<script type="text/ng-template" id="modifyPullGoodsModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">編輯</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="modifyForm">
+			<fieldset>
+				<div class="form-group">
+                    <label class="col-md-2 control-label">航班(改)</label>
+                    <div class="col-md-3">
+                        <input class="form-control" ng-model="$ctrl.mdData.FLIGHTNO_START" placeholder="代碼" type="text" ui-mask="**" ui-mask-placeholder required>
+                    </div>
+                    <div class="col-md-7">
+                        <input class="form-control" ng-model="$ctrl.mdData.FLIGHTNO_END" placeholder="號碼" type="text" maxlength="4" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">主號(改)</label>
+                    <div class="col-md-10">
+                        <input class="form-control" name="PG_MASTER" placeholder="請輸入主號(改)" model-view-value="true" ng-model="$ctrl.mdData.PG_MASTER" type="text" ui-mask="999-99999999" ui-mask-placeholder required>
+                    </div>
+                </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!modifyForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="viewReasonModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">原因</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">拉貨原因</label>
+			        <div class="col-md-10">
+			            <textarea class="form-control" rows="3" name="PG_REASON" ng-model="$ctrl.mdData.PG_REASON" style="resize: none; "></textarea>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="viewDetailModalContent.html">
+    <div class="modal-header" ng-init="$ctrl.Init()">
+	    <h3 class="modal-title" id="modal-title">明細</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.mdDataOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="addOrderListModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">移機</h3>
+	</div>
+	<div class="modal-body" id="modal-body" ng-init="$ctrl.Init()">
+	    <form class="form-horizontal" name="addItemForm"> 
+            <fieldset> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label"><code>*</code>進口日期</label> 
+                    <div class="col-md-10"> 
+                        <input class="form-control" name="OL_IMPORTDT" type="text" ng-model="$ctrl.mdData.OL_IMPORTDT" ui-mask="9999-99-99" ui-mask-placeholder ui-mask-placeholder-char="_" placeholder="請輸入公佈日期 (西元 年-月-日)" model-view-value="true" is-date required/> 
+                    </div> 
+                </div> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label"><code>*</code>行家</label> 
+                    <div class="col-md-10"> 
+                        <select class="form-control" name="OL_CO_CODE" ng-model="$ctrl.mdData.OL_CO_CODE" ng-options="data.value as data.label for data in $ctrl.compy" ng-disabled="$ctrl.compy.length == 0" required> 
+                        </select> 
+                    </div> 
+                </div> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label"><code>*</code>航班</label> 
+                    <div class="col-md-3" ng-class="$ctrl.mdData.FLIGHTNO_END.length && !$ctrl.mdData.FLIGHTNO_START.length ? ' has-error' : ''"> 
+                        <input class="form-control" ng-model="$ctrl.mdData.FLIGHTNO_START" placeholder="代碼" type="text" ui-mask="**" ui-mask-placeholder ng-required="$ctrl.mdData.FLIGHTNO_END.length"> 
+                    </div> 
+                    <div class="col-md-7" ng-class="$ctrl.mdData.FLIGHTNO_START.length && !$ctrl.mdData.FLIGHTNO_END.length ? ' has-error' : ''"> 
+                        <input class="form-control" ng-model="$ctrl.mdData.FLIGHTNO_END" placeholder="號碼" type="text" maxlength="4" ng-required="$ctrl.mdData.FLIGHTNO_START.length"> 
+                    </div> 
+                </div> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label"><code>*</code>主號</label> 
+                    <div class="col-md-10"> 
+                        <input class="form-control" name="OL_MASTER" placeholder="請輸入主號" model-view-value="true" ng-model="$ctrl.mdData.OL_MASTER" type="text" ui-mask="999-99999999" ui-mask-placeholder required> 
+                    </div> 
+                </div> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label"><code>*</code>起運國別</label> 
+                    <div class="col-md-10"> 
+                        <input class="form-control" name="OL_COUNTRY" placeholder="請輸入起運國別" ng-model="$ctrl.mdData.OL_COUNTRY" type="text" ui-mask="AA" ui-mask-placeholder required> 
+                    </div> 
+                </div> 
+                <div class="form-group"> 
+                    <label class="col-md-2 control-label">原因</label> 
+                    <div class="col-md-10"> 
+                        <textarea class="form-control" rows="3" maxlength="300" ng-model="$ctrl.mdData.OL_REASON" placeholder="字數限制 300字"></textarea> 
+                    </div> 
+                </div> 
+            </fieldset> 
+        </form> 
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!addItemForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>

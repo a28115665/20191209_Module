@@ -1,0 +1,207 @@
+<!-- MAIN CONTENT -->
+<div id="content" ng-init="$vm.Init()">
+
+	<div class="row">
+		<big-breadcrumbs items="['Settings', 'ExcompyBagno']" icon="shopping-bag" class="col-xs-12 col-sm-7 col-md-7 col-lg-4"></big-breadcrumbs>
+	</div>
+
+	<!-- widget grid -->
+	<section id="widget-grid" data-widget-grid>
+	    <!-- row -->
+	    <div class="row">
+
+	        <!-- NEW WIDGET START -->
+	        <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+	        	<!-- Widget ID (each widget will need unique ID)-->
+				<div id="billboard" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-deletebutton="false" data-widget-color="blue" data-jarvis-widget>
+				    <!-- widget options:
+				        usage: <div data-jarvis-widget id="wid-id-0" data-widget-editbutton="false">
+				        data-widget-colorbutton="false"
+				        data-widget-editbutton="false"
+				        data-widget-togglebutton="false"
+				        data-widget-deletebutton="false"
+				        data-widget-fullscreenbutton="false"
+				        data-widget-custombutton="false"
+				        data-widget-collapsed="true"
+				        data-widget-sortable="false"
+				    -->
+				    <header>
+				        <h2>袋號管理 </h2>
+				        <ul id="widget-tab-1" class="nav pull-right" ng-class="{'nav-tabs' : !!ShowTabs, 'nav-pills': !ShowTabs }">
+				            <li ng-class="$vm.TabSwitch('hr1')" ng-click="$vm.defaultTab='hr1';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr1"> <i class="fa fa-lg fa-cube"></i> <span class="hidden-mobile hidden-tablet"> 前三碼 </span> </a>
+				            </li>
+				            <li ng-class="$vm.TabSwitch('hr2')" ng-click="$vm.defaultTab='hr2';$vm.LoadData()">
+				                <a data-toggle="tab" href="#hr2"> <i class="fa fa-lg fa-cube"></i> <span class="hidden-mobile hidden-tablet"> 後五碼 </span></a>
+				            </li>
+				        </ul>
+
+				    </header>
+				    <!-- widget div-->
+				    <div>
+				        <!-- widget content -->
+						<div class="widget-body no-padding">
+
+				            <!-- widget body text-->
+				            <div class="tab-content no-padding">
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr1')" id="hr1">
+
+									<div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddBagNo3Need()">
+									                {{getWord('Add')}}{{getWord('Rule')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.bagNo3NeedOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				                <div class="tab-pane fade in " ng-class="$vm.TabSwitch('hr2')" id="hr2">
+				                    <div class="widget-body-toolbar">
+									    <div class="row">
+									        <div class="col-xs-9 col-sm-5 col-md-5 col-lg-5">
+									        </div>
+									        <div class="col-xs-3 col-sm-7 col-md-7 col-lg-7 text-right">
+									            <button class="btn btn-primary"
+									            		ng-click="$vm.AddBagNo5NotNeed()">
+									                {{getWord('Add')}}{{getWord('Rule')}}
+									            </button>
+									        </div>
+									    </div>
+									</div>
+									
+									<div id="grid1" ui-grid="$vm.bagNo5NotNeedOptions" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+				                </div>
+				            </div>
+
+						</div>
+						<!-- end widget content -->
+				    </div>
+				    <!-- end widget div -->
+				</div>
+				<!-- end widget -->
+	        </article>
+	        <!-- End WIDGET START -->
+
+	    </div>
+	</section>
+
+</div>
+
+<script type="text/ng-template" id="addBagNo3NeedModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Add')}}{{getWord('Rule')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="addRuleForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label"><code>*</code>代號</label>
+			        <div class="col-md-10">
+			            <input class="form-control" name="SC_CODE" minlength="3" maxlength="3" ng-model="$ctrl.mdData['SC_CODE']" type="text" placeholder="請輸入袋號前三碼規則(不可重複)" ng-pattern="$ctrl.scCodeRegex" required>
+			            <p class="note">目前袋號規則有：{{$ctrl.originBagNo3Data.join(", ")}}</p>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">代號描述</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['SC_DESC']" type="text" placeholder="請輸入規則描述">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">作廢</label>
+			        <div class="col-md-10">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData['SC_STS']"
+								ng-options="data.value as data.label for data in $ctrl.boolData">
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!addRuleForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="modifyBagNoModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Modify')}}{{getWord('Rule')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="modifyRuleForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label"><code>*</code>代號</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['SC_CODE']" type="text" ng-disabled="true" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">代號描述</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['SC_DESC']" type="text" placeholder="請輸入規則描述">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">作廢</label>
+			        <div class="col-md-10">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData['SC_STS']"
+								ng-options="data.value as data.label for data in $ctrl.boolData">
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!modifyRuleForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="addBagNo5NotNeedModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">{{getWord('Add')}}{{getWord('Rule')}}</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+	    <form class="form-horizontal" name="addRuleForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label"><code>*</code>代號</label>
+			        <div class="col-md-10">
+			            <input class="form-control" name="SC_CODE" minlength="1" maxlength="1" ng-model="$ctrl.mdData['SC_CODE']" type="text" placeholder="請輸入袋號後五碼規則(不可重複)" ng-pattern="$ctrl.scCodeRegex" required>
+			            <p class="note">目前袋號規則有：{{$ctrl.originBagNo5Data.join(", ")}}</p>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">代號描述</label>
+			        <div class="col-md-10">
+			            <input class="form-control" ng-model="$ctrl.mdData['SC_DESC']" type="text" placeholder="請輸入規則描述">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">作廢</label>
+			        <div class="col-md-10">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData['SC_STS']"
+								ng-options="data.value as data.label for data in $ctrl.boolData">
+						</select>
+			        </div>
+			    </div>
+			</fieldset>
+	    </form>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!addRuleForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
