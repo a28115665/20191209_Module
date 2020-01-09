@@ -972,7 +972,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         break;
                     // 關貿格式(X2)
                     case "0X2":
-                        _templates = "13";
+                        _templates = "20";
                         _queryname = "SelectItemListForEx12";
                         _params["IL_G1"] = "'','X2','Y'";
                         // 不包含併X3(也就是mergeno是null)
@@ -987,7 +987,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         break;
                     // 關貿格式(併X3)
                     case "0MX3":
-                        _templates = "10";
+                        _templates = "21";
                         _queryname = "SelectItemListForEx0MX3";
                         _params["CO_NAME"] = $vm.vmData.CO_NAME
                         break;
@@ -1490,27 +1490,28 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
     function CalculationFinalCost(rowEntity, colDef, newValue, oldValue){
         
         // 一律為大寫
-        if(colDef.name == 'O_IL_G1') {
+        if(colDef.name == 'IL_G1') {
             try {
-                rowEntity["O_IL_G1"] = newValue.toUpperCase();
+                rowEntity["IL_G1"] = newValue.toUpperCase();
+                G1ForY(rowEntity);
             }
             catch (e) {
                 console.log(e);
             }
         }
 
-        try {
-            if(newValue.toUpperCase() == "Y"){
-                G1ForY(rowEntity)
-                // rowEntity.IL_WEIGHT_NEW = rowEntity.IL_WEIGHT;
-                // rowEntity.IL_NEWPCS = rowEntity.IL_PCS;
-                // rowEntity.IL_UNIVALENT_NEW = rowEntity.IL_UNIVALENT;
-                // rowEntity.IL_NEWSENDNAME = rowEntity.IL_SENDNAME;
-                // rowEntity.IL_FINALCOST = null;
-            }
-        } catch (e) {
-            console.log(e);
-        }
+        // try {
+        //     if(rowEntity["IL_G1"] == "Y"){
+        //         G1ForY(rowEntity)
+        //         // rowEntity.IL_WEIGHT_NEW = rowEntity.IL_WEIGHT;
+        //         // rowEntity.IL_NEWPCS = rowEntity.IL_PCS;
+        //         // rowEntity.IL_UNIVALENT_NEW = rowEntity.IL_UNIVALENT;
+        //         // rowEntity.IL_NEWSENDNAME = rowEntity.IL_SENDNAME;
+        //         // rowEntity.IL_FINALCOST = null;
+        //     }
+        // } catch (e) {
+        //     console.log(e);
+        // }
 
         if(colDef.name == 'IL_GETNAME_NEW'){
             var _temp = encodeURI(rowEntity.IL_GETNAME_NEW),

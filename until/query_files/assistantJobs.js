@@ -9,6 +9,7 @@ module.exports = function(pQueryname, pParams){
 								   OL_IMPORTDT, \
 								   OL_CR_DATETIME, \
 								   OL_COUNTRY, \
+								   OL_AIRPLANEID, \
 								   PG_SEQ, \
 								   PG_BAGNO, \
 								   PG_MOVED, \
@@ -111,6 +112,7 @@ module.exports = function(pQueryname, pParams){
 									OL_FLIGHTNO, \
 									OL_IMPORTDT, \
 									OL_COUNTRY, \
+									OL_AIRPLANEID, \
 									OL_CR_USER, \
 									OL_CR_DATETIME, \
 									OL_TEL, \
@@ -228,6 +230,7 @@ module.exports = function(pQueryname, pParams){
 									OL_FLIGHTNO, \
 									OL_IMPORTDT, \
 									OL_COUNTRY, \
+									OL_AIRPLANEID, \
 									OL_REASON, \
 									OL_CR_USER, \
 									OL_CR_DATETIME, \

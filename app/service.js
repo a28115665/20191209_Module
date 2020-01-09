@@ -354,7 +354,8 @@ angular.module('app')
     var socket = null;
 
     function listenerExists(eventName) {
-        return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
+        // return socket.hasOwnProperty("$events") && socket.$events.hasOwnProperty(eventName);
+        return socket._callbacks["$" + eventName];
     }
 
 	this.Connect = function () {
@@ -364,6 +365,7 @@ angular.module('app')
         return socket != null;
     },
     this.On = function (eventName, callback) {
+        // if (!listenerExists(eventName)) {
         if (!listenerExists(eventName)) {
             socket.on(eventName, function () {
                 var args = arguments;

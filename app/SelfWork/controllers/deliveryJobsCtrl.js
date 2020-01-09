@@ -78,6 +78,7 @@ angular.module('app.selfwork').controller('DeliveryJobsCtrl', function ($scope, 
                             OL_FLIGHTNO : selectedItem.OL_FLIGHTNO,
                             OL_MASTER   : selectedItem.OL_MASTER,
                             OL_COUNTRY  : selectedItem.OL_COUNTRY,
+                            OL_AIRPLANEID   : selectedItem.OL_AIRPLANEID,
                             OL_REASON   : selectedItem.OL_REASON
                         },
                         condition: {
@@ -260,6 +261,7 @@ angular.module('app.selfwork').controller('DeliveryJobsCtrl', function ($scope, 
                 { name: 'CO_NAME'  ,  displayName: '行家' },
                 { name: 'OL_FLIGHTNO' ,  displayName: '航班' },
                 { name: 'OL_MASTER'   ,  displayName: '主號' },
+                { name: 'OL_AIRPLANEID'   ,  displayName: '航空代理' },
                 { name: 'OL_COUNTRY'  ,  displayName: '起運國別' },
                 { name: 'OL_REASON'   ,  displayName: '描述', width: 100, cellTooltip: function (row, col) 
                     {

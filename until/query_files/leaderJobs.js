@@ -11,6 +11,7 @@ module.exports = function(pQueryname, pParams){
 									OL_REAL_IMPORTDT, \
 									OL_CR_DATETIME, \
 									OL_COUNTRY, \
+									OL_AIRPLANEID, \
 									OL_REASON, \
 									OL_ILSTATUS, \
 									OL_FLLSTATUS, \
@@ -310,6 +311,7 @@ module.exports = function(pQueryname, pParams){
 									OL_IMPORTDT, \
 									OL_REAL_IMPORTDT, \
 									OL_COUNTRY, \
+									OL_AIRPLANEID, \
 									OL_CR_USER, \
 									( \
 										CASE WHEN ( \

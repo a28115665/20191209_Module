@@ -89,6 +89,7 @@ angular.module('app.selfwork').controller('AssistantHistorySearchCtrl', function
                             OL_FLIGHTNO : selectedItem.OL_FLIGHTNO,
                             OL_MASTER   : selectedItem.OL_MASTER,
                             OL_COUNTRY  : selectedItem.OL_COUNTRY,
+                            OL_AIRPLANEID   : selectedItem.OL_AIRPLANEID,
                             OL_REASON   : selectedItem.OL_REASON
                         },
                         condition: {
@@ -135,6 +136,7 @@ angular.module('app.selfwork').controller('AssistantHistorySearchCtrl', function
                 // { name: 'FA_ACTL_ARRIVALTIME'    ,  displayName: '真實抵達時間', cellFilter: 'datetimeFilter' },
                 // { name: 'FA_ARRIVAL_REMK'        ,  displayName: '狀態', width: 80, cellTemplate: $templateCache.get('accessibilityToArrivalRemark') },
                 { name: 'OL_MASTER'              ,  displayName: '主號', width: 110, cellTemplate: $templateCache.get('accessibilityToMasterForViewOrder') },
+                { name: 'OL_AIRPLANEID'          ,  displayName: '航空代理' },
                 { name: 'OL_COUNTRY'             ,  displayName: '起運國別' },
                 { name: 'OL_REASON'              ,  displayName: '描述', cellTooltip: function (row, col) 
                     {

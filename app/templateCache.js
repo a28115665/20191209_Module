@@ -362,6 +362,12 @@ angular.module('app')
                                         </div> \
                                     </div> \
                                     <div class="form-group"> \
+                                        <label class="col-md-2 control-label">航空代理</label> \
+                                        <div class="col-md-10"> \
+                                            <input class="form-control" name="OL_AIRPLANEID" placeholder="請輸入航空代理" ng-model="$ctrl.mdData.OL_AIRPLANEID" type="text" maxlength="20"> \
+                                        </div> \
+                                    </div> \
+                                    <div class="form-group"> \
                                         <label class="col-md-2 control-label">描述</label> \
                                         <div class="col-md-10"> \
                                             <textarea class="form-control" rows="3" maxlength="300" ng-model="$ctrl.mdData.OL_REASON" placeholder="字數限制 300字"></textarea> \

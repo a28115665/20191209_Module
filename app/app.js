@@ -152,7 +152,7 @@ angular.module('app', [
     localStorageServiceProvider.setStorageType('localStorage');
 })
 
-.run(function ($rootScope, $state, $stateParams, Session, $http, AuthApi, localStorageService, SocketApi, toaster) {
+.run(function ($rootScope, $state, $stateParams, Session, $http, AuthApi, localStorageService, SocketApi) {
     // $rootScope.$state = $state;
     // $rootScope.$stateParams = $stateParams;
     // editableOptions.theme = 'bs3';
@@ -174,9 +174,6 @@ angular.module('app', [
                     if(!SocketApi.Connected()){
                         SocketApi.Connect();
                     }
-                    SocketApi.On('whoLogin', function(data){
-                        toaster.info("訊息", data, 3000);
-                    })
                 }
             }, function(err){
                 // 失敗

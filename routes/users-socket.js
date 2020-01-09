@@ -17,7 +17,7 @@ module.exports = function (socket) {
 
         	userIsConnected = true;
         	console.log('登入成功('+moment().format('YYYY-MM-DD HH:mm:ss')+'):', session.key.U_ID);
-        	socket.broadcast.emit('whoLogin', session.key.U_NAME+' 已登入');
+        	// socket.broadcast.emit('whoLogin', session.key.U_NAME+' 已登入');
 
         	// 推播至帳號管理頁面，了解目前上線人員
         	var allUsers = await sessionService.getAllUsers();

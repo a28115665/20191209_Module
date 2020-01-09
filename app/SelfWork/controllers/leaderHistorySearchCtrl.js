@@ -56,6 +56,7 @@ angular.module('app.selfwork').controller('LeaderHistorySearchCtrl', function ($
                             OL_FLIGHTNO : selectedItem.OL_FLIGHTNO,
                             OL_MASTER   : selectedItem.OL_MASTER,
                             OL_COUNTRY  : selectedItem.OL_COUNTRY,
+                            OL_AIRPLANEID   : selectedItem.OL_AIRPLANEID,
                             OL_REASON   : selectedItem.OL_REASON
                         },
                         condition: {
@@ -138,6 +139,7 @@ angular.module('app.selfwork').controller('LeaderHistorySearchCtrl', function ($
                 { name: 'CO_NAME'     ,  displayName: '行家' },
                 { name: 'OL_FLIGHTNO' ,  displayName: '航班' },
                 { name: 'OL_MASTER'   ,  displayName: '主號' },
+                { name: 'OL_AIRPLANEID'   ,  displayName: '航空代理' },
                 { name: 'OL_COUNT'    ,  displayName: '報機單(袋數)', width: 80, enableCellEdit: false },
                 { name: 'OL_PULL_COUNT',  displayName: '拉貨(袋數)', width: 80, enableCellEdit: false },
                 { name: 'OL_COUNTRY'  ,  displayName: '起運國別' },

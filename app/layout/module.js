@@ -12,8 +12,12 @@ angular.module('app.layout', ['ui.router'])
             views: {
                 root: {
                     templateUrl: 'app/layout/layout.tpl.html',
-                    controller: function ($rootScope, $stateParams, $state, i18nService) {
+                    controller: function ($rootScope, $stateParams, $state, i18nService, SocketApi, toaster) {
                         i18nService.setCurrentLang('zh-tw');
+
+                        SocketApi.On('whoLogin', function(data){
+                            toaster.info("訊息", data, 3000);
+                        })
                     }
                 }
             },
