@@ -114,7 +114,7 @@ angular.module('app')
                     </div>');
 
 	$templateCache.put('accessibilityToJob001', '\
-                    <div class="ui-grid-cell-contents">\
+                    <div class="ui-grid-cell-contents" ng-if="row.entity.SDG_SOFTDELETEGOODS == 0">\
                         <!--<a href="javascript:void(0);" class="btn btn-warning btn-xs" ng-click="grid.appScope.$vm.gridMethod.changeNature(row)" ng-hide="row.entity[\'loading\']"> 改單</a>-->\
                         <!--<a href="javascript:void(0);" class="btn btn-warning btn-xs disabled" ng-show="row.entity[\'loading\']"> <i class="fa fa-refresh fa-spin"></i></a>-->\
         				<!--<a href="javascript:void(0);" class="btn btn-danger btn-xs" ng-click="grid.appScope.$vm.gridMethod.banData(row)" ng-class="row.entity.BLFO_TRACK != null ? \'disabled\' : \'\'"> 加入黑名單</a>-->\
@@ -124,7 +124,10 @@ angular.module('app')
                         <button class="btn btn-default btn-xs" ng-click="grid.appScope.$vm.gridMethod.specialGoods(row)" ng-if="row.entity.SPG_SPECIALGOODS == 0"> 特貨</button>\
                         <button class="btn btn-warning btn-xs" ng-click="grid.appScope.$vm.gridMethod.specialGoods(row)" ng-if="row.entity.SPG_SPECIALGOODS == 1"> 普特貨</button>\
                         <button class="btn btn-success btn-xs" ng-click="grid.appScope.$vm.gridMethod.specialGoods(row)" ng-if="row.entity.SPG_SPECIALGOODS == 2"> 特特貨</button>\
-   		  		    </div>');
+   		  		    </div>\
+                    <div class="ui-grid-cell-contents" ng-if="row.entity.SDG_SOFTDELETEGOODS == 1">\
+                        <button class="btn btn-info btn-xs" ng-click="grid.appScope.$vm.gridMethod.reduceSoftDeleteGoods(row)"> 還原</button>\
+                    </div>');
     $templateCache.put('accessibilityToOJob001', '\
                     <div class="ui-grid-cell-contents">\
                         <button class="btn btn-primary btn-xs" ng-click="grid.appScope.$vm.gridMethod.pullGoods(row)" ng-class="row.entity.O_PG_PULLGOODS ? \'disabled\' : \'\'"> 拉貨</button>\

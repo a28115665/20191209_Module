@@ -9,7 +9,7 @@ module.exports = function(pQueryname, pParams){
 							FROM FLIGHT_ITEM_LIST \
 							LEFT JOIN ( \
 								SELECT DISTINCT(SUBSTRING(IL_BAGNO, 0, 9)) AS IL_BAGNO \
-								FROM ITEM_LIST \
+								FROM V_ITEM_LIST_EXIST_ITEM \
 								WHERE IL_SEQ = @FLL_SEQ \
 								AND IL_BAGNO != '' \
 							) DI ON IL_BAGNO LIKE FLL_BAGNO \

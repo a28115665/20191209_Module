@@ -21,7 +21,7 @@ module.exports = function(pQueryname, pParams){
 											SELECT COUNT(1) \
 											FROM ( \
 												SELECT IL_BAGNO \
-												FROM ITEM_LIST \
+												FROM V_ITEM_LIST_EXIST_ITEM \
 												WHERE IL_SEQ = OL_SEQ \
 												AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 												GROUP BY IL_BAGNO \
@@ -48,7 +48,7 @@ module.exports = function(pQueryname, pParams){
 									) AS 'OL_FLL_COUNT', \
 									( \
 										SELECT MAX(IL_SUPPLEMENT_COUNT) \
-										FROM ITEM_LIST \
+										FROM V_ITEM_LIST_EXIST_ITEM \
 										WHERE IL_SEQ = OL_SEQ \
 									) AS 'OL_SUPPLEMENT_COUNT', \
 									OL_CR_USER, \
@@ -221,7 +221,7 @@ module.exports = function(pQueryname, pParams){
 									SELECT COUNT(1) \
 									FROM ( \
 										SELECT IL_BAGNO \
-										FROM ITEM_LIST \
+										FROM V_ITEM_LIST_EXIST_ITEM \
 										JOIN ORDER_LIST ON OL_SEQ = IL_SEQ AND OL_CO_CODE = CO_CODE \
 										WHERE IL_SEQ = OL_SEQ \
 										AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
@@ -231,7 +231,7 @@ module.exports = function(pQueryname, pParams){
 								) AS 'W2_BAG_COUNT', \
 								( \
 									SELECT COUNT(1) \
-									FROM ITEM_LIST \
+									FROM V_ITEM_LIST_EXIST_ITEM \
 									JOIN ORDER_LIST ON OL_SEQ = IL_SEQ AND OL_CO_CODE = CO_CODE \
 									/*只抓今天*/ \
 									WHERE '"+pParams["REAL_IMPORTDT_FROM"]+"' <= OL_REAL_IMPORTDT AND OL_REAL_IMPORTDT <= '"+pParams["REAL_IMPORTDT_TOXX"]+"' \
@@ -241,9 +241,9 @@ module.exports = function(pQueryname, pParams){
 									FROM ORDER_LIST \
 									JOIN ( \
 										SELECT IL_SEQ \
-										FROM ITEM_LIST \
+										FROM V_ITEM_LIST_EXIST_ITEM \
 										GROUP BY IL_SEQ \
-									) ITEM_LIST ON OL_SEQ = IL_SEQ AND OL_CO_CODE = CO_CODE \
+									) V_ITEM_LIST_EXIST_ITEM ON OL_SEQ = IL_SEQ AND OL_CO_CODE = CO_CODE \
 									/*只抓今天*/ \
 									WHERE '"+pParams["REAL_IMPORTDT_FROM"]+"' <= OL_REAL_IMPORTDT AND OL_REAL_IMPORTDT <= '"+pParams["REAL_IMPORTDT_TOXX"]+"' \
 								) AS 'OL_W2_COUNT', \
@@ -405,7 +405,7 @@ module.exports = function(pQueryname, pParams){
 											SELECT COUNT(1) \
 											FROM ( \
 												SELECT IL_BAGNO \
-												FROM ITEM_LIST \
+												FROM V_ITEM_LIST_EXIST_ITEM \
 												WHERE IL_SEQ = OL_SEQ \
 												AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 												GROUP BY IL_BAGNO \

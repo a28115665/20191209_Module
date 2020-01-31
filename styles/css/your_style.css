@@ -158,6 +158,11 @@
     text-decoration: none;
 }
 
+/*軟刪除*/
+.cell-class-softdelete {
+    background-color: #f2a7a7 !important; 
+}
+
 /*ui-grid 異動資料*/
 .ui-grid-row-dirty .ui-grid-cell {
     color: #8e1da9;
@@ -207,6 +212,14 @@
  */
 .center-modal {
     margin: 15% auto;
+}
+
+/*
+    Modal size for xl
+ */
+.my-xl-modal-window .modal-dialog {
+    width: 90%;
+    max-width: 1400px;
 }
 
 /**

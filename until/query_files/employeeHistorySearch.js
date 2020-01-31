@@ -19,7 +19,7 @@ module.exports = function(pQueryname, pParams){
 											SELECT COUNT(1) \
 											FROM ( \
 												SELECT IL_BAGNO \
-												FROM ITEM_LIST \
+												FROM V_ITEM_LIST_EXIST_ITEM \
 												WHERE IL_SEQ = OL_SEQ \
 												AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 												GROUP BY IL_BAGNO \
@@ -82,7 +82,7 @@ module.exports = function(pQueryname, pParams){
 								/*行家中文名稱*/ \
 								OUTTER JOIN COMPY_INFO ON CO_CODE = OL_CO_CODE \
 							) ORDER_LIST \
-							LEFT JOIN ITEM_LIST ON IL_SEQ = OL_SEQ \
+							LEFT JOIN V_ITEM_LIST_EXIST_ITEM ON IL_SEQ = OL_SEQ \
 							/*報機單*/ \
 							LEFT JOIN V_ORDER_EDITOR_BY_R W2_OE ON W2_OE.OE_SEQ = ORDER_LIST.OL_SEQ \
 							/*銷艙單只有完成時間*/ \

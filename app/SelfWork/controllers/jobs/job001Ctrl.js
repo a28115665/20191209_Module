@@ -29,6 +29,10 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 LoadItemList();
             }
         },
+        loading : {
+            softDeleteGoods : false,
+            softDeleteAllGoods : false
+        },
         profile : Session.Get(),
         gridMethod : {
             // 改單
@@ -444,6 +448,74 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 }, function() {
                     // $log.info('Modal dismissed at: ' + new Date());
                 });
+            },
+            // 還原
+            reduceSoftDeleteGoods: function(row){
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    template: $templateCache.get('isChecked'),
+                    controller: 'IsCheckedModalInstanceCtrl',
+                    controllerAs: '$ctrl',
+                    size: 'sm',
+                    windowClass: 'center-modal',
+                    // appendTo: parentElem,
+                    resolve: {
+                        items: function() {
+                            return {};
+                        },
+                        show: function(){
+                            return {
+                                title : "是否還原"
+                            }
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(selectedItem) {
+
+                    var _tasks = [],
+                        _d = new Date();
+
+                    // 刪除軟刪除的資料
+                    _tasks.push({
+                        crudType: 'Delete',
+                        table: 48,
+                        params: {
+                            SDG_SEQ : row.entity.IL_SEQ,
+                            SDG_NEWBAGNO : row.entity.IL_NEWBAGNO,
+                            SDG_NEWSMALLNO : row.entity.IL_NEWSMALLNO,
+                            SDG_ORDERINDEX : row.entity.IL_ORDERINDEX
+                        }
+                    });
+
+                    // 重新計算一袋多件
+                    _tasks.push({
+                        crudType: 'Select',
+                        querymain: 'job001',
+                        queryname: 'ReCalculateBag',
+                        params: {               
+                            IL_SEQ: row.entity.IL_SEQ,
+                            IL_BAGNO: row.entity.IL_BAGNO
+                        }
+                    });
+
+                    RestfulApi.CRUDMSSQLDataByTask(_tasks).then(function (res){
+                        if(res["returnData"].length > 0){
+                            toaster.pop('success', '訊息', '還原成功', 3000);
+                        }
+                    }, function (err) {
+                        toaster.pop('error', '錯誤', '還原失敗', 3000);
+                    }).finally(function(){
+                        LoadItemList();
+                    });  
+
+                }, function() {
+                    // $log.info('Modal dismissed at: ' + new Date());
+                });
+
             }
         },
         job001Options : {
@@ -484,6 +556,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     } 
                 },
                 { name: 'IL_TAX2'       , displayName: '稅則', width: 100, headerCellClass: 'text-primary' },
+                { name: 'IL_TAXRATE'    , displayName: '稅率', width: 100, headerCellClass: 'text-primary' },
                 { name: 'ChangeNature'  , displayName: '改單', width: 50, enableCellEdit: false, enableSorting:false, cellTemplate: $templateCache.get('accessibilityToChangeNature'), cellClass: 'cell-class-no-style' },
                 { name: 'IL_CTN'        , displayName: '件數', width: 50, headerCellClass: 'text-primary' },
                 { name: 'IL_PLACE'      , displayName: '產地', width: 50, enableCellEdit: false },
@@ -578,8 +651,16 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             //                 <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="row.entity.BLFO_TRACK != null ? \'cell-class-pull cell-class-ban\' : \'\'" ui-grid-cell></div> \
             //               </div>',
             rowTemplate: '<div> \
-                            <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{\'cell-class-ban\' : row.entity.BLFO_TRACK != null, \'cell-class-pull\' : row.entity.PG_PULLGOODS == true, \'cell-class-special\' : row.entity.SPG_SPECIALGOODS != 0}" ui-grid-cell></div> \
+                            <div ng-repeat="(colRenderIndex, col) in colContainer.renderedColumns track by col.colDef.name" class="ui-grid-cell" ng-class="{\'cell-class-ban\' : row.entity.BLFO_TRACK != null, \'cell-class-pull\' : row.entity.PG_PULLGOODS == true, \'cell-class-special\' : row.entity.SPG_SPECIALGOODS != 0, \'cell-class-softdelete\' : row.entity.SDG_SOFTDELETEGOODS == true}" ui-grid-cell></div> \
                           </div>',
+            isRowSelectable: function(row){
+                // 被軟刪除的就不可以再被勾選起來
+                if(row.entity.SDG_SOFTDELETEGOODS){
+                    return false;
+                } else {
+                    return true;
+                }
+            },
             enableFiltering: true,
             enableSorting: true,
             enableColumnMenus: false,
@@ -607,10 +688,142 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 });
             }
         },
+        /**
+         * [SoftDeleteAllGoods description] 刪除網購貨
+         */
+        SoftDeleteAllGoods: function(){
+            RestfulApi.SearchMSSQLData({
+                querymain: 'job001',
+                queryname: 'SelectItemListBangoNumber',
+                params: {
+                    IL_SEQ: $vm.vmData.OL_SEQ
+                }
+            }).then(function (res){
+                // console.log(res["returnData"]);
+                
+                var _data = res["returnData"] || [];
+
+                if(_data.length == 0){
+                    toaster.pop('info', '訊息', '查無資料。', 3000);
+                    return;
+                }
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'softDeleteAllGoodsModalContent.html',
+                    controller: 'SoftDeleteAllGoodsModalInstanceCtrl',
+                    controllerAs: '$ctrl',
+                    backdrop: 'static',
+                    size: 'lg',
+                    // appendTo: parentElem,
+                    resolve: {
+                        data: function() {
+                            return _data;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(selectedItem) {
+                    
+                    $vm.loading.softDeleteAllGoods = true;
+
+                    var willSoftDelete = _data
+                    .map(function(value, index, fullArray){
+                        if(value.Number >= selectedItem.leastNumber && value.Number <= selectedItem.mostNumber){
+                            // 即將刪除的數量
+                            value["reduceNumber"] = Math.ceil(value.Number * (selectedItem.reduceRatio/100));
+
+                            var filterBagno = $filter('filter')($vm.job001Data, {IL_BAGNO: value.IL_BAGNO});
+                            value["softDeleteGoods"] = [];
+
+                            for(var i=0 ; i < value["reduceNumber"] ; i++){
+                                //隨機數
+                                var num = Math.random()*filterBagno.length;
+                                num = Math.floor(num);
+                                //把找到陣列元素放入新陣列中
+                                value["softDeleteGoods"].push(filterBagno[num]);
+                                //把選到的這個從陣列中刪除
+                                filterBagno.splice(num,1);
+                            }
+
+                            return value;
+                        }
+                    }).filter(function(item){
+                        return typeof item !== 'undefined';  
+                    });
+                    
+                    // console.log(willSoftDelete); 
+
+                    var _tasks = [],
+                        _d = new Date();
+
+                    // 刪除軟刪除的資料
+                    _tasks.push({
+                        crudType: 'Delete',
+                        table: 48,
+                        params: {
+                            SDG_SEQ : $vm.vmData.OL_SEQ
+                        }
+                    });
+
+                    for(var i in willSoftDelete){
+
+                        for(var j in willSoftDelete[i].softDeleteGoods){
+                            // 新增軟刪除的資料
+                            _tasks.push({
+                                crudType: 'Insert',
+                                table: 48,
+                                params: {
+                                    SDG_SEQ         : willSoftDelete[i].softDeleteGoods[j].IL_SEQ,
+                                    SDG_NEWBAGNO    : willSoftDelete[i].softDeleteGoods[j].IL_NEWBAGNO,
+                                    SDG_NEWSMALLNO  : willSoftDelete[i].softDeleteGoods[j].IL_NEWSMALLNO,
+                                    SDG_ORDERINDEX  : willSoftDelete[i].softDeleteGoods[j].IL_ORDERINDEX,
+                                    SDG_CR_USER     : $vm.profile.U_ID,
+                                    SDG_CR_DATETIME : $filter('date')(new Date, 'yyyy-MM-dd HH:mm:ss')
+                                }
+                            });
+                        }
+
+                        // 重新計算一袋多件
+                        _tasks.push({
+                            crudType: 'Select',
+                            querymain: 'job001',
+                            queryname: 'ReCalculateBag',
+                            params: {               
+                                IL_SEQ: $vm.vmData.OL_SEQ,
+                                IL_BAGNO: willSoftDelete[i].IL_BAGNO
+                            }
+                        });
+
+                    }
+
+                    RestfulApi.CRUDMSSQLDataByTask(_tasks).then(function (res){
+                        if(res["returnData"].length > 0){
+                            toaster.pop('success', '訊息', '刪除網購貨成功', 3000);
+                        }
+                    }, function (err) {
+                        toaster.pop('error', '錯誤', '刪除網購貨失敗', 3000);
+                    }).finally(function(){
+                        $vm.loading.softDeleteAllGoods = false;
+                        LoadItemList();
+                    });  
+
+                }, function() {
+                    // $log.info('Modal dismissed at: ' + new Date());
+                });
+                
+            }); 
+        },
         // 整理報關種類為Y
         SortoutG1ForY: function(){
 
             var _g1ForY = $filter('filter')($vm.job001Data, {IL_G1: 'Y'});
+
+            if(_g1ForY.length == 0){
+                toaster.pop('info', '訊息', '找無報關種類為Y的類型', 3000);
+            }
 
             if(_g1ForY.length > 0){
 
@@ -629,21 +842,70 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 return;
             }
 
+            if($vm.job001GridApi.selection.getSelectedRows().length == 1) {
+                toaster.pop('info', '訊息', '併票須兩筆資料以上。', 3000);
+                return;
+            }
+
+            // 如果併票過就不能再併
+            for(var i in $vm.job001GridApi.selection.getSelectedRows()){
+                if($vm.job001GridApi.selection.getSelectedRows()[i].IL_MERGENO){
+                    toaster.pop('info', '訊息', '勾選的資料已併票過。', 3000);
+                    return;
+                }
+            }
+
             // 取得第一個袋號當併票號
             var _mergeNo = $vm.job001GridApi.selection.getSelectedRows()[0].IL_BAGNO,
-                _natureNew = [],
-                _ilTax2 = [],
+                // _natureNew = [],
+                // _ilTax2 = [],
+                // _ilTaxRate = [],
+                _item = [],
+                _newItem = {
+                    IL_WEIGHT_NEW    : 0,
+                    IL_NEWPCS        : 0,
+                    IL_UNIVALENT_NEW : 0,
+                    IL_FINALCOST     : 0,
+                    A10AndB40        : 0
+                },
                 _bagNo = [];
 
-            // 塞入新品名
             for(var i in $vm.job001GridApi.selection.getSelectedRows()){
                 // console.log($vm.job001GridApi.selection.getSelectedRows()[i].IL_NATURE_NEW);
+                
+                // // 塞入新品名
+                // if($vm.job001GridApi.selection.getSelectedRows()[i].IL_NATURE_NEW){
+                //     _natureNew.push($vm.job001GridApi.selection.getSelectedRows()[i].IL_NATURE_NEW);
+                // }
+
+                // // 塞入稅則
+                // if($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAX2){
+                //     _ilTax2.push($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAX2);
+                // }
+
+                // // 塞入稅率
+                // if($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAXRATE){
+                //     _ilTaxRate.push($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAXRATE);
+                // }
+
                 if($vm.job001GridApi.selection.getSelectedRows()[i].IL_NATURE_NEW){
-                    _natureNew.push($vm.job001GridApi.selection.getSelectedRows()[i].IL_NATURE_NEW);
+                    _item.push($vm.job001GridApi.selection.getSelectedRows()[i]);
                 }
 
-                if($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAX2){
-                    _ilTax2.push($vm.job001GridApi.selection.getSelectedRows()[i].IL_TAX2);
+                if($vm.job001GridApi.selection.getSelectedRows()[i].IL_WEIGHT_NEW){
+                    _newItem.IL_WEIGHT_NEW += $vm.job001GridApi.selection.getSelectedRows()[i].IL_WEIGHT_NEW;
+                }
+
+                if($vm.job001GridApi.selection.getSelectedRows()[i].IL_NEWPCS){
+                    _newItem.IL_NEWPCS += $vm.job001GridApi.selection.getSelectedRows()[i].IL_NEWPCS;
+                }
+
+                // if($vm.job001GridApi.selection.getSelectedRows()[i].IL_UNIVALENT_NEW){
+                //     _newItem.IL_UNIVALENT_NEW += $vm.job001GridApi.selection.getSelectedRows()[i].IL_UNIVALENT_NEW;
+                // }
+
+                if(parseFloat($vm.job001GridApi.selection.getSelectedRows()[i].IL_FINALCOST)){
+                    _newItem.IL_FINALCOST += parseFloat($vm.job001GridApi.selection.getSelectedRows()[i].IL_FINALCOST);
                 }
 
                 // 算出袋數 重複不塞入
@@ -652,6 +914,14 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 }
 
             }
+
+            _newItem.IL_WEIGHT_NEW    = Math.round(_newItem.IL_WEIGHT_NEW * 100) / 100;
+            _newItem.IL_NEWPCS        = Math.round(_newItem.IL_NEWPCS * 100) / 100;
+            // 回算新單價
+            _newItem.IL_UNIVALENT_NEW = Math.round((_newItem.IL_FINALCOST / _newItem.IL_NEWPCS) * 100) / 100;
+            // 回算完稅價格
+            _newItem.IL_FINALCOST     = Math.round((_newItem.IL_UNIVALENT_NEW * _newItem.IL_NEWPCS) * 100) / 100;
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -666,11 +936,20 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     mergeNo: function() {
                         return _mergeNo;
                     },
-                    natureNew: function() {
-                        return _natureNew;
+                    // natureNew: function() {
+                    //     return _natureNew;
+                    // },
+                    // ilTax2: function() {
+                    //     return _ilTax2;
+                    // },
+                    // ilTaxRate: function() {
+                    //     return _ilTaxRate;
+                    // },
+                    item: function(){
+                        return _item;
                     },
-                    ilTax2: function() {
-                        return _ilTax2;
+                    newItem: function(){
+                        return _newItem;
                     },
                     bagNo: function(){
                         return _bagNo;
@@ -682,12 +961,21 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 // $ctrl.selected = selectedItem;
                 console.log(selectedItem);
 
-                // 變更併票號與新品名
+                // 變更併票號
                 for(var i in $vm.job001GridApi.selection.getSelectedRows()){
                     var _index = $vm.job001GridApi.selection.getSelectedRows()[i].Index;
                     $vm.job001Data[_index-1].IL_MERGENO = selectedItem.mergeNo;
-                    $vm.job001Data[_index-1].IL_NATURE_NEW = selectedItem.natureNew;
-                    $vm.job001Data[_index-1].IL_TAX2 = selectedItem.ilTax2;
+
+                    // 只變更第一筆 新品名 稅則 稅率 新重量 新數量 新單價 完稅價格
+                    if(i == 0){
+                        $vm.job001Data[_index-1].IL_NATURE_NEW = selectedItem.item.IL_NATURE_NEW;
+                        $vm.job001Data[_index-1].IL_TAX2 = selectedItem.item.IL_TAX2;
+                        $vm.job001Data[_index-1].IL_TAXRATE = selectedItem.item.IL_TAXRATE;
+                        $vm.job001Data[_index-1].IL_WEIGHT_NEW = selectedItem.newItem.IL_WEIGHT_NEW;
+                        $vm.job001Data[_index-1].IL_NEWPCS = selectedItem.newItem.IL_NEWPCS;
+                        $vm.job001Data[_index-1].IL_UNIVALENT_NEW = selectedItem.newItem.IL_UNIVALENT_NEW;
+                        $vm.job001Data[_index-1].IL_FINALCOST = selectedItem.newItem.IL_FINALCOST;
+                    }
                 }
 
                 $vm.job001GridApi.rowEdit.setRowsDirty($vm.job001GridApi.selection.getSelectedRows());
@@ -699,20 +987,134 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         },
         // 取消併票
         CancelNo: function(){
-            if($vm.job001GridApi.selection.getSelectedRows().length == 0) {
-                toaster.pop('info', '訊息', '尚未勾選資料。', 3000);
-                return;
-            }
 
-            for(var i in $vm.job001GridApi.selection.getSelectedRows()){
-                var _index = $vm.job001GridApi.selection.getSelectedRows()[i].Index;
-                $vm.job001Data[_index-1].IL_MERGENO = null;
-                // $vm.job001Data[_index-1].IL_NATURE_NEW = null;
-            }
+            RestfulApi.SearchMSSQLData({
+                querymain: 'job001',
+                queryname: 'SelectItemListMergeNumber',
+                params: {
+                    IL_SEQ: $vm.vmData.OL_SEQ
+                }
+            }).then(function (res){
+                // console.log(res["returnData"]);
+                
+                var _data = res["returnData"] || [];
 
-            $vm.job001GridApi.rowEdit.setRowsDirty($vm.job001GridApi.selection.getSelectedRows());
-            $vm.job001GridApi.selection.clearSelectedRows();
-            ClearSelectedColumn();
+                if(_data.length == 0){
+                    toaster.pop('info', '訊息', '查無併票。', 3000);
+                    return;
+                }
+
+                var modalInstance = $uibModal.open({
+                    animation: true,
+                    ariaLabelledBy: 'modal-title',
+                    ariaDescribedBy: 'modal-body',
+                    templateUrl: 'cancelNoModalContent.html',
+                    controller: 'CancelNoModalInstanceCtrl',
+                    controllerAs: '$ctrl',
+                    // windowClass: 'my-xl-modal-window',
+                    backdrop: 'static',
+                    // size: 'lg',
+                    // appendTo: parentElem,
+                    resolve: {
+                        data: function() {
+                            return _data;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function(selectedItem) {
+                    console.log(selectedItem);
+
+                    if(selectedItem.length == 0){
+                        // toaster.pop('info', '訊息', '尚未選擇併票資料。', 3000);
+                        return;
+                    }
+
+                    selectedItem.forEach(function(value, index, fullArray){
+                        var _ilWeightNew = 0,
+                            _ilNewPcs = 0,
+                            _ilUnivalentNew = 0,
+                            _ilFinalCost = 0,
+                            _array = $filter('filter')($vm.job001Data, {IL_MERGENO: value.IL_MERGENO}),
+                            _reverseSelectedRows = _array.reverse();
+
+                        for(var i in _reverseSelectedRows){
+                            var _index = _reverseSelectedRows[i].Index;
+                            $vm.job001Data[_index-1].IL_MERGENO = null;
+
+                            // 如果是最後一筆，扣除先前的新重量 新數量 新單價 完稅價格
+                            if(i == (_reverseSelectedRows.length-1)){
+                                $vm.job001Data[_index-1].IL_WEIGHT_NEW    -= _ilWeightNew;
+                                $vm.job001Data[_index-1].IL_NEWPCS        -= _ilNewPcs;
+                                $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_FINALCOST - _ilFinalCost) * 100) / 100;
+                                // 回算新單價
+                                $vm.job001Data[_index-1].IL_UNIVALENT_NEW = Math.round(($vm.job001Data[_index-1].IL_FINALCOST / $vm.job001Data[_index-1].IL_NEWPCS) * 100) / 100;
+                                // 回算完稅價格
+                                $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_NEWPCS * $vm.job001Data[_index-1].IL_UNIVALENT_NEW) * 100) / 100;
+                            }else{
+                                _ilWeightNew    += _reverseSelectedRows[i].IL_WEIGHT_NEW;
+                                _ilNewPcs       += _reverseSelectedRows[i].IL_NEWPCS;
+                                _ilFinalCost    += _reverseSelectedRows[i].IL_FINALCOST;
+                            }
+
+                        }
+
+                        $vm.job001GridApi.rowEdit.setRowsDirty(_array);
+                    });
+
+                }, function() {
+                    // $log.info('Modal dismissed at: ' + new Date());
+                });
+            });
+
+            // if($vm.job001GridApi.selection.getSelectedRows().length == 0) {
+            //     toaster.pop('info', '訊息', '尚未勾選資料。', 3000);
+            //     return;
+            // }
+
+            // if($vm.job001GridApi.selection.getSelectedRows().length == 1) {
+            //     toaster.pop('info', '訊息', '取消併票須兩筆資料以上。', 3000);
+            //     return;
+            // }
+
+            // // 如果尚未併票過就不能取消併票
+            // for(var i in $vm.job001GridApi.selection.getSelectedRows()){
+            //     if(!$vm.job001GridApi.selection.getSelectedRows()[i].IL_MERGENO){
+            //         toaster.pop('info', '訊息', '勾選的資料尚未併票。', 3000);
+            //         return;
+            //     }
+            // }
+
+            // var _ilWeightNew = 0,
+            //     _ilNewPcs = 0,
+            //     _ilUnivalentNew = 0,
+            //     _ilFinalCost = 0,
+            //     _reverseSelectedRows = $vm.job001GridApi.selection.getSelectedRows().reverse();
+
+            // for(var i in _reverseSelectedRows){
+            //     var _index = _reverseSelectedRows[i].Index;
+            //     $vm.job001Data[_index-1].IL_MERGENO = null;
+
+            //     // 如果是最後一筆，扣除先前的新重量 新數量 新單價 完稅價格
+            //     if(i == (_reverseSelectedRows.length-1)){
+            //         $vm.job001Data[_index-1].IL_WEIGHT_NEW    -= _ilWeightNew;
+            //         $vm.job001Data[_index-1].IL_NEWPCS        -= _ilNewPcs;
+            //         $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_FINALCOST - _ilFinalCost) * 100) / 100;
+            //         // 回算新單價
+            //         $vm.job001Data[_index-1].IL_UNIVALENT_NEW = Math.round(($vm.job001Data[_index-1].IL_FINALCOST / $vm.job001Data[_index-1].IL_NEWPCS) * 100) / 100;
+            //         // 回算完稅價格
+            //         $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_NEWPCS * $vm.job001Data[_index-1].IL_UNIVALENT_NEW) * 100) / 100;
+            //     }else{
+            //         _ilWeightNew    += _reverseSelectedRows[i].IL_WEIGHT_NEW;
+            //         _ilNewPcs       += _reverseSelectedRows[i].IL_NEWPCS;
+            //         _ilFinalCost    += _reverseSelectedRows[i].IL_FINALCOST;
+            //     }
+
+            // }
+
+            // $vm.job001GridApi.rowEdit.setRowsDirty($vm.job001GridApi.selection.getSelectedRows());
+            // $vm.job001GridApi.selection.clearSelectedRows();
+            // ClearSelectedColumn();
         },
         // 特貨註記
         MultiSpecialGoods: function(){
@@ -883,6 +1285,96 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
         },
         /**
+         * [SoftDeleteGoods description] 軟刪除
+         */
+        SoftDeleteGoods: function(){
+            if($vm.job001GridApi.selection.getSelectedRows().length == 0) {
+                toaster.pop('info', '訊息', '尚未勾選資料。', 3000);
+                return;
+            }
+            if($vm.job001GridApi.selection.getSelectedRows().length > 100) {
+                toaster.pop('info', '訊息', '超過100筆，請重新選擇筆數', 3000);
+                return;
+            }
+
+            console.log($vm.vmData);
+
+            var modalInstance = $uibModal.open({
+                animation: true,
+                ariaLabelledBy: 'modal-title',
+                ariaDescribedBy: 'modal-body',
+                template: $templateCache.get('isChecked'),
+                controller: 'IsCheckedModalInstanceCtrl',
+                controllerAs: '$ctrl',
+                size: 'sm',
+                windowClass: 'center-modal',
+                // appendTo: parentElem,
+                resolve: {
+                    items: function() {
+                        return {};
+                    },
+                    show: function(){
+                        return {
+                            title : "是否軟刪除"
+                        }
+                    }
+                }
+            });
+
+            modalInstance.result.then(function(selectedItem) {
+
+                $vm.loading.softDeleteGoods = true;
+
+                var _tasks = [],
+                    _d = new Date();
+
+                // Insert資料
+                for(var i in $vm.job001GridApi.selection.getSelectedRows()){
+
+                    if($vm.job001GridApi.selection.getSelectedRows()[i].SDG_SOFTDELETEGOODS == 0){
+                        _tasks.push({
+                            crudType: 'Insert',
+                            table: 48,
+                            params: {
+                                SDG_SEQ         : $vm.job001GridApi.selection.getSelectedRows()[i].IL_SEQ,
+                                SDG_NEWBAGNO    : $vm.job001GridApi.selection.getSelectedRows()[i].IL_NEWBAGNO,
+                                SDG_NEWSMALLNO  : $vm.job001GridApi.selection.getSelectedRows()[i].IL_NEWSMALLNO,
+                                SDG_ORDERINDEX  : $vm.job001GridApi.selection.getSelectedRows()[i].IL_ORDERINDEX,
+                                SDG_CR_USER     : $vm.profile.U_ID,
+                                SDG_CR_DATETIME : $filter('date')(new Date, 'yyyy-MM-dd HH:mm:ss')
+                            }
+                        });
+
+                        _tasks.push({
+                            crudType: 'Select',
+                            querymain: 'job001',
+                            queryname: 'ReCalculateBag',
+                            params: {               
+                                IL_SEQ: $vm.job001GridApi.selection.getSelectedRows()[i].IL_SEQ,
+                                IL_BAGNO: $vm.job001GridApi.selection.getSelectedRows()[i].IL_BAGNO
+                            }
+                        });
+                    }
+
+                }
+
+                RestfulApi.CRUDMSSQLDataByTask(_tasks).then(function (res){
+                    if(res["returnData"].length > 0){
+                        toaster.pop('success', '訊息', '軟刪除成功', 3000);
+                    }
+                }, function (err) {
+                    toaster.pop('error', '錯誤', '軟刪除失敗', 3000);
+                }).finally(function(){
+                    $vm.loading.softDeleteGoods = false;
+                    $vm.job001GridApi.selection.clearSelectedRows();
+                    LoadItemList();
+                });  
+
+            }, function() {
+                // $log.info('Modal dismissed at: ' + new Date());
+            });
+        },
+        /**
          * [DoTax description] 稅則
          */
         DoTax: function(){
@@ -974,7 +1466,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     case "0X2":
                         _templates = "20";
                         _queryname = "SelectItemListForEx12";
-                        _params["IL_G1"] = "'','X2','Y'";
+                        _params["IL_G1"] = "'','X2','Y','上稅'";
                         // 不包含併X3(也就是mergeno是null)
                         _params["IL_MERGENO"] = null;
                         _params["OL_CO_NAME"] = $filter('compyFilter')($vm.vmData.OL_CO_CODE);
@@ -1137,6 +1629,9 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         },
         // 顯示併票結果
         MergeNoResult : function(){
+
+            var _data = $filter('filter')($vm.job001Data, { SDG_SOFTDELETEGOODS : 0});
+
             var modalInstance = $uibModal.open({
                 animation: true,
                 ariaLabelledBy: 'modal-title',
@@ -1144,12 +1639,13 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 templateUrl: 'mergeNoResultModalContent.html',
                 controller: 'MergeNoResultModalInstanceCtrl',
                 controllerAs: '$ctrl',
+                windowClass: 'my-xl-modal-window',
                 backdrop: 'static',
                 size: 'lg',
                 // appendTo: parentElem,
                 resolve: {
                     job001Data: function() {
-                        return $vm.job001Data;
+                        return _data;
                     }
                 }
             });
@@ -1165,6 +1661,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
          * N : 收件人
          * A : 地址
          * N+A : 收件人 + 地址
+         * SBN : 同袋收件人
          */
         RepeatData : function(pType){
 
@@ -1178,6 +1675,9 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     break;
                 case "N+A":
                     _queryname = 'SelectRepeatNameAndAddress';
+                    break;
+                case "SBN":
+                    _queryname = 'SelectRepeatNameWithOneBagno';
                     break;
             }
 
@@ -1198,6 +1698,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                             templateUrl: 'repeatDataModalContent.html',
                             controller: 'RepeatDataModalInstanceCtrl',
                             controllerAs: '$ctrl',
+                            windowClass: 'my-xl-modal-window',
                             backdrop: 'static',
                             size: 'lg',
                             // appendTo: parentElem,
@@ -1306,6 +1807,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                                 templateUrl: 'overSixModalContent.html',
                                 controller: 'OverSixModalInstanceCtrl',
                                 controllerAs: '$ctrl',
+                                windowClass: 'my-xl-modal-window',
                                 backdrop: 'static',
                                 size: 'lg',
                                 // appendTo: parentElem,
@@ -1479,11 +1981,16 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 IL_SEQ: $vm.vmData.OL_SEQ
             }
         }).then(function (res){
-            // console.log(res["returnData"]);
-            for(var i=0;i<res["returnData"].length;i++){
-                res["returnData"][i]["Index"] = i+1;
+            // console.log("ItemList:", res["returnData"]);
+
+            var _data = res["returnData"] || [];
+
+            for(var i=0;i<_data.length;i++){
+                _data[i]["Index"] = i+1;
+                _data[i]["IL_FINALCOST"] = Math.round(_data[i]["IL_FINALCOST"] * 100) / 100;
+
             }
-            $vm.job001Data = angular.copy(res["returnData"]);
+            $vm.job001Data = angular.copy(_data);
         }); 
     };
 
@@ -1523,7 +2030,8 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
         // 新單價 = 新重量 * 100 / 新數量
         if(colDef.name == 'IL_WEIGHT_NEW' || colDef.name == 'IL_NEWPCS'){
-            var _weight = parseFloat(rowEntity.IL_WEIGHT_NEW).toFixed(2),
+            // var _weight = parseFloat(rowEntity.IL_WEIGHT_NEW).toFixed(2),
+            var _weight = Math.round(rowEntity.IL_WEIGHT_NEW * 100) / 100,
                 _pcs = parseInt(rowEntity.IL_NEWPCS);
 
             // 如果都不是空值 才開始計算
@@ -1538,9 +2046,12 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         }
 
         // 計算稅
-        var _univalent = parseInt(rowEntity.IL_UNIVALENT_NEW),
-            _pcs = parseInt(rowEntity.IL_NEWPCS),
-            _finalcost = parseInt(rowEntity.IL_FINALCOST),
+        // var _univalent = parseInt(rowEntity.IL_UNIVALENT_NEW),
+        //     _pcs = parseInt(rowEntity.IL_NEWPCS),
+        //     _finalcost = parseInt(rowEntity.IL_FINALCOST),
+        var _univalent = rowEntity.IL_UNIVALENT_NEW,
+            _pcs = rowEntity.IL_NEWPCS,
+            _finalcost = rowEntity.IL_FINALCOST,
             start = 0;
 
         if(!isNaN(_univalent)){
@@ -1587,7 +2098,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             if(colDef.name == 'IL_FINALCOST' || colDef.name == 'IL_NEWPCS' || colDef.name == 'IL_UNIVALENT_NEW'){
                 if(!isNaN(_pcs)){
                     if(parseInt(_pcs) != 0){
-                        _univalent = Math.round(_finalcost / _pcs);
+                        _univalent = _finalcost / _pcs;
                     }else{
                         _univalent = 0;
                     }
@@ -1603,9 +2114,9 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             }
 
             // console.log("_univalent:", _univalent," _pcs:" , _pcs," _finalcost:" , _finalcost);
-            rowEntity.IL_UNIVALENT_NEW = isNaN(_univalent) ? null : _univalent;
-            rowEntity.IL_NEWPCS = isNaN(_pcs) ? null : _pcs;
-            rowEntity.IL_FINALCOST = isNaN(_finalcost) ? null : _finalcost;
+            rowEntity.IL_UNIVALENT_NEW = isNaN(_univalent) ? null : Math.round(_univalent * 100) / 100;
+            rowEntity.IL_NEWPCS = isNaN(_pcs) ? null : Math.round(_pcs * 100) / 100;
+            rowEntity.IL_FINALCOST = isNaN(_finalcost) ? null : Math.round(_finalcost * 100) / 100;
         }
 
         $vm.job001GridApi.rowEdit.setRowsDirty([rowEntity]);
@@ -1650,15 +2161,85 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         $uibModalInstance.dismiss('cancel');
     };
 })
-.controller('MergeNoModalInstanceCtrl', function ($uibModalInstance, mergeNo, natureNew, ilTax2, bagNo) {
+.controller('SoftDeleteAllGoodsModalInstanceCtrl', function ($uibModalInstance, $q, $scope, data) {
     var $ctrl = this;
-    $ctrl.natureNew = natureNew;
-    $ctrl.ilTax2 = ilTax2;
+    $ctrl.mdData = {
+        leastNumber: 0,
+        mostNumber: 90,
+        reduceRatio: 0
+    };
+    $ctrl.data = data;
+
+    $ctrl.dataOption = {
+        data: '$ctrl.data',
+        columnDefs: [
+            { name: 'IL_BAGNO'    , displayName: '袋號' },
+            { name: 'Number'      , displayName: '件數' },
+        ],
+        enableFiltering: true,
+        enableSorting: true,
+        enableColumnMenus: false,
+        // enableVerticalScrollbar: false,
+        paginationPageSizes: [50, 100, 150, 200, 250, 300],
+        paginationPageSize: 100,
+        onRegisterApi: function(gridApi){
+            $ctrl.dataGridApi = gridApi;
+        }
+    }
+
+    $ctrl.ok = function() {
+        $uibModalInstance.close($ctrl.mdData);
+    };
+
+    $ctrl.cancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+})
+.controller('CancelNoModalInstanceCtrl', function ($uibModalInstance, $q, $scope, data) {
+    var $ctrl = this;
+    $ctrl.data = data;
+
+    $ctrl.dataOption = {
+        data: '$ctrl.data',
+        columnDefs: [
+            { name: 'IL_MERGENO'  , displayName: '併票號' },
+            { name: 'Number'      , displayName: '件數' },
+        ],
+        enableFiltering: true,
+        enableSorting: true,
+        enableColumnMenus: false,
+        // enableVerticalScrollbar: false,
+        enableRowSelection: true,
+        enableSelectAll: true,
+        paginationPageSizes: [50, 100, 150, 200, 250, 300],
+        paginationPageSize: 100,
+        onRegisterApi: function(gridApi){
+            $ctrl.dataGridApi = gridApi;
+        }
+    }
+
+    $ctrl.ok = function() {
+        $uibModalInstance.close($ctrl.dataGridApi.selection.getSelectedRows());
+    };
+
+    $ctrl.cancel = function() {
+        $uibModalInstance.dismiss('cancel');
+    };
+})
+.controller('MergeNoModalInstanceCtrl', function ($uibModalInstance, mergeNo, item, newItem, bagNo) {
+    var $ctrl = this;
+    // $ctrl.natureNew = natureNew;
+    // $ctrl.ilTax2 = ilTax2;
+    // $ctrl.ilTaxRate = ilTaxRate;
+    $ctrl.item = item;
 
     $ctrl.mdData = {
         mergeNo : mergeNo,
-        natureNew : null,
-        ilTax2 : null,
+        // natureNew : null,
+        // ilTax2 : null,
+        // ilTaxRate : null,
+        item : {},
+        newItem: newItem,
         bagNo : bagNo
     };
 
@@ -1667,7 +2248,28 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         $ctrl.mergeNoIlTax2 = '1';
     };
 
+    $ctrl.CalculateA10AndB40 = function(){
+
+        // 進口稅[ 完稅價格*稅則稅率 }
+        // 營業稅[ (完稅價格+進口稅金)*0.05 ]
+        // 稅費合計 [ 進口稅金+營業稅金 ]
+        
+        var A10 = Math.round(($ctrl.mdData.newItem.IL_FINALCOST * ($ctrl.mdData.item.IL_TAXRATE / 100)) * 100) / 100,
+            B40 = Math.round(($ctrl.mdData.newItem.IL_FINALCOST + A10) * 0.05 * 100) / 100;
+
+        $ctrl.mdData.newItem.A10AndB40 = Math.round((A10 + B40) * 100) / 100;
+    }
+
+    $ctrl.CalculateFinalCost = function(){
+        $ctrl.mdData.newItem.IL_FINALCOST = Math.round(($ctrl.mdData.newItem.IL_NEWPCS * $ctrl.mdData.newItem.IL_UNIVALENT_NEW) * 100) / 100;
+    }
+
     $ctrl.ok = function() {
+        // 轉回文字
+        // $ctrl.mdData.ilTax2 = ilTax2[$ctrl.mdData.ilTax2];
+        // $ctrl.mdData.natureNew = natureNew[$ctrl.mdData.natureNew];
+        // $ctrl.mdData.ilTaxRate = ilTaxRate[$ctrl.mdData.natureNew];
+        // console.log($ctrl.mdData);
         $uibModalInstance.close($ctrl.mdData);
     };
 
@@ -1754,11 +2356,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             { name: 'IL_BAGNO'        , displayName: '袋號', width: 129 },
             { name: 'IL_SMALLNO'      , displayName: '小號', width: 115 },
             { name: 'IL_NATURE'    , displayName: '品名', width: 115 },
-            { name: 'IL_NATURE_NEW'   , displayName: '新品名', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.MAX, 
-                customTreeAggregationFinalizerFn: function( aggregation ) {
-                    aggregation.rendered = aggregation.value;
-                }
-            },
+            { name: 'IL_NATURE_NEW'    , displayName: '新品名', width: 115 },
             { name: 'IL_CTN'          , displayName: '件數', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
                 customTreeAggregationFinalizerFn: function( aggregation ) {
                     aggregation.rendered = aggregation.value;
@@ -1766,31 +2364,38 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             },
             { name: 'IL_PLACE'        , displayName: '產地', width: 115 },
             { name: 'IL_NEWPLACE'     , displayName: '新產地', width: 115 },
-            { name: 'IL_WEIGHT'       , displayName: '重量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
-                customTreeAggregationFinalizerFn: function( aggregation ) {
-                    aggregation.rendered = Math.round(aggregation.value * 100) / 100;
-                }
-            },
-            { name: 'IL_WEIGHT_NEW'   , displayName: '新重量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
+            { name: 'IL_WEIGHT'       , displayName: '重量', width: 115 },
+            // { name: 'IL_WEIGHT'       , displayName: '重量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
+            //     customTreeAggregationFinalizerFn: function( aggregation ) {
+            //         aggregation.rendered = Math.round(aggregation.value * 100) / 100;
+            //     }
+            // },
+            { name: 'IL_WEIGHT_NEW'   , displayName: '新重量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.MAX, 
                 customTreeAggregationFinalizerFn: function( aggregation ) {
                     // console.log(aggregation);
                     aggregation.rendered = Math.round(aggregation.value * 100) / 100;
                 }
             },
-            { name: 'IL_PCS'       , displayName: '數量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
-                customTreeAggregationFinalizerFn: function( aggregation ) {
-                    aggregation.rendered = aggregation.value;
-                }
-            },
-            { name: 'IL_NEWPCS'       , displayName: '新數量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
+            { name: 'IL_PCS'    , displayName: '數量', width: 115 },
+            // { name: 'IL_PCS'       , displayName: '數量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.SUM, 
+            //     customTreeAggregationFinalizerFn: function( aggregation ) {
+            //         aggregation.rendered = aggregation.value;
+            //     }
+            // },
+            { name: 'IL_NEWPCS'       , displayName: '新數量', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.MAX, 
                 customTreeAggregationFinalizerFn: function( aggregation ) {
                     // console.log(aggregation);
                     aggregation.rendered = aggregation.value;
                 }
             },
             { name: 'IL_UNIVALENT'    , displayName: '單價', width: 115 },
-            { name: 'IL_UNIVALENT_NEW', displayName: '新單價', width: 115 },
-            { name: 'IL_FINALCOST'    , displayName: '完稅價格', width: 115 },
+            { name: 'IL_UNIVALENT_NEW'    , displayName: '新單價', width: 115 },
+            { name: 'IL_FINALCOST'       , displayName: '完稅價格', width: 115, treeAggregationType: uiGridGroupingConstants.aggregation.MAX, 
+                customTreeAggregationFinalizerFn: function( aggregation ) {
+                    // console.log(aggregation);
+                    aggregation.rendered = aggregation.value;
+                }
+            },
             { name: 'IL_UNIT'         , displayName: '單位', width: 115 },
             { name: 'IL_NEWUNIT'      , displayName: '新單位', width: 115 },
             { name: 'IL_GETNO'        , displayName: '收件者統編', width: 115 },
@@ -1930,39 +2535,6 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             { name: 'IL_TRCOM'        , displayName: '派送公司', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_REMARK'       , displayName: '備註', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_TAX2'         , displayName: '稅則', width: 100, headerCellClass: 'text-primary' }
-
-            // { name: 'IL_G1'         , displayName: '報關種類', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_MERGENO'    , displayName: '併票號', width: 129, headerCellClass: 'text-primary' },
-            // { name: 'IL_BAGNO'      , displayName: '袋號', width: 129, headerCellClass: 'text-primary' },
-            // { name: 'IL_SMALLNO'    , displayName: '小號', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_NATURE'     , displayName: '品名', width: 115, enableCellEdit: false },
-            // { name: 'IL_NATURE_NEW' , displayName: '新品名', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_CTN'        , displayName: '件數', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_PLACE'      , displayName: '產地', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWPLACE'   , displayName: '新產地', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_WEIGHT'     , displayName: '重量', width: 115, enableCellEdit: false },
-            // { name: 'IL_WEIGHT_NEW' , displayName: '新重量', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_PCS'        , displayName: '數量', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWPCS'     , displayName: '新數量', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_UNIVALENT'  , displayName: '單價', width: 115, enableCellEdit: false },
-            // { name: 'IL_UNIVALENT_NEW', displayName: '新單價', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_FINALCOST'  , displayName: '完稅價格', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_UNIT'       , displayName: '單位', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWUNIT'    , displayName: '新單位', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETNO'      , displayName: '收件者統編', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_EXNO'       , displayName: '匯出統編', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_SENDNAME'   , displayName: '寄件人', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWSENDNAME', displayName: '新寄件人', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TAX'        , displayName: '稅費歸屬', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETNAME'    , displayName: '收件人公司', width: 115, enableCellEdit: false },
-            // { name: 'IL_GETNAME_NEW', displayName: '新收件人公司', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETADDRESS' , displayName: '收件地址', width: 300, enableCellEdit: false },
-            // { name: 'IL_GETADDRESS_NEW' , displayName: '新收件地址', width: 300, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETTEL'     , displayName: '收件電話', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_EXTEL'      , displayName: '匯出電話', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TRCOM'      , displayName: '派送公司', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_REMARK'     , displayName: '備註', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TAX2'       , displayName: '稅則', width: 115, headerCellClass: 'text-primary' }
         ],
         enableFiltering: false,
         enableSorting: true,
@@ -1992,10 +2564,18 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
     $ctrl.overSixOption = {
         data: '$ctrl.mdData',
         columnDefs: [
-            { name: 'IL_G1'           , displayName: '報關種類', width: 80, headerCellClass: 'text-primary' },
-            { name: 'IL_MERGENO'      , displayName: '併票號', width: 80, headerCellClass: 'text-primary' },
+            { name: 'IL_REMARK'       , displayName: '備註', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_BAGNO'        , displayName: '袋號', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_SMALLNO'      , displayName: '小號', width: 110, headerCellClass: 'text-primary' },
+            { name: 'IL_GETNO'        , displayName: '收件者統編', width: 100, headerCellClass: 'text-primary' },
+            { name: 'IL_EXNO'         , displayName: '匯出統編', width: 80, headerCellClass: 'text-primary' },
+            { name: 'IL_GETNAME'      , displayName: '收件人公司', width: 100, enableCellEdit: false },
+            { name: 'IL_GETNAME_NEW'  , displayName: '新收件人公司', width: 100, headerCellClass: 'text-primary' },
+            { name: 'IL_GETADDRESS'   , displayName: '收件地址', width: 300, enableCellEdit: false },
+            { name: 'IL_GETADDRESS_NEW', displayName: '新收件地址', width: 300, headerCellClass: 'text-primary' },
+
+            { name: 'IL_G1'           , displayName: '報關種類', width: 80, headerCellClass: 'text-primary' },
+            { name: 'IL_MERGENO'      , displayName: '併票號', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_NATURE'       , displayName: '品名', width: 120, enableCellEdit: false },
             { name: 'IL_NATURE_NEW'   , displayName: '新品名', width: 120, headerCellClass: 'text-primary' },
             { name: 'IL_CTN'          , displayName: '件數', width: 50, headerCellClass: 'text-primary' },
@@ -2010,57 +2590,15 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             { name: 'IL_FINALCOST'    , displayName: '完稅價格', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_UNIT'         , displayName: '單位', width: 70, enableCellEdit: false },
             { name: 'IL_NEWUNIT'      , displayName: '新單位', width: 70, headerCellClass: 'text-primary' },
-            { name: 'IL_GETNO'        , displayName: '收件者統編', width: 100, headerCellClass: 'text-primary' },
-            { name: 'IL_EXNO'         , displayName: '匯出統編', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_SENDNAME'     , displayName: '寄件人', width: 80, enableCellEdit: false },
             { name: 'IL_NEWSENDNAME'  , displayName: '新寄件人', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_TAX'          , displayName: '稅費歸屬', width: 80, headerCellClass: 'text-primary' },
-            { name: 'IL_GETNAME'      , displayName: '收件人公司', width: 100, enableCellEdit: false },
-            { name: 'IL_GETNAME_NEW'  , displayName: '新收件人公司', width: 100, headerCellClass: 'text-primary' },
-            { name: 'IL_GETADDRESS'   , displayName: '收件地址', width: 300, enableCellEdit: false },
-            { name: 'IL_GETADDRESS_NEW', displayName: '新收件地址', width: 300, headerCellClass: 'text-primary' },
             { name: 'IL_GETTEL'       , displayName: '收件電話', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_EXTEL'        , displayName: '匯出電話', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_TRCOM'        , displayName: '派送公司', width: 100, headerCellClass: 'text-primary' },
-            { name: 'IL_REMARK'       , displayName: '備註', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_TAX2'         , displayName: '稅則', width: 100, headerCellClass: 'text-primary' },
             { name: 'GETNAME_COUNT'   , displayName: '收件人公司', width: 100, headerCellClass: 'text-danger', enableCellEdit: false, pinnedRight:true, cellTemplate: $templateCache.get('accessibilityToOverSixName') },
             { name: 'GETADDRESS_COUNT', displayName: '收件地址', width: 100, headerCellClass: 'text-danger', enableCellEdit: false, pinnedRight:true, cellTemplate: $templateCache.get('accessibilityToOverSixAddress') }
-            
-            // { name: 'IL_G1'         , displayName: '報關種類', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_MERGENO'    , displayName: '併票號', width: 129, headerCellClass: 'text-primary' },
-            // { name: 'IL_BAGNO'      , displayName: '袋號', width: 129, headerCellClass: 'text-primary' },
-            // { name: 'IL_SMALLNO'    , displayName: '小號', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_NATURE'     , displayName: '品名', width: 115, enableCellEdit: false },
-            // { name: 'IL_NATURE_NEW' , displayName: '新品名', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_CTN'        , displayName: '件數', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_PLACE'      , displayName: '產地', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWPLACE'   , displayName: '新產地', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_WEIGHT'     , displayName: '重量', width: 115, enableCellEdit: false },
-            // { name: 'IL_WEIGHT_NEW' , displayName: '新重量', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_PCS'        , displayName: '數量', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWPCS'     , displayName: '新數量', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_UNIVALENT'  , displayName: '單價', width: 115, enableCellEdit: false },
-            // { name: 'IL_UNIVALENT_NEW', displayName: '新單價', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_FINALCOST'  , displayName: '完稅價格', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_UNIT'       , displayName: '單位', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWUNIT'    , displayName: '新單位', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETNO'      , displayName: '收件者統編', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_EXNO'       , displayName: '匯出統編', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_SENDNAME'   , displayName: '寄件人', width: 115, enableCellEdit: false },
-            // { name: 'IL_NEWSENDNAME', displayName: '新寄件人', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TAX'        , displayName: '稅費歸屬', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETNAME'    , displayName: '收件人公司', width: 115, enableCellEdit: false },
-            // { name: 'IL_GETNAME_NEW', displayName: '新收件人公司', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETADDRESS' , displayName: '收件地址', width: 300, enableCellEdit: false },
-            // { name: 'IL_GETADDRESS_NEW' , displayName: '新收件地址', width: 300, headerCellClass: 'text-primary' },
-            // { name: 'IL_GETTEL'     , displayName: '收件電話', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_EXTEL'      , displayName: '匯出電話', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TRCOM'      , displayName: '派送公司', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_REMARK'     , displayName: '備註', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'IL_TAX2'       , displayName: '稅則', width: 115, headerCellClass: 'text-primary' },
-            // { name: 'GETNAME_COUNT'   , displayName: '收件人公司', width: 115, headerCellClass: 'text-danger', enableCellEdit: false, pinnedRight:true },
-            // { name: 'GETADDRESS_COUNT', displayName: '收件地址', width: 115, headerCellClass: 'text-danger', enableCellEdit: false, pinnedRight:true }
 
         ],
         enableFiltering: false,

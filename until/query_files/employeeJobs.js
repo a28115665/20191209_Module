@@ -18,7 +18,7 @@ module.exports = function(pQueryname, pParams){
 											SELECT COUNT(1) \
 											FROM ( \
 												SELECT IL_BAGNO \
-												FROM ITEM_LIST \
+												FROM V_ITEM_LIST_EXIST_ITEM \
 												WHERE IL_SEQ = OL_SEQ \
 												AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 												GROUP BY IL_BAGNO \
@@ -137,7 +137,7 @@ module.exports = function(pQueryname, pParams){
 							 AND ( SELECT COUNT(1) \
 								FROM ( \
 									SELECT IL_BAGNO \
-									FROM ITEM_LIST \
+									FROM V_ITEM_LIST_EXIST_ITEM \
 									WHERE IL_SEQ = OL_SEQ \
 									AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 									GROUP BY IL_BAGNO \

@@ -145,6 +145,9 @@
 				                    <li>
 				                        <a href-void="" href="#" ng-click="$vm.RepeatData('N+A');repeatData=false">收件者+地址</a>
 				                    </li>
+				                    <li>
+				                        <a href-void="" href="#" ng-click="$vm.RepeatData('SBN');repeatData=false">同袋收件人</a>
+				                    </li>
 						        </ul>
 						    </div>
 				            <!-- <a href-void="" class="btn btn-warning" href="#" ng-click="$vm.RepeatName()">收件者相同</a> -->
@@ -181,6 +184,7 @@
 														<span class="cell-class-ban"> 黑名單</span>
 														<span class="cell-class-pull"> 拉貨</span>
 														<span class="cell-class-special"> 特貨</span>
+														<span class="cell-class-softdelete"> 軟刪除</span>
 														<span class="text-primary"> 可編輯欄位</span>
 											        </span>
 							                    </div>
@@ -205,6 +209,18 @@
 							        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 text-right">
 							        	<form class="form-inline" role="form">
 							                <fieldset>
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.SoftDeleteAllGoods()"
+										            		ng-disabled="$vm.loading.softDeleteAllGoods">
+									            		<span ng-if="$vm.loading.softDeleteAllGoods">
+									            			<i class="fa fa-refresh fa-spin"></i>
+										            	</span>
+									            		<span ng-if="!$vm.loading.softDeleteAllGoods">
+										                	刪除網購貨
+										            	</span>
+										            </button>
+							                    </div>
 							                    <div class="form-group">
 										            <button class="btn btn-info"
 										            		ng-click="$vm.SortoutG1ForY()">
@@ -253,6 +269,18 @@
 										            <button class="btn btn-danger"
 										            		ng-click="$vm.gridMethod.deleteData()">
 										                刪除
+										            </button>
+							                    </div>
+							                    <div class="form-group">
+										            <button class="btn btn-danger"
+										            		ng-click="$vm.SoftDeleteGoods()"
+										            		ng-disabled="$vm.loading.softDeleteGoods">
+									            		<span ng-if="$vm.loading.softDeleteGoods">
+									            			<i class="fa fa-refresh fa-spin"></i>
+										            	</span>
+									            		<span ng-if="!$vm.loading.softDeleteGoods">
+										                	軟刪除
+										            	</span>
 										            </button>
 							                    </div>
 							                </fieldset>
@@ -323,6 +351,55 @@
                 介宏格式 
             </button> 
         </div> 
+	</div>
+</script>
+
+<script type="text/ng-template" id="softDeleteAllGoodsModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">刪除網購貨</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+
+	    <form class="form-horizontal padding-10" name="softDeleteAllGoodsForm">
+			<fieldset>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">件數範圍</label>
+			        <div class="col-md-2">
+			            <input class="form-control" name="leastNumber" placeholder="最少件數" ng-model="$ctrl.mdData.leastNumber" type="number"  min="0" max="{{$ctrl.mdData.mostNumber}}" ng-required="true">
+			        </div>
+			        <label class="col-md-1 control-label text-center">-</label>
+			        <div class="col-md-2">
+			            <input class="form-control" name="mostNumber" placeholder="最多件數" ng-model="$ctrl.mdData.mostNumber" type="number" min="{{$ctrl.mdData.leastNumber}}" max="90" ng-required="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">減少比例</label>
+			        <div class="col-md-2">
+			            <input class="form-control" name="reduceRatio" placeholder="輸入比例" ng-model="$ctrl.mdData.reduceRatio" type="number" min="0" max="100" ng-required="true">
+			        </div>
+			        <label class="col-md-1 control-label text-left">%</label>
+			    </div>
+			</fieldset>
+	    </form>
+
+        <div id="grid1" ui-grid="$ctrl.dataOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()" ng-disabled="!softDeleteAllGoodsForm.$valid">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
+	</div>
+</script>
+
+<script type="text/ng-template" id="cancelNoModalContent.html">
+    <div class="modal-header">
+	    <h3 class="modal-title" id="modal-title">取消併票</h3>
+	</div>
+	<div class="modal-body no-padding" id="modal-body">
+        <div id="grid1" ui-grid="$ctrl.dataOption" class="my-ui-grid" ui-grid-pagination ui-grid-resize-columns ui-grid-selection ui-grid-auto-resize></div>
+	</div>
+	<div class="modal-footer">
+	    <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">{{getWord('OK')}}</button>
+	    <button class="btn btn-default" type="button" ng-click="$ctrl.cancel()">{{getWord('Cancel')}}</button>
 	</div>
 </script>
 
@@ -398,7 +475,7 @@
 				<div class="form-group" ng-show="$ctrl.mergeNoNature == '1'">
 			        <label class="col-md-2 control-label">新品名</label>
 			        <div class="col-md-10">
-						<select class="form-control" name="natureNew" ng-model="$ctrl.mdData.natureNew" ng-options="data as data for data in $ctrl.natureNew" ng-disabled="$ctrl.natureNew.length == 0" ng-required="true">
+						<select class="form-control" name="natureNew" ng-model="$ctrl.mdData.item" ng-options="data as data.IL_NATURE_NEW for (idx, data) in $ctrl.item" ng-change="$ctrl.CalculateA10AndB40()" ng-disabled="$ctrl.item.length == 0" ng-required="true">
 							<option value="">-- 請選擇 --</option>
 						</select>
 			        </div>
@@ -406,7 +483,7 @@
 				<div class="form-group" ng-show="$ctrl.mergeNoNature == '2'">
 			        <label class="col-md-2 control-label">自訂</label>
 			        <div class="col-md-10">
-			            <input class="form-control" name="natureNew" placeholder="請輸入自訂併票號品名" ng-model="$ctrl.mdData.natureNew" type="text" ng-required="true">
+			            <input class="form-control" name="natureNew" placeholder="請輸入自訂併票號品名" ng-model="$ctrl.mdData.item.IL_NATURE_NEW" type="text" ng-required="true">
 			        </div>
 			    </div>
 			    <div class="form-group">
@@ -425,7 +502,7 @@
 				<div class="form-group" ng-show="$ctrl.mergeNoIlTax2 == '1'">
 			        <label class="col-md-2 control-label">稅則</label>
 			        <div class="col-md-10">
-						<select class="form-control" name="ilTax2" ng-model="$ctrl.mdData.ilTax2" ng-options="data as data for data in $ctrl.ilTax2" ng-disabled="$ctrl.ilTax2.length == 0" ng-required="true">
+						<select class="form-control" name="ilTax2" ng-model="$ctrl.mdData.item" ng-options="data as data.IL_TAX2 for (idx, data) in $ctrl.item" ng-change="$ctrl.CalculateA10AndB40()" ng-disabled="$ctrl.item.length == 0" ng-required="true">
 							<option value="">-- 請選擇 --</option>
 						</select>
 			        </div>
@@ -433,13 +510,43 @@
 				<div class="form-group" ng-show="$ctrl.mergeNoIlTax2 == '2'">
 			        <label class="col-md-2 control-label">自訂</label>
 			        <div class="col-md-10">
-			            <input class="form-control" name="ilTax2" placeholder="請輸入自訂併票號稅則" ng-model="$ctrl.mdData.ilTax2" type="text" ng-required="true">
+			            <input class="form-control" name="ilTax2" placeholder="請輸入自訂併票號稅則" ng-model="$ctrl.mdData.item.IL_TAX2" type="text" ng-required="true">
 			        </div>
 			    </div>
 				<div class="form-group">
 			        <label class="col-md-2 control-label">袋數</label>
-			        <div class="col-md-10">
+			        <div class="col-md-4">
 			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.bagNo.length}}</span>
+			        </div>
+			        <label class="col-md-2 control-label">稅率</label>
+			        <div class="col-md-4">
+			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.item.IL_TAXRATE}} %</span>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">新重量</label>
+			        <div class="col-md-4">
+			            <input class="form-control" name="ilWeightNew" placeholder="請輸入新重量" ng-model="$ctrl.mdData.newItem.IL_WEIGHT_NEW"  type="number" step="0.01" min="0" ng-required="true">
+			        </div>
+			        <label class="col-md-2 control-label">新數量</label>
+			        <div class="col-md-4">
+			            <input class="form-control" name="ilNewPcs" placeholder="請輸入新數量" ng-model="$ctrl.mdData.newItem.IL_NEWPCS"  type="number" min="0" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" required>
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">新單價</label>
+			        <div class="col-md-4">
+			            <input class="form-control" name="ilUnivalentNew" placeholder="請輸入新單價" ng-model="$ctrl.mdData.newItem.IL_UNIVALENT_NEW"  type="number" step="0.01" min="0" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" required>
+			        </div>
+			        <label class="col-md-2 control-label">完稅價格</label>
+			        <div class="col-md-4">
+			            <input class="form-control" name="ilFinalCost" placeholder="請輸入完稅價格" ng-model="$ctrl.mdData.newItem.IL_FINALCOST"  type="number" step="0.01" min="0" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" ng-required="true">
+			        </div>
+			    </div>
+				<div class="form-group">
+			        <label class="col-md-2 control-label">稅費合計</label>
+			        <div class="col-md-10">
+			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.newItem.A10AndB40}}</span>
 			        </div>
 			    </div>
 			</fieldset>

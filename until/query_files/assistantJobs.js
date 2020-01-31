@@ -26,7 +26,7 @@ module.exports = function(pQueryname, pParams){
 											SELECT COUNT(1) \
 											FROM ( \
 												SELECT IL_BAGNO \
-												FROM ITEM_LIST \
+												FROM V_ITEM_LIST_EXIST_ITEM \
 												WHERE IL_SEQ = OL_SEQ \
 												AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 												GROUP BY IL_BAGNO \
@@ -238,7 +238,7 @@ module.exports = function(pQueryname, pParams){
 										SELECT COUNT(1) \
 										FROM ( \
 											SELECT IL_BAGNO \
-											FROM ITEM_LIST \
+											FROM V_ITEM_LIST_EXIST_ITEM \
 											WHERE IL_SEQ = OL_SEQ \
 											AND IL_BAGNO IS NOT NULL AND IL_BAGNO != '' \
 											GROUP BY IL_BAGNO \
@@ -292,7 +292,7 @@ module.exports = function(pQueryname, pParams){
 
 		case "SelectBagNoDetail":
 			_SQLCommand += "SELECT * \
-							FROM ITEM_LIST \
+							FROM V_ITEM_LIST_EXIST_ITEM \
 						    WHERE 1=1";
 
 			if(pParams["IL_SEQ"] !== undefined){
@@ -353,7 +353,7 @@ module.exports = function(pQueryname, pParams){
 									IL_HASUNIVALENT, \
 									IL_SUPPLEMENT_COUNT, \
 									IL_TAXRATE \
-							FROM ITEM_LIST \
+							FROM V_ITEM_LIST_EXIST_ITEM \
 						    WHERE 1=1";
 
 			if(pParams["SeqAndBagno"] !== undefined){
@@ -380,7 +380,7 @@ module.exports = function(pQueryname, pParams){
 									SPG_UP_USER, \
 									SPG_UP_DATETIME \
 							FROM SPECIAL_GOODS \
-							INNER JOIN ITEM_LIST ON \
+							INNER JOIN V_ITEM_LIST_EXIST_ITEM ON \
 							IL_SEQ = SPG_SEQ AND \
 							IL_NEWBAGNO = SPG_NEWBAGNO AND \
 							IL_NEWSMALLNO = SPG_NEWSMALLNO AND \
