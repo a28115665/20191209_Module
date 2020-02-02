@@ -153,7 +153,12 @@ module.exports = function(pQueryname, pParams){
 				delete pParams["NewSmallNo"];
 			}
 
-			_SQLCommand += "ORDER BY IL_BAGNO";
+			_SQLCommand += "ORDER BY ( \
+							    CASE IL_G1 \
+							    WHEN 'G1' \
+							    THEN 10 \
+								END \
+							) DESC, IL_MERGENO DESC, IL_BAGNO";
 		
 			break;
 

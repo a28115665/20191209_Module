@@ -2093,7 +2093,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             if(_finalcost > 2000){
                 toaster.pop('warning', '警告', '完稅價格超過2000元，請注意', 3000);
             }
-            
+
             // 當數量不為空 帶出單價 (會與新單價衝突)
             if(colDef.name == 'IL_FINALCOST' || colDef.name == 'IL_NEWPCS' || colDef.name == 'IL_UNIVALENT_NEW'){
                 if(!isNaN(_pcs)){
@@ -2129,11 +2129,17 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
      * @param {[type]} rowEntity [description]
      */
     function G1ForY (rowEntity){
-        rowEntity.IL_WEIGHT_NEW = rowEntity.IL_WEIGHT;
-        rowEntity.IL_NEWPCS = rowEntity.IL_PCS;
-        rowEntity.IL_UNIVALENT_NEW = rowEntity.IL_UNIVALENT;
-        rowEntity.IL_NEWSENDNAME = rowEntity.IL_SENDNAME;
-        rowEntity.IL_FINALCOST = null;
+        try{
+            if(rowEntity["IL_G1"] == "Y"){
+                rowEntity.IL_WEIGHT_NEW = rowEntity.IL_WEIGHT;
+                rowEntity.IL_NEWPCS = rowEntity.IL_PCS;
+                rowEntity.IL_UNIVALENT_NEW = rowEntity.IL_UNIVALENT;
+                rowEntity.IL_NEWSENDNAME = rowEntity.IL_SENDNAME;
+                rowEntity.IL_FINALCOST = null;
+            }
+        } catch (e) {
+            console.log(e);
+        }
     }
 
     /**
