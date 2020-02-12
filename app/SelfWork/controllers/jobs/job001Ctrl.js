@@ -915,12 +915,12 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
             }
 
-            _newItem.IL_WEIGHT_NEW    = Math.round(_newItem.IL_WEIGHT_NEW * 100) / 100;
-            _newItem.IL_NEWPCS        = Math.round(_newItem.IL_NEWPCS * 100) / 100;
+            _newItem.IL_WEIGHT_NEW    = _newItem.IL_WEIGHT_NEW;
+            _newItem.IL_NEWPCS        = _newItem.IL_NEWPCS;
             // 回算新單價
-            _newItem.IL_UNIVALENT_NEW = Math.round((_newItem.IL_FINALCOST / _newItem.IL_NEWPCS) * 100) / 100;
+            _newItem.IL_UNIVALENT_NEW = Math.round(_newItem.IL_FINALCOST / _newItem.IL_NEWPCS);
             // 回算完稅價格
-            _newItem.IL_FINALCOST     = Math.round((_newItem.IL_UNIVALENT_NEW * _newItem.IL_NEWPCS) * 100) / 100;
+            _newItem.IL_FINALCOST     = _newItem.IL_UNIVALENT_NEW * _newItem.IL_NEWPCS;
 
             var modalInstance = $uibModal.open({
                 animation: true,
@@ -1044,15 +1044,15 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
                             // 如果是最後一筆，扣除先前的新重量 新數量 新單價 完稅價格
                             if(i == (_reverseSelectedRows.length-1)){
-                                $vm.job001Data[_index-1].IL_WEIGHT_NEW    -= _ilWeightNew;
+                                $vm.job001Data[_index-1].IL_WEIGHT_NEW    = Math.round(($vm.job001Data[_index-1].IL_WEIGHT_NEW - _ilWeightNew) * 100) / 100;
                                 $vm.job001Data[_index-1].IL_NEWPCS        -= _ilNewPcs;
-                                $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_FINALCOST - _ilFinalCost) * 100) / 100;
+                                $vm.job001Data[_index-1].IL_FINALCOST     = $vm.job001Data[_index-1].IL_FINALCOST - _ilFinalCost;
                                 // 回算新單價
-                                $vm.job001Data[_index-1].IL_UNIVALENT_NEW = Math.round(($vm.job001Data[_index-1].IL_FINALCOST / $vm.job001Data[_index-1].IL_NEWPCS) * 100) / 100;
+                                $vm.job001Data[_index-1].IL_UNIVALENT_NEW = Math.round($vm.job001Data[_index-1].IL_FINALCOST / $vm.job001Data[_index-1].IL_NEWPCS);
                                 // 回算完稅價格
-                                $vm.job001Data[_index-1].IL_FINALCOST     = Math.round(($vm.job001Data[_index-1].IL_NEWPCS * $vm.job001Data[_index-1].IL_UNIVALENT_NEW) * 100) / 100;
+                                $vm.job001Data[_index-1].IL_FINALCOST     = $vm.job001Data[_index-1].IL_NEWPCS * $vm.job001Data[_index-1].IL_UNIVALENT_NEW;
                             }else{
-                                _ilWeightNew    += _reverseSelectedRows[i].IL_WEIGHT_NEW;
+                                _ilWeightNew    += Math.round(_reverseSelectedRows[i].IL_WEIGHT_NEW * 100) / 100;
                                 _ilNewPcs       += _reverseSelectedRows[i].IL_NEWPCS;
                                 _ilFinalCost    += _reverseSelectedRows[i].IL_FINALCOST;
                             }
@@ -1481,7 +1481,6 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     case "0MX3":
                         _templates = "21";
                         _queryname = "SelectItemListForEx0MX3";
-                        _params["CO_NAME"] = $vm.vmData.CO_NAME
                         _exportName += '-併X3';
                         break;
                     // 介宏格式
@@ -1988,7 +1987,6 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
             for(var i=0;i<_data.length;i++){
                 _data[i]["Index"] = i+1;
-                _data[i]["IL_FINALCOST"] = Math.round(_data[i]["IL_FINALCOST"] * 100) / 100;
 
             }
             $vm.job001Data = angular.copy(_data);
@@ -2047,12 +2045,12 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
         }
 
         // 計算稅
-        // var _univalent = parseInt(rowEntity.IL_UNIVALENT_NEW),
-        //     _pcs = parseInt(rowEntity.IL_NEWPCS),
-        //     _finalcost = parseInt(rowEntity.IL_FINALCOST),
-        var _univalent = rowEntity.IL_UNIVALENT_NEW,
-            _pcs = rowEntity.IL_NEWPCS,
-            _finalcost = rowEntity.IL_FINALCOST,
+        var _univalent = parseInt(rowEntity.IL_UNIVALENT_NEW),
+            _pcs = parseInt(rowEntity.IL_NEWPCS),
+            _finalcost = parseInt(rowEntity.IL_FINALCOST),
+        // var _univalent = rowEntity.IL_UNIVALENT_NEW,
+        //     _pcs = rowEntity.IL_NEWPCS,
+        //     _finalcost = rowEntity.IL_FINALCOST,
             start = 0;
 
         if(!isNaN(_univalent)){
@@ -2083,23 +2081,26 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             }
 
             // 當完稅價格小於100
-            if(_finalcost < 100 && _finalcost != 0){
-                // 給個新值 100~125
-                var maxNum = 125;  
-                var minNum = 100;  
+            if(_finalcost < 50 && _finalcost != 0){
+                // 給個新值 100~130
+                var maxNum = 70;  
+                var minNum = 50;  
                 _finalcost = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum; 
             }
 
-            // 當完稅價格超過2000 提醒使用者
-            if(_finalcost > 2000){
-                toaster.pop('warning', '警告', '完稅價格超過2000元，請注意', 3000);
+            // 當完稅價格超過1299 提醒使用者
+            if(_finalcost > 1299){
+                // var maxNum = 1299;  
+                // var minNum = 1000;  
+                // _finalcost = Math.floor(Math.random() * (maxNum - minNum + 1)) + minNum; 
+                toaster.pop('warning', '警告', '完稅價格超過1299元，請注意', 3000);
             }
 
             // 當數量不為空 帶出單價 (會與新單價衝突)
             if(colDef.name == 'IL_FINALCOST' || colDef.name == 'IL_NEWPCS' || colDef.name == 'IL_UNIVALENT_NEW'){
                 if(!isNaN(_pcs)){
                     if(parseInt(_pcs) != 0){
-                        _univalent = _finalcost / _pcs;
+                        _univalent = Math.round(_finalcost / _pcs);
                     }else{
                         _univalent = 0;
                     }
@@ -2115,9 +2116,9 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             }
 
             // console.log("_univalent:", _univalent," _pcs:" , _pcs," _finalcost:" , _finalcost);
-            rowEntity.IL_UNIVALENT_NEW = isNaN(_univalent) ? null : Math.round(_univalent * 100) / 100;
-            rowEntity.IL_NEWPCS = isNaN(_pcs) ? null : Math.round(_pcs * 100) / 100;
-            rowEntity.IL_FINALCOST = isNaN(_finalcost) ? null : Math.round(_finalcost * 100) / 100;
+            rowEntity.IL_UNIVALENT_NEW = isNaN(_univalent) ? null : _univalent;
+            rowEntity.IL_NEWPCS = isNaN(_pcs) ? null : _pcs;
+            rowEntity.IL_FINALCOST = isNaN(_finalcost) ? null : _finalcost;
         }
 
         $vm.job001GridApi.rowEdit.setRowsDirty([rowEntity]);

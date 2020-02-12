@@ -536,11 +536,11 @@
 				<div class="form-group">
 			        <label class="col-md-2 control-label">新單價</label>
 			        <div class="col-md-4">
-			            <input class="form-control" name="ilUnivalentNew" placeholder="請輸入新單價" ng-model="$ctrl.mdData.newItem.IL_UNIVALENT_NEW"  type="number" step="0.01" min="0" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" required>
+			            <input class="form-control" name="ilUnivalentNew" placeholder="請輸入新單價" ng-model="$ctrl.mdData.newItem.IL_UNIVALENT_NEW"  type="number" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" required>
 			        </div>
 			        <label class="col-md-2 control-label">完稅價格</label>
 			        <div class="col-md-4">
-			            <input class="form-control" name="ilFinalCost" placeholder="請輸入完稅價格" ng-model="$ctrl.mdData.newItem.IL_FINALCOST"  type="number" step="0.01" min="0" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" ng-required="true">
+			            <input class="form-control" name="ilFinalCost" placeholder="請輸入完稅價格" ng-model="$ctrl.mdData.newItem.IL_FINALCOST"  type="number" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()" ng-required="true">
 			        </div>
 			    </div>
 				<div class="form-group">

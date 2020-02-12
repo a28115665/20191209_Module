@@ -169,7 +169,6 @@ module.exports = function(pQueryname, pParams){
 
 		case "SelectItemListForEx0MX3":
 			_SQLCommand += "SELECT *, \
-									@CO_NAME AS 'CO_NAME', \
 									IL_UNIVALENT_NEW * IL_NEWPCS_NOREPEAT AS 'IL_FINALCOST_NOREPEAT', \
 									CONVERT(VARCHAR, IL_TAXRATE) + '%' AS 'IL_TAXRATEEX', \
 									ROUND(CASE WHEN IL_WEIGHT_NEW - 0.5 > 0 THEN IL_WEIGHT_NEW - 0.5 ELSE IL_WEIGHT_NEW - 0.1 END, 2) AS 'IL_NETWEIGHT',  \
@@ -189,7 +188,7 @@ module.exports = function(pQueryname, pParams){
 										THEN IL_MERGENO ELSE NULL END AS 'IL_BAGNOEX_NOREPEAT', \
 										CASE WHEN ROW_NUMBER() OVER(PARTITION BY IL_MERGENO ORDER BY IL_MERGENO) = 1 \
 										THEN( \
-											SELECT SUM(IL_CTN) \
+											SELECT COUNT(DISTINCT IL_BAGNO) \
 											FROM V_ITEM_LIST_EXIST_ITEM IN_IL \
 											LEFT JOIN PULL_GOODS ON \
 											IN_IL.IL_SEQ = PG_SEQ AND \
@@ -198,7 +197,7 @@ module.exports = function(pQueryname, pParams){
 											AND IN_IL.IL_SEQ = @IL_SEQ \
 											/*拉貨不匯出*/ \
 											AND PG_SEQ IS NULL \
-										) ELSE NULL END AS 'IL_CTN_NOREPEAT', \
+										) ELSE NULL END AS 'IL_BAGNO_NOREPEAT', \
 										CASE WHEN ROW_NUMBER() OVER(PARTITION BY IL_MERGENO ORDER BY IL_MERGENO) = 1 \
 										/*THEN( \
 											SELECT SUM(IL_WEIGHT_NEW) \
