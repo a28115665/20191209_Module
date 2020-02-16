@@ -1461,6 +1461,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         _templates = "0";
                         _queryname = "SelectItemListForEx0";
                         _params["IL_G1"] = "'G1'";
+                        _exportName += '-G1';
                         break;
                     // 關貿格式(X2)
                     case "0X2":
@@ -1470,12 +1471,14 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         // 不包含併X3(也就是mergeno是null)
                         _params["IL_MERGENO"] = null;
                         _params["OL_CO_NAME"] = $filter('compyFilter')($vm.vmData.OL_CO_CODE);
+                        _exportName += '-X2';
                         break;
                     // 關貿格式(X3)
                     case "0X3":
                         _templates = "0";
                         _queryname = "SelectItemListForEx0";
                         _params["IL_G1"] = "'X3'";
+                        _exportName += '-X3';
                         break;
                     // 關貿格式(併X3)
                     case "0MX3":
@@ -1487,6 +1490,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     case "8":
                         _templates = "8";
                         _queryname = "SelectItemListForEx8";
+                        _exportName += '-介宏';
                         break;
                 }
 
@@ -2511,6 +2515,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
     $ctrl.repeatDataOption = {
         data: '$ctrl.mdData',
         columnDefs: [
+            { name: 'IL_G1'           , displayName: '報關種類', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_REMARK'       , displayName: '備註', width: 100, headerCellClass: 'text-primary' },
             { name: 'IL_BAGNO'        , displayName: '袋號', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_SMALLNO'      , displayName: '小號', width: 110, headerCellClass: 'text-primary' },
@@ -2521,7 +2526,6 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             { name: 'IL_GETADDRESS'   , displayName: '收件地址', width: 300, enableCellEdit: false },
             { name: 'IL_GETADDRESS_NEW', displayName: '新收件地址', width: 300, headerCellClass: 'text-primary' },
 
-            { name: 'IL_G1'           , displayName: '報關種類', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_MERGENO'      , displayName: '併票號', width: 80, headerCellClass: 'text-primary' },
             { name: 'IL_NATURE'       , displayName: '品名', width: 120, enableCellEdit: false },
             { name: 'IL_NATURE_NEW'   , displayName: '新品名', width: 120, headerCellClass: 'text-primary' },
