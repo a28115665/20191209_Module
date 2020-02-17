@@ -7,6 +7,7 @@ module.exports = function(pQueryname, pParams){
 								   OL_MASTER, \
 								   OL_FLIGHTNO, \
 								   OL_IMPORTDT, \
+								   OL_REAL_IMPORTDT, \
 								   OL_CR_DATETIME, \
 								   OL_COUNTRY, \
 								   OL_AIRPLANEID, \

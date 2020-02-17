@@ -332,10 +332,10 @@ angular.module('app.selfwork').controller('EmployeeJobsCtrl', function ($scope, 
                 // { name: 'FA_ACTL_ARRIVALTIME'    ,  displayName: '真實抵達時間', cellFilter: 'datetimeFilter' },
                 { name: 'FA_ARRIVAL_REMK'        ,  displayName: '狀態', width: 60, cellTemplate: $templateCache.get('accessibilityToArrivalRemark') },
                 { name: 'OL_MASTER'              ,  displayName: '主號', width: 110, cellTemplate: $templateCache.get('accessibilityToMasterForViewOrder') },
-                { name: 'OL_AIRPLANEID'   ,  displayName: '航空代理' },
-                { name: 'OL_COUNT'               ,  displayName: '報機單(袋數)' },
-                { name: 'OL_PULL_COUNT'          ,  displayName: '拉貨(袋數)' },
-                { name: 'OL_COUNTRY'             ,  displayName: '起運國別' },
+                { name: 'OL_AIRPLANEID'          ,  displayName: '航空代理', width: 70 },
+                { name: 'OL_COUNT'               ,  displayName: '報機單(袋數)', width: 55 },
+                { name: 'OL_PULL_COUNT'          ,  displayName: '拉貨(袋數)', width: 55 },
+                { name: 'OL_COUNTRY'             ,  displayName: '起運國別', width: 55 },
                 { name: 'OL_REASON'              ,  displayName: '描述', cellTooltip: function (row, col) 
                     {
                         return row.entity.OL_REASON

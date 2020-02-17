@@ -163,13 +163,38 @@ angular.module('app.selfwork').controller('LeaderJobsCtrl', function ($scope, $s
                                 // console.log(res["returnData"]);
 
                                 if(res["returnData"].length == 0){
-                                    RestfulApi.DeleteMSSQLData({
-                                        deletename: 'Delete',
+                                    // RestfulApi.DeleteMSSQLData({
+                                    //     deletename: 'Delete',
+                                    //     table: 18,
+                                    //     params: {
+                                    //         OL_SEQ : selectedItem.OL_SEQ
+                                    //     }
+                                    // }).then(function (res) {
+                                    //     LoadOrderList();
+                                    //     toaster.pop('success', '訊息', '刪除成功', 3000);
+                                    // });
+
+                                    var _tasks = [];
+
+                                    // 刪除銷倉單
+                                    _tasks.push({
+                                        crudType: 'Delete',
+                                        table: 49,
+                                        params: {
+                                            OLS_SEQ_NEW : selectedItem.OL_SEQ
+                                        }
+                                    });
+
+                                    // 刪除銷倉單標記
+                                    _tasks.push({
+                                        crudType: 'Delete',
                                         table: 18,
                                         params: {
                                             OL_SEQ : selectedItem.OL_SEQ
                                         }
-                                    }).then(function (res) {
+                                    });
+
+                                    RestfulApi.CRUDMSSQLDataByTask(_tasks).then(function (res) {
                                         LoadOrderList();
                                         toaster.pop('success', '訊息', '刪除成功', 3000);
                                     });
