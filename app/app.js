@@ -188,7 +188,7 @@ angular.module('app', [
         // 無權限就導到default頁面
         // console.log(Session.Get().GRIGHT[toState.name], toState.name);
         if(!angular.isUndefined(Session.Get()) && Session.Get()["GRIGHT"] !== undefined){
-            if(!Session.Get().GRIGHT[toState.name]){
+            if(Session.Get()["U_ROLE"] != "Admin" && !Session.Get().GRIGHT[toState.name]){
                 // event.preventDefault();
                 $state.transitionTo("app.default");
             }

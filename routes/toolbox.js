@@ -4,6 +4,7 @@ var mkdirp = require('mkdirp');
 var dbCommand = require('../until/dbCommand.js');
 var dbCommandByTask = require('../until/dbCommandByTask.js');
 var async = require('async');
+var xlsx = require('xlsx');
 var tmpXlsObj = require('../until/tmpXlsObj.js');
 var setting = require('../app.setting.json');
 var templates = require('../templates/templates.json');
@@ -98,96 +99,6 @@ router.get('/exportExcelBySql', function(req, res) {
         res.status(post_res.statusCode).send('匯出失敗');
     }
 
-    // var post_data = querystring.stringify(req.query);
-    
-    // var post_options = {
-    //     host: '127.0.0.1',
-    //     port: setting.NodeJs.port,
-    //     path: '/restful/crud?' + post_data,
-    //     method: 'GET',
-    //     auth: until.FindID(req.session) + ':' + req.sessionID
-    // };
-
-    // // Set up the request
-    // var post_req = http.request(post_options, function (post_res) {
-
-    //     // console.log("statusCode: ", post_res.statusCode);
-    //     //console.log("headers: ", post_res.headers);
-    //     if(post_res.statusCode == 200){
-    //         var content = '';
-
-    //         post_res.setEncoding('utf8');
-
-    //         post_res.on('data', function(chunk) {
-    //             content += chunk;
-    //         });
-
-    //         post_res.on('end', function() {
-    //             // console.log(content);
-
-    //             try {
-
-    //                 let _params = typeof req.query["params"] == "string" ? JSON.parse(req.query["params"]) : req.query["params"];
-                    
-    //                 // 如果undefined則先宣告物件
-    //                 if(_params == undefined){
-    //                     _params = {};
-    //                 }
-
-    //                 _params["data"] = JSON.parse(content).returnData;
-
-    //                 // console.log(_params);
-
-    //                 tmpXlsObj.GetXls({
-    //                     JsonXls : _params,
-    //                     TmpXlsFilePath : path.join(path.dirname(module.parent.filename), 'templates', templates[req.query["templates"]]), //template xls 路徑(含檔名)
-    //                     // OutputXlsPath : path.join(path.dirname(module.parent.filename), 'templates', 'test2.xlsx'),
-    //                     SheetNumber : 1
-    //                 }, function (err, result){
-
-    //                     if (err) {
-    //                         // Do something with your error...
-    //                         logger.error('匯出失敗', req.ip, __line+'行', err);
-    //                         res.status(403).send("匯出失敗");
-    //                     } else {
-
-    //                         try {
-    //                             res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    //                             res.setHeader('Content-Length', result.length);
-    //                             res.setHeader('Expires', '0');
-    //                             // res.setHeader('Content-Disposition', 'attachment; filename=test.xls');
-    //                             res.setHeader('Content-Encoding', 'UTF-8');
-    //                             res.status(200);
-
-    //                             var buffer = new Buffer(result, "binary");
-
-    //                             // res.end(toArrayBuffer(buffer));
-    //                             res.end(buffer);
-    //                         } catch(err){
-    //                             logger.error('匯出失敗', req.ip, __line+'行', err);
-    //                             res.status(403).send("匯出失敗");
-    //                         }
-    //                     }
-    //                 });
-    //             } 
-    //             catch(err) {
-    //                 logger.error('匯出失敗', req.ip, __line+'行', err);
-    //                 res.status(403).send("匯出失敗");
-    //             }  
-
-    //         });
-    //     }else{
-    //         res.status(post_res.statusCode).send('匯出失敗');
-    //     }
-    // });
-
-    // post_req.on('error', function(err) {
-    //     // Handle error
-    //     res.status(403).send('匯出失敗');
-    // });
-
-    // post_req.end(); 
-
     let id = until.FindID(req.session),
         action = "查詢",
         querymain = req.query["querymain"],
@@ -280,87 +191,169 @@ router.get('/exportExcelByMultiSql', function(req, res) {
     if(_params["templates"] == undefined){
         res.status(post_res.statusCode).send('匯出失敗');
     }
-
-    var post_data = querystring.stringify(_query);
     
-    var post_options = {
-        host: '127.0.0.1',
-        port: setting.NodeJs.port,
-        path: '/restful/crudByTask?' + post_data,
-        method: 'GET'
-    };
+    try{
 
-    // Set up the request
-    var post_req = http.request(post_options, function (post_res) {
+        var tasks = [];
+        tasks.push(dbCommandByTask.Connect);
+        tasks.push(dbCommandByTask.TransactionBegin);
+        for(var i in _query){
+            tasks.push(async.apply(dbCommandByTask.SelectRequestWithTransaction, JSON.parse(_query[i])));
+        }
+        tasks.push(dbCommandByTask.TransactionCommit);
+        async.waterfall(tasks, function (err, args) {
 
-        // console.log("statusCode: ", post_res.statusCode);
-        //console.log("headers: ", post_res.headers);
-        if(post_res.statusCode == 200){
-            var content = '';
+            if (err) {
+                // 如果連線失敗就不做Rollback
+                if(Object.keys(args).length !== 0){
+                    dbCommandByTask.TransactionRollback(args, function (err, result){
+                        
+                    });
+                }
 
-            post_res.setEncoding('utf8');
+                console.error("匯出Excel錯誤訊息:", err);
 
-            post_res.on('data', function(chunk) {
-                content += chunk;
-            });
+                res.status(403).send('匯出Excel失敗');
+                // process.exit();
+            }else{
+                for(var i in args.result){
+                    _params["data" + i] = args.result[i];
+                }
 
-            post_res.on('end', function() {
-                // console.log(content);
+                tmpXlsObj.GetXls({
+                    JsonXls : _params,
+                    TmpXlsFilePath : path.join(path.dirname(module.parent.filename), 'templates', templates[_params["templates"]]), //template xls 路徑(含檔名)
+                    // OutputXlsPath : path.join(path.dirname(module.parent.filename), 'templates', 'test2.xlsx'),
+                    SheetNumber : 1
+                }, function (err, result){
+                    if (err) {
+                        // Do something with your error...
+                        logger.error('匯出失敗', req.ip, __line+'行', err);
+                        res.status(403).send("匯出失敗");
+                    } else {
 
-                try {
-                    var _content = JSON.parse(content);
-                    for(var i in _content.returnData){
-                        _params["data" + i] = _content.returnData[i];
-                    }
+                        try {
+                            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                            res.setHeader('Content-Length', result.length);
+                            res.setHeader('Expires', '0');
+                            // res.setHeader('Content-Disposition', 'attachment; filename=test.xls');
+                            res.setHeader('Content-Encoding', 'UTF-8');
+                            res.status(200);
 
-                    tmpXlsObj.GetXls({
-                        JsonXls : _params,
-                        TmpXlsFilePath : path.join(path.dirname(module.parent.filename), 'templates', templates[_params["templates"]]), //template xls 路徑(含檔名)
-                        // OutputXlsPath : path.join(path.dirname(module.parent.filename), 'templates', 'test2.xlsx'),
-                        SheetNumber : 1
-                    }, function (err, result){
-                        if (err) {
-                            // Do something with your error...
+                            var buffer = new Buffer(result, "binary");
+
+                            // res.end(toArrayBuffer(buffer));
+                            res.end(buffer);
+                        } catch(err){
                             logger.error('匯出失敗', req.ip, __line+'行', err);
                             res.status(403).send("匯出失敗");
-                        } else {
-
-                            try {
-                                res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                                res.setHeader('Content-Length', result.length);
-                                res.setHeader('Expires', '0');
-                                // res.setHeader('Content-Disposition', 'attachment; filename=test.xls');
-                                res.setHeader('Content-Encoding', 'UTF-8');
-                                res.status(200);
-
-                                var buffer = new Buffer(result, "binary");
-
-                                // res.end(toArrayBuffer(buffer));
-                                res.end(buffer);
-                            } catch(err){
-                                logger.error('匯出失敗', req.ip, __line+'行', err);
-                                res.status(403).send("匯出失敗");
-                            }
                         }
-                    });
-                } 
-                catch(err) {
-                    logger.error('匯出失敗', req.ip, __line+'行', err);
-                    res.status(403).send("匯出失敗");
-                }  
+                    }
+                });
+            }
+        });
 
-            });
-        }else{
-            res.status(post_res.statusCode).send('匯出失敗');
+    } catch(err){
+        logger.error(err);
+        res.status(403).send('匯出Excel error');
+    }
+});
+
+/**
+ * ExportCsvByMultiSql 經由MultiSql匯出Excel
+ */
+router.get('/exportCsvByMultiSql', function(req, res) {
+
+    var _query = []
+    for(var i in req.query){
+        _query.push(req.query[i]);
+    }
+
+    if(_query.length == 0){
+        res.status(post_res.statusCode).send('匯出失敗');
+    }
+
+    // 主要的參數
+    var _params = JSON.parse(_query.shift());
+
+    if(_params["templates"] == undefined){
+        res.status(post_res.statusCode).send('匯出失敗');
+    }
+    
+    try{
+
+        var tasks = [];
+        tasks.push(dbCommandByTask.Connect);
+        tasks.push(dbCommandByTask.TransactionBegin);
+        for(var i in _query){
+            tasks.push(async.apply(dbCommandByTask.SelectRequestWithTransaction, JSON.parse(_query[i])));
         }
-    });
+        tasks.push(dbCommandByTask.TransactionCommit);
+        async.waterfall(tasks, function (err, args) {
 
-    post_req.on('error', function(err) {
-        // Handle error
-        res.status(403).send('匯出失敗');
-    });
+            if (err) {
+                // 如果連線失敗就不做Rollback
+                if(Object.keys(args).length !== 0){
+                    dbCommandByTask.TransactionRollback(args, function (err, result){
+                        
+                    });
+                }
 
-    post_req.end(); 
+                console.error("匯出csv錯誤訊息:", err);
+
+                res.status(403).send('匯出csv失敗');
+                // process.exit();
+            }else{
+                for(var i in args.result){
+                    _params["data" + i] = args.result[i];
+                }
+
+                tmpXlsObj.GetXls({
+                    JsonXls : _params,
+                    TmpXlsFilePath : path.join(path.dirname(module.parent.filename), 'templates', templates[_params["templates"]]), //template xls 路徑(含檔名)
+                    // OutputXlsPath : path.join(path.dirname(module.parent.filename), 'templates', 'test2.xlsx'),
+                    SheetNumber : 1
+                }, function (err, result){
+                    if (err) {
+                        // Do something with your error...
+                        logger.error('匯出失敗', req.ip, __line+'行', err);
+                        res.status(403).send("匯出失敗");
+                    } else {
+
+                        try {
+                            var buffer = new Buffer(result, "binary");
+
+                            // 再利用js-xlsx元件轉製成csv檔
+                            var workbook = xlsx.read(buffer);
+                            var csv;
+                            workbook.SheetNames.forEach(function(sheetName) {
+                                csv = xlsx.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+                            });
+
+                            res.setHeader('Content-Type', 'text/csv');
+                            // res.setHeader('Content-Length', until.stringBytes(csv));
+                            res.setHeader('Expires', '0');
+                            res.setHeader("Content-Disposition", "attachment;filename="+_params.filename+".csv");
+                            res.setHeader('Content-Encoding', 'UTF-8');
+                            res.status(200);
+
+                            // 避免中文亂碼，需轉換成有BOM的樣式
+                            var buffer = Buffer.from("\ufeff"+csv, 'utf8');
+
+                            res.end(buffer);
+                        } catch(err){
+                            logger.error('匯出失敗', req.ip, __line+'行', err);
+                            res.status(403).send("匯出失敗");
+                        }
+                    }
+                });
+            }
+        });
+
+    } catch(err){
+        logger.error(err);
+        res.status(403).send('匯出csv error');
+    }
 });
 
 /**
@@ -454,134 +447,6 @@ router.get('/downloadFiles', function(req, res) {
  * 2. 開始寄信
  */
 router.get('/sendMail', function(req, res) {
-
-    // // 取得帳號密碼
-    // var post_data = querystring.stringify({
-    //     querymain : 'aviationMail',
-    //     queryname : 'SelectMailAccount',
-    //     params : JSON.stringify({
-    //         MA_USER : setting.GMail.account
-    //     })
-    // });
-    
-    // var post_options = {
-    //     host: '127.0.0.1',
-    //     port: setting.NodeJs.port,
-    //     path: '/restful/crud?' + post_data,
-    //     method: 'GET',
-    //     auth: until.FindID(req.session) + ':' + req.sessionID
-    // };
-
-    // // Set up the request
-    // var post_req = http.request(post_options, function (post_res) {
-
-    //     // console.log("statusCode: ", post_res.statusCode);
-    //     //console.log("headers: ", post_res.headers);
-    //     if(post_res.statusCode == 200){
-    //         var content = '';
-
-    //         post_res.setEncoding('utf8');
-
-    //         post_res.on('data', function(chunk) {
-    //             content += chunk;
-    //         });
-
-    //         post_res.on('end', function() {
-    //             var account = JSON.parse(content).returnData;
-    //             // console.warn(account);
-    //             // console.warn(req.query);
-
-    //             if(account.length > 0){
-
-    //                 // 撈取銷倉單Excel
-    //                 // var _queryContent = typeof req.query["queryContent"] == "string" ? JSON.parse(req.query["queryContent"]) : {};
-    //                 var _mailContent = typeof req.query["mailContent"] == "string" ? JSON.parse(req.query["mailContent"]) : {};
-                    
-    //                 /**
-    //                  * 開始寄信
-    //                  * 宣告發信物件
-    //                  */
-    //                 var transporter = nodemailer.createTransport({
-    //                     service: 'Gmail',
-    //                     auth: {
-    //                         user: account[0].MA_USER,
-    //                         pass: account[0].MA_PASS
-    //                     }
-    //                 });
-
-    //                 var _to = [],
-    //                     _attchments = [];
-
-    //                 for(var i in _mailContent.FM_MAIL){
-    //                     _to.push(_mailContent.FM_MAIL[i].text);
-    //                 }
-
-    //                 // 信件預設檔案
-    //                 for(var i in _mailContent.UploadedData){
-    //                     _attchments.push({
-    //                         // file on disk as an attachment
-    //                         filename: _mailContent.UploadedData[i].FMAF_O_FILENAME,
-    //                         path: _mailContent.UploadedData[i].FMAF_FILEPATH + _mailContent.UploadedData[i].FMAF_R_FILENAME
-    //                     });
-    //                 }
-
-    //                 // 使用者上傳檔案
-    //                 for(var i in _mailContent.UserUploadedData){
-    //                     _attchments.push({
-    //                         // file on disk as an attachment
-    //                         filename: _mailContent.UserUploadedData[i].FMAF_O_FILENAME,
-    //                         path: _mailContent.UserUploadedData[i].FMAF_FILEPATH + _mailContent.UserUploadedData[i].FMAF_R_FILENAME
-    //                     });
-    //                 }
-
-    //                 var options = {
-    //                     //寄件者
-    //                     from: account[0].MA_USER,
-    //                     //收件者
-    //                     to: _to.join(";"), 
-    //                     //副本
-    //                     // cc: 'dongfengexpress@gmail.com',
-    //                     //密件副本
-    //                     // bcc: 'dongfengexpress@gmail.com',
-    //                     //主旨
-    //                     subject: _mailContent.FM_TITLE, // Subject line
-    //                     //純文字
-    //                     // text: 'Hello world2', // plaintext body
-    //                     //嵌入 html 的內文
-    //                     html: _mailContent.FM_CONTENT, 
-    //                     //附件檔案
-    //                     attachments: _attchments
-    //                 };
-
-    //                 //發送信件方法
-    //                 transporter.sendMail(options, function(error, info){
-    //                     if(error){
-    //                         logger.error('寄信失敗', req.ip, __line+'行', error);
-    //                         res.status(403).send('寄信失敗');
-    //                     }else{
-
-    //                         res.json({
-    //                             "returnData": "ok"
-    //                         });
-    //                         // console.log('訊息發送: ' + info.response);
-    //                     }
-    //                 });
-    //             }else{
-    //                 res.status(403).send('查無寄件人帳號密碼');
-    //             }
-
-    //         });
-    //     }else{
-    //         res.status(post_res.statusCode).send('取得帳號密碼');
-    //     }
-    // });
-
-    // post_req.on('error', function(err) {
-    //     // Handle error
-    //     res.status(403).send('取得帳號密碼');
-    // });
-
-    // post_req.end(); 
 
     let id = until.FindID(req.session),
         action = "查詢",
@@ -942,216 +807,6 @@ router.get('/changeONature', function(req, res) {
 router.get('/composeMenu', function(req, res) {
     
     try{
-        // var conditions = [
-        //     JSON.stringify({
-        //         crudType : 'Select',
-        //         querymain : 'composeMenu',
-        //         queryname : 'SelectMaxLvl'
-        //     }),
-        //     JSON.stringify({
-        //         crudType : 'Select',
-        //         querymain : 'composeMenu',
-        //         queryname : 'SelectSubsys'
-        //     }),
-        //     JSON.stringify({
-        //         crudType : 'Select',
-        //         querymain : 'composeMenu',
-        //         queryname : 'SelectProgm'
-        //     })
-        // ];
-
-        // if(req.query["U_ID"] != undefined){
-        //     conditions.push(JSON.stringify({
-        //         crudType : 'Select',
-        //         querymain : 'composeMenu',
-        //         queryname : 'GetUserRight',
-        //         params : {
-        //             U_ID : req.query["U_ID"]
-        //         }
-        //     }));
-        // }
-
-        // var post_data = querystring.stringify(conditions);
-        
-        // var post_options = {
-        //     host: '127.0.0.1',
-        //     port: setting.NodeJs.port,
-        //     path: '/restful/crudByTask?' + post_data,
-        //     method: 'GET',
-            
-        // };
-
-        // var post_req = http.request(post_options, function (post_res){
-
-        //     if(post_res.statusCode == 200){
-        //         var content = '';
-
-        //         post_res.setEncoding('utf8');
-
-        //         post_res.on('data', function (chunk){
-        //             content += chunk;
-        //         });
-
-        //         post_res.on('end', function(){
-        //             var sqlData = JSON.parse(content)["returnData"];
-        //             var maxLvlObj = sqlData[0];
-        //             var subsysObj = sqlData[1];
-        //             var progmObj = sqlData[2];
-        //             var gRight = req.query["U_ID"] != undefined ? sqlData[3] : null;
-
-        //             var finalObj;
-
-        //             if(maxLvlObj != undefined){
-        //                 //取得menu目前最深的階層
-        //                 var iMaxLvl = parseInt(maxLvlObj[0].MAXLVL);
-        //                 //有幾個子系統
-        //                 var sysCount = subsysObj.length;
-        //                 var progmCount = progmObj.length;
-
-        //                 //程式與系統物件
-        //                 var progItem = { items:[] };
-        //                 var sysItem = { items:[] };
-        //                 var tempItem ;
-        //                 //權限
-        //                 var gRightItem = {};
-
-        //                 //權限轉換物件
-        //                 for(var igRight in gRight){
-        //                     gRightItem[gRight[igRight].PROG_PATH] = (gRight[igRight].USER_RIGHT == 'true');
-        //                 }
-
-        //                 //是否有包含權限功能    
-        //                 if(req.query["U_ID"] != undefined){
-        //                     var tempProgmObj = [];
-        //                     for(var iProgmObj in progmObj){
-        //                         // 如果有就新增到temp
-        //                         if(gRightItem[progmObj[iProgmObj].PROG_PATH]){
-        //                             tempProgmObj.push(progmObj[iProgmObj]);
-        //                         }
-        //                     }
-        //                     progmObj = tempProgmObj
-        //                     progmCount = progmObj.length;
-        //                 }
-                        
-        //                 //1.取得程式Array
-        //                 for(var iProgm = 0 ; iProgm < progmCount; iProgm++){
-        //                     tempItem = {};
-        //                     tempItem = {
-        //                                     "title": progmObj[iProgm].SP_PNAME,
-        //                                     "sref": progmObj[iProgm].PROG_PATH.toLowerCase(),
-        //                                     "icon": progmObj[iProgm].SP_ICON,
-        //                                     "lvl": progmObj[iProgm].SP_LVL,
-        //                                     "exsysId": progmObj[iProgm].SS_SYSID,
-        //                                     "sort": progmObj[iProgm].SP_SEQ //將順序納入判斷
-        //                                 };
-        //                     progItem.items.push(tempItem);
-        //                 }
-                        
-        //                 //2.取得系統Array(資料夾的概念)
-        //                 var tmpExSubsys = '';
-        //                 for(var iSys = 0 ; iSys < sysCount; iSys++){
-        //                     //找出上一層的子系統
-        //                     tmpExSubsys = '';
-        //                     var lvl = parseInt(subsysObj[iSys].SS_LVL);
-        //                     var tmpSplitObj = subsysObj[iSys].SS_PATH.split('.');
-        //                     //若split後的長度與lvl相等，且長度大於1，取得前一層的子系統
-        //                     if(tmpSplitObj.length == lvl && tmpSplitObj.length > 1){
-        //                         tmpExSubsys = tmpSplitObj[lvl-2];
-        //                     }
-
-        //                     tempItem = {};
-        //                     tempItem = {
-        //                                     "title": subsysObj[iSys].SS_NAME,
-        //                                     "href": "#",
-        //                                     "icon": subsysObj[iSys].SS_ICON,
-        //                                     "lvl": subsysObj[iSys].SS_LVL,
-        //                                     "sysId": subsysObj[iSys].SS_SYSID,
-        //                                     "exsysId": tmpExSubsys,
-        //                                     "sort": subsysObj[iSys].SS_SEQ, //將順序納入判斷
-        //                                     "items":[]
-        //                                 };
-        //                     sysItem.items.push(tempItem);
-        //                 }
-
-        //                 //3.將程式塞入對應的子系統(資料夾)
-        //                 var outputObj;
-        //                 //最大層級往回推(含最深之子層級或程式)
-        //                 for(var iLvl = iMaxLvl + 1 ; iLvl >= 1 ; iLvl--){
-        //                     for(var iProg = 0; iProg < progmCount ; iProg++){
-        //                         for(var iSys = 0 ; iSys < sysCount; iSys++){
-        //                             //找出最小的lvl 往上加，找出該層的prog
-        //                             if(progItem.items[iProg].lvl == iLvl){
-        //                                 //若lvl-1等於前一子系統之lvl，且程式附屬的系統ID=系統ID，則將程式加入該系統
-        //                                 if((progItem.items[iProg].lvl - 1) == sysItem.items[iSys].lvl && 
-        //                                     progItem.items[iProg].exsysId == sysItem.items[iSys].sysId){
-        //                                         var tmpObj = {
-        //                                                 "title": progItem.items[iProg].title,
-        //                                                 "sref": progItem.items[iProg].sref,
-        //                                                 "icon": progItem.items[iProg].icon,
-        //                                                 "sysId": progItem.items[iProg].exsysId                                                          
-        //                                             };
-        //                                         sysItem.items[iSys].items.push(tmpObj);
-        //                                     }
-        //                             }//if end
-        //                         }//for iSys end
-        //                     }//for iProg end
-        //                 }
-
-        //                 //4.將子系統塞入對應之item下，從最小的開始往上塞
-        //                 for(var iLvl = iMaxLvl ; iLvl >= 1 ; iLvl--){
-        //                     for(var iSys = 0 ; iSys < sysCount; iSys++){
-        //                         for(var iSubsys = 0 ; iSubsys < sysCount; iSubsys++){
-        //                             //從最小的開始往上塞 和 此資料夾下要有資料
-        //                             if(sysItem.items[iSubsys].lvl == iLvl && sysItem.items[iSubsys].items.length > 0){
-        //                                 if((sysItem.items[iSubsys].lvl - 1) == sysItem.items[iSys].lvl &&
-        //                                     sysItem.items[iSubsys].exsysId == sysItem.items[iSys].sysId){
-        //                                         var tmpObj = {
-        //                                                 "title": sysItem.items[iSubsys].title,
-        //                                                 "href": "#",
-        //                                                 "icon": sysItem.items[iSubsys].icon,
-        //                                                 "items": sysItem.items[iSubsys].items
-        //                                             };
-        //                                         if(sysItem.items[iSubsys].sort > 0){
-        //                                             //因撈出的prog已經照順序放，只要照資料夾需擺放的位置插入陣列中即可。
-        //                                             sysItem.items[iSys].items.splice(sysItem.items[iSubsys].sort - 1,0,tmpObj);
-        //                                         }
-        //                                         else{
-        //                                             sysItem.items[iSys].items.splice(0,0,tmpObj);
-        //                                         }
-                                                
-        //                                         //sysItem.items[iSys].items.push(tmpObj);
-        //                                     }
-        //                             }
-
-        //                         }//for iSubsys End
-        //                     }//for iSys End
-        //                 }//for lvl end
-
-        //                 //5.最後output資料
-        //                 finalObj = { "items":sysItem.items[0].items};
-        //              }
-
-        //              // //6.output 至 menu-items.js
-        //              // var path = require("path");
-        //              // var menuPath = path.resolve(__dirname, '../public/api/menu-items.json');
-        //              // //寫檔
-        //              // var fs = require('fs');
-        //              // fs.writeFile(menuPath, JSON.stringify(finalObj), function(err) {
-        //              //    if(err) {
-        //              //        console.log(err);
-        //              //    } else {
-        //              //        console.log("The file was saved!");
-        //              //    }
-        //              // });
-
-        //             res.json(finalObj);
-        //         });
-        //     }else{
-        //         res.status(post_res.statusCode).send('Compose Menu error');
-        //     }
-        // });
-
-        // post_req.end();
 
         var tasks = [];
         tasks.push(dbCommandByTask.Connect);
@@ -1192,9 +847,9 @@ router.get('/composeMenu', function(req, res) {
                     });
                 }
 
-                console.error("登入失敗錯誤訊息:", err);
+                console.error("Compose Menu 失敗錯誤訊息:", err);
 
-                res.status(403).send('登入失敗');
+                res.status(403).send('Compose Menu 失敗');
                 // process.exit();
             }else{
                 var sqlData = args.result;

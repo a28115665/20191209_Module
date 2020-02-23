@@ -78,6 +78,22 @@ angular.module('app')
                 }
             }
         ),
+        EXPORTCSVBYMULTISQL : $resource('/toolbox/exportCsvByMultiSql', null, 
+            {
+                'postByArraybuffer': { 
+                    method: 'GET',
+                    responseType : 'arraybuffer',
+                    transformResponse: function(data, headers, status, config) {
+                        return {
+                            response : new Blob([data], { type: 'text/csv' }),
+                            headers  : headers,
+                            status   : status,
+                            config   : config
+                        };
+                    }
+                }
+            }
+        ),
         DOWNLOADFILES : $resource('/toolbox/downloadFiles', null, 
             {
                 'postByArraybuffer': { 

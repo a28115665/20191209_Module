@@ -1465,7 +1465,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         break;
                     // 關貿格式(X2)
                     case "0X2":
-                        _templates = "20";
+                        _templates = "22";
                         _queryname = "SelectItemListForEx12";
                         _params["IL_G1"] = "'','X2','Y','上稅'";
                         // 不包含併X3(也就是mergeno是null)
@@ -1482,7 +1482,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         break;
                     // 關貿格式(併X3)
                     case "0MX3":
-                        _templates = "21";
+                        _templates = "23";
                         _queryname = "SelectItemListForEx0MX3";
                         _exportName += '-併X3';
                         break;
@@ -2365,7 +2365,20 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             { name: 'Index'           , displayName: '序列', width: 50},
             { name: 'IL_G1'           , displayName: '報關種類', width: 115 },
             { name: 'IL_MERGENO'      , displayName: '併票號', width: 129, grouping: { groupPriority: 0 } },
-            { name: 'IL_BAGNO'        , displayName: '袋號', width: 129 },
+            { name: 'IL_BAGNO'        , displayName: '袋號', width: 129, customTreeAggregationFn : function( aggregation, fieldValue, numValue, row ) {
+                    if(aggregation.value == undefined){
+                        aggregation.value = [];
+                        aggregation.value.push(fieldValue);
+                    }else{
+                        if(aggregation.value.indexOf(fieldValue) == -1){
+                            aggregation.value.push(fieldValue);
+                        }
+                    }
+                }, 
+                customTreeAggregationFinalizerFn: function (aggregation) {
+                    aggregation.rendered = aggregation.value.length;
+                }
+            },
             { name: 'IL_SMALLNO'      , displayName: '小號', width: 115 },
             { name: 'IL_NATURE'    , displayName: '品名', width: 115 },
             { name: 'IL_NATURE_NEW'    , displayName: '新品名', width: 115 },
@@ -2498,6 +2511,13 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 $ctrl.job001DataNotMergeNo.push(job001Data[i]);
             }
         }
+
+        // 重新排序
+        $ctrl.job001DataHaveMergeNo.sort(function compare( a, b ) {
+            if ( a.IL_MERGENO < b.IL_MERGENO ){ return -1; }
+            if ( a.IL_MERGENO > b.IL_MERGENO ){ return 1; }
+            return 0;
+        });
     }
 
     $ctrl.ok = function() {

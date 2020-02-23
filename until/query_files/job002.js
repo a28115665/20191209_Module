@@ -5,7 +5,8 @@ module.exports = function(pQueryname, pParams){
 		case "SelectFlightItemList":
 			_SQLCommand += "SELECT ROW_NUMBER() OVER(PARTITION BY FLL_SEQ ORDER BY cast(FLL_ITEM as int) ASC) AS FLL_INDEX, \
 								   *, \
-								   CASE WHEN DI.IL_BAGNO IS NULL THEN 0 ELSE 1 END AS BAGNO_MATCH \
+								   CASE WHEN DI.IL_BAGNO IS NULL THEN 0 ELSE 1 END AS BAGNO_MATCH, \
+								   '' AS SPACE \
 							FROM FLIGHT_ITEM_LIST \
 							LEFT JOIN ( \
 								SELECT DISTINCT(SUBSTRING(IL_BAGNO, 0, 9)) AS IL_BAGNO \
@@ -19,6 +20,14 @@ module.exports = function(pQueryname, pParams){
 			break;
 		case "SelectRemark":
 			_SQLCommand += "SELECT FLLR_REMARK, \
+								   '' AS SPACE \
+							FROM FLL_REMARK \
+							WHERE FLLR_SEQ = @FLL_SEQ \
+							ORDER BY FLLR_ROWINDEX";
+
+			break;
+		case "SelectTop1Remark":
+			_SQLCommand += "SELECT TOP 1 FLLR_REMARK, \
 								   '' AS SPACE \
 							FROM FLL_REMARK \
 							WHERE FLLR_SEQ = @FLL_SEQ \

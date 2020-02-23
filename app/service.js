@@ -152,7 +152,7 @@ angular.module('app')
 	    return deferred.promise
 	}
 })
-.service('ToolboxApi', function ($http, $q, Resource){
+.service('ToolboxApi', function ($http, $q, Resource, $timeout){
 
 	this.ExportExcelByVar = function (dataSrc) {
 	    // console.log(dataSrc);
@@ -231,6 +231,38 @@ angular.module('app')
                     link.click();
                     // remove the link when done
                     document.body.removeChild(link); 
+                } else {
+                    location.replace(objectUrl);
+                }
+
+				deferred.resolve(pSResponse);
+			},
+	    	function (pFResponse){
+	    		deferred.reject(pFResponse.data);
+	    	});
+
+	    return deferred.promise
+	},
+
+	this.ExportCsvByMultiSql = function (dataSrc) {
+	    // console.log(dataSrc);
+	    var deferred = $q.defer();
+
+	    Resource.EXPORTCSVBYMULTISQL.postByArraybuffer(dataSrc,
+	    	function (pSResponse){
+                var blob = new Blob([pSResponse.response], {type: pSResponse.headers('Content-Type')});
+                var objectUrl = URL.createObjectURL(blob);
+                var contentDispositionHeader = pSResponse.headers('Content-Disposition');
+                var filename = contentDispositionHeader.split(';')[1].trim().split('=')[1];
+                var link = document.createElement('a');
+                if (typeof link.download === 'string') {
+                    document.body.appendChild(link); // Firefox requires the link to be in the body
+                    link.download = decodeURI(filename);
+                    link.href = objectUrl;
+                    $timeout(function(){
+                        link.click();
+                    })
+                    document.body.removeChild(link); // remove the link when done
                 } else {
                     location.replace(objectUrl);
                 }
