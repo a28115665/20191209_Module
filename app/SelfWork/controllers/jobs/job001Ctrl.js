@@ -915,7 +915,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
 
             }
 
-            _newItem.IL_WEIGHT_NEW    = _newItem.IL_WEIGHT_NEW;
+            _newItem.IL_WEIGHT_NEW    = Math.round(_newItem.IL_WEIGHT_NEW * 100) / 100;
             _newItem.IL_NEWPCS        = _newItem.IL_NEWPCS;
             // 回算新單價
             _newItem.IL_UNIVALENT_NEW = Math.round(_newItem.IL_FINALCOST / _newItem.IL_NEWPCS);

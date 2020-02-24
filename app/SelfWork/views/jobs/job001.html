@@ -519,8 +519,11 @@
 			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.bagNo.length}}</span>
 			        </div>
 			        <label class="col-md-2 control-label">稅率</label>
-			        <div class="col-md-4">
+			        <div class="col-md-4" ng-if="$ctrl.mergeNoNature == '1' && $ctrl.mergeNoIlTax2 == '1'">
 			            <span class="form-control" ng-disabled="true">{{$ctrl.mdData.item.IL_TAXRATE}} %</span>
+			        </div>
+			        <div class="col-md-4" ng-if="$ctrl.mergeNoNature == '2' || $ctrl.mergeNoIlTax2 == '2'">
+			            <input class="form-control" name="ilTaxRate" placeholder="請輸入稅率" ng-model="$ctrl.mdData.item.IL_TAXRATE" type="number" ng-required="true" ng-change="$ctrl.CalculateFinalCost();$ctrl.CalculateA10AndB40()">
 			        </div>
 			    </div>
 				<div class="form-group">
