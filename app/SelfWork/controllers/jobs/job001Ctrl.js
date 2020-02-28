@@ -975,6 +975,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                         $vm.job001Data[_index-1].IL_NEWPCS = selectedItem.newItem.IL_NEWPCS;
                         $vm.job001Data[_index-1].IL_UNIVALENT_NEW = selectedItem.newItem.IL_UNIVALENT_NEW;
                         $vm.job001Data[_index-1].IL_FINALCOST = selectedItem.newItem.IL_FINALCOST;
+                        $vm.job001Data[_index-1].IL_GETADDRESS_NEW = $vm.job001Data[_index-1].IL_GETADDRESS;
                     }
                 }
 
@@ -2004,6 +2005,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
             try {
                 rowEntity["IL_G1"] = newValue.toUpperCase();
                 G1ForY(rowEntity);
+                G1ForTax(rowEntity);
             }
             catch (e) {
                 console.log(e);
@@ -2142,6 +2144,20 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                 rowEntity.IL_UNIVALENT_NEW = rowEntity.IL_UNIVALENT;
                 rowEntity.IL_NEWSENDNAME = rowEntity.IL_SENDNAME;
                 rowEntity.IL_FINALCOST = null;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    /**
+     * [G1ForTax description] 報關類型為上稅的處理方法
+     * @param {[type]} rowEntity [description]
+     */
+    function G1ForTax (rowEntity){
+        try{
+            if(rowEntity["IL_G1"] == "上稅"){
+                rowEntity.IL_GETADDRESS_NEW = rowEntity.IL_GETADDRESS;
             }
         } catch (e) {
             console.log(e);
