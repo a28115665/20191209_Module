@@ -66,7 +66,7 @@
 								        </div>
 								        <label class="col-md-2 control-label">航班</label>
 								        <div class="col-md-1" ng-class="$vm.vmData.FLIGHTNO_END.length && !$vm.vmData.FLIGHTNO_START.length ? ' has-error' : ''">
-								            <input class="form-control" ng-model="$vm.vmData.FLIGHTNO_START" placeholder="代碼" type="text" ui-mask="AA" ui-mask-placeholder ng-required="$vm.vmData.FLIGHTNO_END.length">
+								            <input class="form-control" ng-model="$vm.vmData.FLIGHTNO_START" placeholder="代碼" type="text" ui-mask="**" ui-mask-placeholder ng-required="$vm.vmData.FLIGHTNO_END.length">
 								        </div>
 								        <div class="col-md-3" ng-class="$vm.vmData.FLIGHTNO_START.length && !$vm.vmData.FLIGHTNO_END.length ? ' has-error' : ''">
 								            <input class="form-control" ng-model="$vm.vmData.FLIGHTNO_END" placeholder="號碼" type="text" maxlength="4" ng-required="$vm.vmData.FLIGHTNO_START.length">
