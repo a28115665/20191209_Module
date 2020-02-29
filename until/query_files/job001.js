@@ -552,6 +552,12 @@ module.exports = function(pQueryname, pParams){
 							AND IL_SEQ = @IL_SEQ \
 							GROUP BY IL_MERGENO";
 			break;
+
+		case "SelectSoftDeleteItem":
+			_SQLCommand += "SELECT * \
+							FROM V_ITEM_LIST_SOFTDELETE_ITEM \
+							WHERE IL_SEQ = @IL_SEQ";
+			break;
 	}
 
 	return _SQLCommand;

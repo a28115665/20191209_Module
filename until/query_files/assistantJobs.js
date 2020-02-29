@@ -254,7 +254,16 @@ module.exports = function(pQueryname, pParams){
 										SELECT CO_NAME \
 										FROM COMPY_INFO \
 										WHERE OL_CO_CODE = CO_CODE \
-									) AS 'CO_NAME' \
+									) AS 'CO_NAME', \
+									( \
+										SELECT TOP 1 IL_BAGNO \
+										FROM V_ITEM_LIST_EXIST_ITEM \
+										LEFT JOIN PULL_GOODS ON  \
+										IL_SEQ = PG_SEQ AND \
+										IL_BAGNO = PG_BAGNO \
+										WHERE IL_SEQ = OL_SEQ \
+										AND PG_SEQ IS NULL \
+									) AS TopOneBagno \
 							FROM ORDER_LIST ";
 							
 			if(pParams["U_ID"] !== undefined && pParams["U_GRADE"] !== undefined){
@@ -354,7 +363,7 @@ module.exports = function(pQueryname, pParams){
 									IL_HASUNIVALENT, \
 									IL_SUPPLEMENT_COUNT, \
 									IL_TAXRATE \
-							FROM V_ITEM_LIST_EXIST_ITEM \
+							FROM ITEM_LIST \
 						    WHERE 1=1";
 
 			if(pParams["SeqAndBagno"] !== undefined){
@@ -381,7 +390,7 @@ module.exports = function(pQueryname, pParams){
 									SPG_UP_USER, \
 									SPG_UP_DATETIME \
 							FROM SPECIAL_GOODS \
-							INNER JOIN V_ITEM_LIST_EXIST_ITEM ON \
+							INNER JOIN ITEM_LIST ON \
 							IL_SEQ = SPG_SEQ AND \
 							IL_NEWBAGNO = SPG_NEWBAGNO AND \
 							IL_NEWSMALLNO = SPG_NEWSMALLNO AND \
@@ -394,6 +403,34 @@ module.exports = function(pQueryname, pParams){
 
 				for(var i in pParams["SeqAndBagno"]){
 					_sql.push("(  SPG_SEQ='" + pParams["SeqAndBagno"][i].SEQ + "' AND IL_BAGNO='" + pParams["SeqAndBagno"][i].BAGNO + "')");
+				}
+
+				_SQLCommand += " AND (" + _sql.join(" OR ") +") ";
+			}
+
+			break;
+
+		case "CopySoftDeleteGoods":
+			_SQLCommand += "SELECT @SDG_SEQ AS SDG_SEQ, \
+									SDG_NEWBAGNO, \
+									SDG_NEWSMALLNO, \
+									SDG_ORDERINDEX, \
+									SDG_CR_USER, \
+									SDG_CR_DATETIME \
+							FROM SOFTDELETE_GOODS \
+							INNER JOIN ITEM_LIST ON \
+							IL_SEQ = SDG_SEQ AND \
+							IL_NEWBAGNO = SDG_NEWBAGNO AND \
+							IL_NEWSMALLNO = SDG_NEWSMALLNO AND \
+							IL_ORDERINDEX = SDG_ORDERINDEX \
+						    WHERE 1=1";
+
+			if(pParams["SeqAndBagno"] !== undefined){
+
+				var _sql = [];
+
+				for(var i in pParams["SeqAndBagno"]){
+					_sql.push("(  SDG_SEQ='" + pParams["SeqAndBagno"][i].SEQ + "' AND IL_BAGNO='" + pParams["SeqAndBagno"][i].BAGNO + "')");
 				}
 
 				_SQLCommand += " AND (" + _sql.join(" OR ") +") ";

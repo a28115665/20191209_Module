@@ -389,6 +389,7 @@ angular.module('app.selfwork').controller('AssistantJobsCtrl', function ($scope,
                 { name: 'CO_NAME'                ,  displayName: '行家', width: 160 },
                 { name: 'OL_FLIGHTNO'            ,  displayName: '航班', width: 80 },
                 { name: 'OL_MASTER'              ,  displayName: '主號', width: 110 },
+                { name: 'TopOneBagno'            ,  displayName: '袋號', width: 110 },
                 { name: 'OL_COUNT'               ,  displayName: '報機單(袋數)', width: 80, enableCellEdit: false },
                 { name: 'OL_PULL_COUNT'          ,  displayName: '拉貨(袋數)', width: 80 },
                 { name: 'OL_COUNTRY'             ,  displayName: '起運國別', width: 110 },
@@ -835,6 +836,18 @@ angular.module('app.selfwork').controller('AssistantJobsCtrl', function ($scope,
                         table: 20,
                         params: {
                             SPG_SEQ : _newSeq,
+                            SeqAndBagno : _seqAndBagno
+                        }
+                    })
+
+                    // 複製SOFTDELETE_GOODS
+                    _tasks.push({
+                        crudType: 'Copy',
+                        querymain: 'assistantJobs',
+                        queryname: 'CopySoftDeleteGoods',
+                        table: 48,
+                        params: {
+                            SDG_SEQ : _newSeq,
                             SeqAndBagno : _seqAndBagno
                         }
                     })
