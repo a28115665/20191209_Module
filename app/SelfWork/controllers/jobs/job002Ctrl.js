@@ -49,6 +49,7 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
                 { name: 'FLL_WEIGHT'      , displayName: '重量', headerCellClass: 'text-primary', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellFilter: 'number: 2' },
                 { name: 'FLL_DESCRIPTION' , displayName: '品名', headerCellClass: 'text-primary' },
                 { name: 'FLL_DECLAREDNO'  , displayName: '宣告序號', headerCellClass: 'text-primary' },
+                { name: 'FLL_BAGNOPARTS'  , displayName: '一分多袋', headerCellClass: 'text-primary' },
                 { name: 'FLL_REMARK'      , displayName: '備註', headerCellClass: 'text-primary' }
             ],
             enableFiltering: true,
@@ -459,6 +460,7 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
                     FLL_WEIGHT       : entity.FLL_WEIGHT,
                     FLL_DESCRIPTION  : entity.FLL_DESCRIPTION,
                     FLL_DECLAREDNO   : entity.FLL_DECLAREDNO,
+                    FLL_BAGNOPARTS   : entity.FLL_BAGNOPARTS,
                     FLL_REMARK       : entity.FLL_REMARK
                 },
                 condition: {
@@ -527,6 +529,7 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
                 FLL_IL_NEWBAGNO : _temp.FLL_SEQ + padLeft("0" + parseInt(_temp.FLL_ITEM), 3),
                 FLL_DESCRIPTION : "CHANDLERY",
                 FLL_DECLAREDNO : "",
+                FLL_BAGNOPARTS : "",
                 FLL_REMARK : "請進遠雄快遞倉"
             };
         }
