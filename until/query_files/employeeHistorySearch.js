@@ -82,7 +82,7 @@ module.exports = function(pQueryname, pParams){
 								/*行家中文名稱*/ \
 								OUTTER JOIN COMPY_INFO ON CO_CODE = OL_CO_CODE \
 							) ORDER_LIST \
-							LEFT JOIN V_ITEM_LIST_EXIST_ITEM ON IL_SEQ = OL_SEQ \
+							LEFT JOIN ITEM_LIST ON IL_SEQ = OL_SEQ \
 							/*報機單*/ \
 							LEFT JOIN V_ORDER_EDITOR_BY_R W2_OE ON W2_OE.OE_SEQ = ORDER_LIST.OL_SEQ \
 							/*銷艙單只有完成時間*/ \
@@ -155,7 +155,6 @@ module.exports = function(pQueryname, pParams){
 			if(pParams["BAGNO_RANGE3"] !== undefined && pParams["BAGNO_RANGE5_START"] !== undefined && pParams["BAGNO_RANGE5_END"] !== undefined){
 				var _bagnoStart = pParams["BAGNO_RANGE3"] + pParams["BAGNO_RANGE5_START"],
 					_bagnoEnd = pParams["BAGNO_RANGE3"] + pParams["BAGNO_RANGE5_END"];
-				console.log(_bagnoStart, _bagnoEnd);
 				_SQLCommand += " AND IL_BAGNO BETWEEN '" + _bagnoStart + "' AND '" + _bagnoEnd + "'";
 				
 				delete pParams["BAGNO_RANGE3"];
