@@ -24,6 +24,7 @@ module.exports = function(pQueryname, pParams){
 			if(pParams["U_PW"] !== undefined){
 				_SQLCommand += " AND dbo.Decrypt(U_PW) = @U_PW";
 			}
+
 			break;
 		case "SelectUserDept":
 			_SQLCommand += "SELECT SUD_DEPT, \
