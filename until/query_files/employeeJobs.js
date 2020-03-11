@@ -129,6 +129,7 @@ module.exports = function(pQueryname, pParams){
 										SELECT * \
 										FROM ORDER_PRINPL \
 										WHERE OP_PRINCIPAL = @U_ID \
+										AND OP_TYPE = 'R' \
 									) ORDER_PRINPL ON OP_SEQ = ORDER_LIST.OL_SEQ ";
 				}
 			}
