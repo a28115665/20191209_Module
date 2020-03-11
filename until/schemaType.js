@@ -5,7 +5,12 @@ var DatabaseSchema = {};
 
 // 初始化 DatabaseSchema
 sql.connect(setting.MSSQL).then(function() {
-	new sql.Request().query('SELECT * FROM Information_Schema.COLUMNS', (err, result) => {
+	new sql.Request().query("SELECT * FROM Information_Schema.COLUMNS C \
+							INNER JOIN ( \
+								SELECT * \
+								FROM INFORMATION_SCHEMA.TABLES \
+								WHERE TABLE_TYPE = 'BASE TABLE' \
+							) T ON T.TABLE_NAME = C.TABLE_NAME", (err, result) => {
         // ... error checks
         if(err) return;
 
