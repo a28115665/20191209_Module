@@ -226,7 +226,7 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
         // 匯出Excel
         ExportExcel: function(){
 
-            var _exportName = $filter('date')($vm.vmData.OL_IMPORTDT, 'yyyyMMdd', 'GMT') + ' ' + 
+            var _exportName = $filter('date')($vm.vmData.OL_IMPORTDT, 'MMdd', 'GMT') + ' ' + 
                               $vm.vmData.OL_MASTER + ' ' + 
                               $vm.vmData.OL_FLIGHTNO;
                 // _totalBag = 0,
