@@ -47,8 +47,8 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
                 { name: 'FLL_BAGNO'       , displayName: '袋號', headerCellClass: 'text-primary' },
                 { name: 'FLL_CTN'         , displayName: '件數', headerCellClass: 'text-primary', aggregationType: uiGridConstants.aggregationTypes.sum },
                 { name: 'FLL_WEIGHT'      , displayName: '重量', headerCellClass: 'text-primary', aggregationType: uiGridConstants.aggregationTypes.sum, footerCellFilter: 'number: 2' },
-                { name: 'FLL_DESCRIPTION' , displayName: '品名', headerCellClass: 'text-primary' },
-                { name: 'FLL_DECLAREDNO'  , displayName: '宣告序號', headerCellClass: 'text-primary' },
+                // { name: 'FLL_DESCRIPTION' , displayName: '品名', headerCellClass: 'text-primary' },
+                // { name: 'FLL_DECLAREDNO'  , displayName: '宣告序號', headerCellClass: 'text-primary' },
                 { name: 'FLL_BAGNOPARTS'  , displayName: '一分多袋', headerCellClass: 'text-primary' },
                 { name: 'FLL_REMARK'      , displayName: '備註', headerCellClass: 'text-primary' }
             ],
