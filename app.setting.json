@@ -43,7 +43,22 @@
 	"MOTC" : {
 		"timer" : 120000
 	},
-	"GMail" : {
-		"account" : ""
+	"Mail" : {
+		"Type" : "GMail",
+		"GMail" : {
+            "service": "Gmail",
+            "auth": {
+                "user": "a28115665@gmail.com"
+            }
+        },
+		"SMTP" : {
+			"service": "SMTP",
+			"host": "192.168.168.41",
+			"secureConnecton": true,
+			"port": 25,
+			"auth": {
+				"user": "ch-ccl@cnhg.com.tw"
+			}
+		}
 	}
 }

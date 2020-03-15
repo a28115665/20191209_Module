@@ -452,8 +452,9 @@ router.get('/sendMail', function(req, res) {
         action = "查詢",
         querymain = 'aviationMail',
         queryname = 'SelectMailAccount',
+        transporterOption = setting.Mail[setting.Mail.Type],
         params = JSON.stringify({
-            MA_USER : setting.GMail.account
+            MA_USER : transporterOption.auth.user
         }),
         ip = req.ip;
 
@@ -485,13 +486,8 @@ router.get('/sendMail', function(req, res) {
                      * 開始寄信
                      * 宣告發信物件
                      */
-                    var transporter = nodemailer.createTransport({
-                        service: 'Gmail',
-                        auth: {
-                            user: account[0].MA_USER,
-                            pass: account[0].MA_PASS
-                        }
-                    });
+                    transporterOption.auth["pass"] = account[0].MA_PASS;
+                    var transporter = nodemailer.createTransport(transporterOption);
 
                     var _to = [],
                         _attchments = [];
