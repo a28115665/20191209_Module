@@ -159,6 +159,9 @@ angular.module('app.selfwork').config(function ($stateProvider){
                             'build/vendor.ui.js'
                         ])
 
+                    },
+                    bool: function (SysCode){
+                        return SysCode.get('Boolean');
                     }
                 }
             }
@@ -202,7 +205,9 @@ angular.module('app.selfwork').config(function ($stateProvider){
                 controller: 'Job002Ctrl',
                 controllerAs: '$vm',
                 resolve: {
-
+                    bool: function (SysCode){
+                        return SysCode.get('Boolean');
+                    }
                 }
             }
         }
@@ -268,7 +273,9 @@ angular.module('app.selfwork').config(function ($stateProvider){
                 controller: 'Job002Ctrl',
                 controllerAs: '$vm',
                 resolve: {
-
+                    bool: function (SysCode){
+                        return SysCode.get('Boolean');
+                    }
                 }
             }
         }
@@ -358,7 +365,9 @@ angular.module('app.selfwork').config(function ($stateProvider){
                 controller: 'Job002Ctrl',
                 controllerAs: '$vm',
                 resolve: {
-
+                    bool: function (SysCode){
+                        return SysCode.get('Boolean');
+                    }
                 }
             }
         }

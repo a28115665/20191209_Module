@@ -229,7 +229,7 @@
 
 <script type="text/ng-template" id="editorRemarkModalContent.html">
     <div class="modal-header" ng-init="$ctrl.Init()">
-	    <h3 class="modal-title" id="modal-title">底部編輯</h3>
+	    <h3 class="modal-title" id="modal-title">卸存地代碼</h3>
 	</div>
 	<div class="modal-body" id="modal-body">
 	    <form class="form-horizontal" name="editorRemarkForm">
@@ -241,7 +241,7 @@
 					                placeholder="新增內容(最多三個)"
 					                max-tags="3"
 					                replace-spaces-with-dashes="false"
-					                display-property"text"
+					                display-property="text"
 					                required>
 					    </tags-input>
 			        </div>
@@ -293,24 +293,31 @@
 			        </div>
 			    </div>
 				<div class="form-group">
-			        <label class="col-md-2 control-label">預設標題</label>
+			        <label class="col-md-2 control-label">標題</label>
 			        <div class="col-md-10">
 			            <input class="form-control" ng-model="$ctrl.mdData.FM_TITLE" type="text" placeholder="請輸入預設標題">
 			        </div>
 			    </div>
 			    <div class="form-group">
-			        <label class="col-md-2 control-label">預設內容</label>
+			        <label class="col-md-2 control-label">內容</label>
 			        <div class="col-md-10">
 			            <summernote ng-model="$ctrl.mdData.FM_CONTENT" config="$ctrl.snOptions"></summernote>
 			        </div>
 			    </div>
 				<div class="form-group">
-			        <label class="col-md-2 control-label">預設附件</label>
-			        <div class="col-md-10">
+			        <label class="col-md-2 control-label">附件</label>
+			        <div class="col-md-2">
 			            <div class="fileUpload btn btn-primary">
 						    <span>選擇檔案</span>
 						    <input type="file" class="upload" nv-file-select=""  uploader="$ctrl.uploader" multiple/>
 						</div>
+			        </div>
+			        <label class="col-md-2 control-label">自動夾帶此Excel</label>
+			        <div class="col-md-2">
+						<select class="form-control" 
+								ng-model="$ctrl.mdData.FM_DEFAULTATTCH"
+								ng-options="data.value as data.label for data in $ctrl.boolData">
+						</select>
 			        </div>
 			    </div>
 				<div class="form-group" ng-show="$ctrl.uploader.queue.length > 0 || $ctrl.mdData.UploadedData.length > 0">

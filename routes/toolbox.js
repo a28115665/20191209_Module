@@ -338,7 +338,7 @@ router.get('/exportCsvByMultiSql', function(req, res) {
                             res.status(200);
 
                             // 避免中文亂碼，需轉換成有BOM的樣式
-                            var buffer = Buffer.from("\ufeff"+csv, 'utf8');
+                            buffer = Buffer.from("\ufeff"+csv, 'utf8');
 
                             res.end(buffer);
                         } catch(err){
@@ -458,7 +458,7 @@ router.get('/sendMail', function(req, res) {
         }),
         ip = req.ip;
 
-    dbCommand.SelectMethod(querymain, queryname, params, function(err, recordset, sql) {
+    dbCommand.SelectMethod(querymain, queryname, params, async function(err, recordset, sql) {
 
         let log = new dbLogObject(id, querymain, queryname, params, sql, ip, err)
         log.writeLog(action);
@@ -481,6 +481,7 @@ router.get('/sendMail', function(req, res) {
                     // 撈取銷倉單Excel
                     // var _queryContent = typeof req.query["queryContent"] == "string" ? JSON.parse(req.query["queryContent"]) : {};
                     var _mailContent = typeof req.query["mailContent"] == "string" ? JSON.parse(req.query["mailContent"]) : {};
+                    // console.log(_mailContent);
                     
                     /**
                      * 開始寄信
@@ -502,6 +503,24 @@ router.get('/sendMail', function(req, res) {
                             // file on disk as an attachment
                             filename: _mailContent.UploadedData[i].FMAF_O_FILENAME,
                             path: _mailContent.UploadedData[i].FMAF_FILEPATH + _mailContent.UploadedData[i].FMAF_R_FILENAME
+                        });
+                    }
+
+                    // 自動夾帶銷艙單的Excel
+                    if(_mailContent.FM_DEFAULTATTCH){
+                        let _query = []
+                        for(let i in _mailContent.defaultAttch){
+                            _query.push(_mailContent.defaultAttch[i]);
+                        }
+
+                        // 主要的參數
+                        let _params = _query.shift();
+                        let buffer = await doExcelToBuffer(_params, _query);
+
+                        _attchments.push({
+                            // file on disk as an attachment
+                            filename: _params.filename + '.csv',
+                            content: buffer
                         });
                     }
 
@@ -1018,6 +1037,69 @@ function toArrayBuffer(buf) {
         view[i] = buf[i];
     }
     return ab;
+}
+
+function doExcelToBuffer(params, query) {
+    return new Promise((resolve, reject) => {
+        try{
+            var tasks = [];
+            tasks.push(dbCommandByTask.Connect);
+            tasks.push(dbCommandByTask.TransactionBegin);
+            for(var i in query){
+                tasks.push(async.apply(dbCommandByTask.SelectRequestWithTransaction, query[i]));
+            }
+            tasks.push(dbCommandByTask.TransactionCommit);
+            async.waterfall(tasks, function (err, args) {
+
+                if (err) {
+                    // 如果連線失敗就不做Rollback
+                    if(Object.keys(args).length !== 0){
+                        dbCommandByTask.TransactionRollback(args, function (err, result){
+                            
+                        });
+                    }
+                    reject(err);
+                }else{
+                    for(var i in args.result){
+                        params["data" + i] = args.result[i];
+                    }
+
+                    tmpXlsObj.GetXls({
+                        JsonXls : params,
+                        TmpXlsFilePath : path.join(path.dirname(module.parent.filename), 'templates', templates[params["templates"]]), //template xls 路徑(含檔名)
+                        // OutputXlsPath : path.join(path.dirname(module.parent.filename), 'templates', 'test2.xlsx'),
+                        SheetNumber : 1
+                    }, function (err, result){
+                        if (err) {
+                            reject(err);
+                        } else {
+
+                            try {
+                                var buffer = new Buffer(result, "binary");
+
+                                // 再利用js-xlsx元件轉製成csv檔
+                                var workbook = xlsx.read(buffer);
+                                var csv;
+                                workbook.SheetNames.forEach(function(sheetName) {
+                                    csv = xlsx.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+                                });
+
+                                // 避免中文亂碼，需轉換成有BOM的樣式
+                                var buffer = Buffer.from("\ufeff"+csv, 'utf8');
+
+                                resolve(buffer);
+                            } catch(err){
+                                reject(err);
+                            }
+                        }
+                    });
+                }
+            });
+
+        } catch(err){
+            reject(err);
+        }
+    })
 }
 
 module.exports = router;

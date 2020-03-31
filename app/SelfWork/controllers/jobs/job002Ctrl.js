@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $stateParams, $state, AuthApi, Session, toaster, $uibModal, $templateCache, RestfulApi, uiGridConstants, $filter, $q, ToolboxApi) {
+angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $stateParams, $state, AuthApi, Session, toaster, $uibModal, $templateCache, RestfulApi, uiGridConstants, $filter, $q, ToolboxApi, bool) {
     // console.log($stateParams, $state);
 
     var $vm = this,
@@ -403,6 +403,41 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
                             },
                             profile: function(){
                                 return $vm.profile
+                            },
+                            bool: function(){
+                                return bool;
+                            },
+                            defaultAttch: function(){
+                                return [
+                                    {
+                                        templates      : 21,
+                                        filename       : $filter('date')($vm.vmData.OL_IMPORTDT, 'MMdd', 'GMT') + ' ' + $vm.vmData.OL_MASTER + ' ' + $vm.vmData.OL_FLIGHTNO,
+                                        OL_MASTER      : $vm.vmData.OL_MASTER,
+                                        OL_IMPORTDT    : $filter('date')($vm.vmData.OL_IMPORTDT, 'yyyyMMdd', 'GMT'),
+                                        OL_FLIGHTNO    : $vm.vmData.OL_FLIGHTNO,
+                                        OL_COUNTRY     : $vm.vmData.OL_COUNTRY, 
+                                        OL_TEL         : $vm.vmData.OL_TEL, 
+                                        OL_FAX         : $vm.vmData.OL_FAX, 
+                                        OL_TOTALBAG    : $vm.job002GridApi.grid.columns[4].getAggregationValue(), 
+                                        OL_TOTALWEIGHT : $vm.job002GridApi.grid.columns[5].getAggregationValue().toFixed(2)
+                                    },
+                                    {
+                                        crudType: 'Select',
+                                        querymain: 'job002',
+                                        queryname: 'SelectFlightItemList',
+                                        params: {               
+                                            FLL_SEQ: $vm.vmData.OL_SEQ
+                                        }
+                                    },
+                                    {
+                                        crudType: 'Select',
+                                        querymain: 'job002',
+                                        queryname: 'SelectTop1Remark',
+                                        params: {               
+                                            FLL_SEQ: $vm.vmData.OL_SEQ
+                                        }
+                                    }
+                                ];
                             }
                         }
                     });
@@ -602,7 +637,7 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
         $uibModalInstance.dismiss('cancel');
     };
 })
-.controller('SendMailModalInstanceCtrl', function ($uibModalInstance, RestfulApi, ToolboxApi, SUMMERNOT_CONFIG, $filter, FileUploader, items, data, profile) {
+.controller('SendMailModalInstanceCtrl', function ($uibModalInstance, RestfulApi, ToolboxApi, SUMMERNOT_CONFIG, $filter, FileUploader, items, data, profile, bool, defaultAttch) {
     var $ctrl = this,
         _d = new Date(),
         _filepath = _d.getFullYear() + '\\' + ("0" + (_d.getMonth()+1)).slice(-2) + '\\' + ("0" + _d.getDate()).slice(-2) + '\\';
@@ -616,7 +651,9 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
             });
         }
 
+        $ctrl.boolData = bool;
         $ctrl.mdData = angular.copy(items[0]);
+        $ctrl.mdData.FM_DEFAULTATTCH = true;
         $ctrl.snOptions = SUMMERNOT_CONFIG;
 
         LoadFMAF();
@@ -781,10 +818,16 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
     }; 
     
     function SendMail(){
-        ToolboxApi.SendMail({
+
+        var _query = {
             mailContent : $ctrl.mdData
-            // queryContent : data
-        }).then(function (res) {
+        }
+
+        if($ctrl.mdData.FM_DEFAULTATTCH){
+            _query.mailContent["defaultAttch"] = defaultAttch;
+        }
+
+        ToolboxApi.SendMail(_query).then(function (res) {
             // console.log(res["returnData"]);
             $uibModalInstance.close(res["returnData"]);
         }).finally(function(){
