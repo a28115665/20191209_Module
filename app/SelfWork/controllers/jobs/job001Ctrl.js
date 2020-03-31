@@ -2106,7 +2106,7 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
                     IL_EXTEL           : entity.IL_EXTEL,
                     IL_EXNO            : entity.IL_EXNO,
                     IL_TAX2            : entity.IL_TAX2,
-                    IL_TAXRATE         : angular.isNumber(entity.IL_TAXRATE) ? entity.IL_TAXRATE : null,
+                    IL_TAXRATE         : entity.IL_TAXRATE,
                     IL_UP_DATETIME     : $filter('date')(new Date(), 'yyyy-MM-dd HH:mm:ss'),
                     IL_UP_USER         : $vm.profile.U_ID
                 },
