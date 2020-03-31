@@ -25,9 +25,9 @@
 	},
 	"WebService" : {
 		"changeNature" : {
-			"host" : "10.1.31.61",
+			"host" : "125.227.139.72",
 			"port" : "80",
-			"url" : "/EWSWS/WebServiceChangeNature.asmx/GetNewNature"
+			"url" : "/GHSWS/WebServiceChangeNature.asmx/GetNewNature"
 		},
 		"doTax" : {
 			"host" : "10.1.31.61",
@@ -44,7 +44,7 @@
 		"timer" : 120000
 	},
 	"Mail" : {
-		"Type" : "GMail",
+		"Type" : "Gmail",
 		"GMail" : {
             "service": "Gmail",
             "auth": {
