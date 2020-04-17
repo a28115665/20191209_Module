@@ -56,8 +56,15 @@
 								    </div>
 									<div class="form-group">
 								        <label class="col-md-2 control-label">預設標題</label>
-								        <div class="col-md-10">
+								        <div class="col-md-6">
 								            <input class="form-control" ng-model="$vm.vmData.FM_TITLE" type="text" placeholder="請輸入預設標題">
+								        </div>
+								        <label class="col-md-2 control-label">標題帶入主號</label>
+								        <div class="col-md-2">
+											<select class="form-control" 
+													ng-model="$vm.vmData.FM_DEFAULT_MASTER"
+													ng-options="data.value as data.label for data in $vm.boolData">
+											</select>
 								        </div>
 								    </div>
 								    <div class="form-group">

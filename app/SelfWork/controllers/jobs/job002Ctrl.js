@@ -373,6 +373,12 @@ angular.module('app.selfwork').controller('Job002Ctrl', function ($scope, $state
 
                 modalInstance.result.then(function(selectedItem) {
                     // console.log(selectedItem);
+
+                    // 如果有預設帶入主號
+                    if(selectedItem[0].FM_DEFAULT_MASTER){
+                        selectedItem[0].FM_TITLE += $vm.vmData.OL_MASTER;
+                    }
+                    
                     var _flightMail = selectedItem;
 
                     modalInstance = $uibModal.open({

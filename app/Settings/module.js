@@ -248,6 +248,9 @@ angular.module('app.settings').config(function ($stateProvider){
                             'build/vendor.ui.js'
                         ])
 
+                    },
+                    bool: function (SysCode){
+                        return SysCode.get('Boolean');
                     }
                 }
             }

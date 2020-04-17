@@ -1,6 +1,6 @@
 "use strict";
 
-angular.module('app.settings').controller('TargetEditorCtrl', function ($scope, $stateParams, $state, AuthApi, Session, toaster, $uibModal, $templateCache, RestfulApi, $filter, $q, FileUploader, SUMMERNOT_CONFIG) {
+angular.module('app.settings').controller('TargetEditorCtrl', function ($scope, $stateParams, $state, AuthApi, Session, toaster, $uibModal, $templateCache, RestfulApi, $filter, $q, FileUploader, SUMMERNOT_CONFIG, bool) {
     
     var $vm = this,
         _tasks = [],
@@ -11,7 +11,8 @@ angular.module('app.settings').controller('TargetEditorCtrl', function ($scope, 
         Init : function(){
             if($stateParams.data == null){
                 $vm.vmData = {
-                    "IU" : "Add"
+                    "IU" : "Add",
+                    FM_DEFAULT_MASTER : false
                 }
             }else{
                 $vm.vmData = $stateParams.data;
@@ -37,6 +38,7 @@ angular.module('app.settings').controller('TargetEditorCtrl', function ($scope, 
             console.log($vm.vmData);
         },
         profile : Session.Get(),
+        boolData : bool,
         snOptions : SUMMERNOT_CONFIG,
         uploader : new FileUploader({
             url: '/toolbox/uploadFile?filePath='+_filepath
@@ -175,6 +177,7 @@ angular.module('app.settings').controller('TargetEditorCtrl', function ($scope, 
                         FM_MAIL : _mailObjectToArray.join(";"),
                         FM_TITLE : $vm.vmData.FM_TITLE,
                         FM_CONTENT : $vm.vmData.FM_CONTENT,
+                        FM_DEFAULT_MASTER : $vm.vmData.FM_DEFAULT_MASTER,
                         FM_UP_USER : $vm.profile.U_ID,
                         FM_UP_DATETIME : $filter('date')(_d, 'yyyy-MM-dd HH:mm:ss')
                     },
