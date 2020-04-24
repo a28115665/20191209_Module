@@ -315,13 +315,11 @@ angular.module('app.selfwork').controller('AssistantJobsCtrl', function ($scope,
             columnDefs: [
                 { name: 'Index'                  ,  displayName: '序列', width: 50, enableFiltering: false },
                 { name: 'OL_IMPORTDT'            ,  displayName: '進口日期', width: 80, cellFilter: 'dateFilter' },
-                // { name: 'OL_CO_CODE'             ,  displayName: '發銷艙單行家', width: 110, cellFilter: 'compyFilter', filter: 
-                //     {
-                //         term: null,
-                //         type: uiGridConstants.filter.SELECT,
-                //         selectOptions: compy
-                //     }
-                // },
+                { name: 'OL_REAL_IMPORTDT' ,  displayName: '報機日期', cellFilter: 'dateFilter', cellTooltip: function (row, col) 
+                    {
+                        return '真實報機日期：' + $filter('dateFilter')(row.entity.OL_CR_DATETIME)
+                    } 
+                },
                 { name: 'CO_NAME'                ,  displayName: '發銷艙單行家', width: 110 },
                 { name: 'OL_FLIGHTNO'            ,  displayName: '航班', width: 80 },
                 { name: 'FA_ACTL_DEPARTTIME'     ,  displayName: '真實起飛時間', cellFilter: 'datetimeFilter' },
