@@ -1819,19 +1819,24 @@ angular.module('app.selfwork').controller('Job001Ctrl', function ($scope, $state
          */
         RepeatData : function(pType){
 
-            var _queryname = null;
+            var _queryname = null,
+                _msg = "";
             switch(pType){
                 case "N":
                     _queryname = 'SelectRepeatName';
+                    _msg = '無重複收件者';
                     break;
                 case "A":
                     _queryname = 'SelectRepeatAddress';
+                    _msg = '無重複地址';
                     break;
                 case "N+A":
                     _queryname = 'SelectRepeatNameAndAddress';
+                    _msg = '無重複收件者+地址';
                     break;
                 case "SBN":
                     _queryname = 'SelectRepeatNameWithOneBagno';
+                    _msg = '無重複同袋收件人';
                     break;
             }
 
